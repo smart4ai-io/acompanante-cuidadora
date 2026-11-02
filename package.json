@@ -1,0 +1,21 @@
+{
+  "name": "acompanante-cuidadora",
+  "version": "0.2.0",
+  "description": "Acompañante de la cuidadora v2: orienta y remite, nunca diagnostica (chat en terminal y piloto web en Vercel).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "chat": "node src/chat.js",
+    "test": "node --test --test-concurrency=1 pruebas/ca.test.js",
+    "banco": "node src/banco.js",
+    "biblioteca": "node src/generar_biblioteca.js",
+    "web": "node src/servidor_local.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0"
+  }
+}

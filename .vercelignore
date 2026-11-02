@@ -1,0 +1,19 @@
+# .vercelignore · qué NO se sube a Vercel desde app\ (por CLI, Vercel no aplica .gitignore).
+# Lista blanca: se ignora todo lo de la raíz de app\ y solo se deja pasar lo que el piloto web necesita.
+/*
+!api
+!public
+!src
+!package.json
+!package-lock.json
+!vercel.json
+!biblioteca.json
+
+# Y, por si acaso, nunca esto (aunque esté dentro de lo permitido):
+node_modules
+.env*
+pruebas/
+*.bak*
+*.log
+alertas.log
+.vercel

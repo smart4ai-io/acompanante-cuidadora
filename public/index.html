@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Acompañante de la cuidadora · piloto</title>
+<!-- Piloto web v2 (2026-11-02). Misma pantalla que entregables\_fuente\plantilla.html,
+     pero el agente corre en el servidor: cada acción es un POST a /api/chat con la
+     sesión que guarda este navegador (localStorage). Aquí no hay lógica del agente. -->
+<style>
+  /* Tokens de color: tema claro por defecto y oscuro si el equipo lo pide. */
+  :root {
+    --fondo-pagina: #f0f2f5;
+    --fondo-chat: #efeae2;
+    --barra: #008069;
+    --texto-barra: #ffffff;
+    --burbuja-ella: #ffffff;
+    --burbuja-yo: #d9fdd3;
+    --burbuja-sistema: #fff5c4;
+    --texto: #111b21;
+    --texto-suave: #54656f;
+    --borde: #d1d7db;
+    --panel: #ffffff;
+    --acento: #008069;
+    --cita: #0b6b5a;
+    --alerta-fondo: #fde2e1;
+    --alerta-texto: #8a1c14;
+    --aviso-fondo: #fff3cd;
+    --aviso-texto: #664d03;
+    --chip: #ffffff;
+    --sombra: 0 1px 1px rgba(11, 20, 26, 0.13);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo-pagina: #111b21;
+      --fondo-chat: #0b141a;
+      --barra: #202c33;
+      --texto-barra: #e9edef;
+      --burbuja-ella: #202c33;
+      --burbuja-yo: #005c4b;
+      --burbuja-sistema: #3b3418;
+      --texto: #e9edef;
+      --texto-suave: #8696a0;
+      --borde: #2a3942;
+      --panel: #1a252c;
+      --acento: #00a884;
+      --cita: #7fd8c4;
+      --alerta-fondo: #4a1a17;
+      --alerta-texto: #ffb4ab;
+      --aviso-fondo: #3d3311;
+      --aviso-texto: #ffe08a;
+      --chip: #202c33;
+      --sombra: 0 1px 1px rgba(0, 0, 0, 0.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .app { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--texto); background: var(--fondo-pagina); padding: 8px; min-height: 100vh; margin: 0; }
+  .cabecera { margin: 0 auto 4px; max-width: 1100px; font-size: 12px; color: var(--texto-suave); text-align: center; line-height: 1.4; }
+  .aviso-piloto { margin: 0 auto 8px; max-width: 1100px; font-size: 12px; color: var(--aviso-texto); text-align: center; line-height: 1.4; }
+  .disposicion { display: flex; flex-direction: column; gap: 12px; max-width: 1100px; margin: 0 auto; }
+  @media (min-width: 900px) {
+    .disposicion { flex-direction: row; align-items: flex-start; justify-content: center; }
+    .telefono { flex: 0 0 420px; }
+    .lateral { flex: 1 1 auto; max-width: 620px; }
+  }
+  .telefono { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; height: 82vh; min-height: 520px; max-height: 860px; border: 1px solid var(--borde); border-radius: 14px; overflow: hidden; background: var(--fondo-chat); }
+  .barra { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--barra); color: var(--texto-barra); }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: grid; place-items: center; font-weight: 700; font-size: 14px; flex: 0 0 auto; }
+  .nombre { font-weight: 600; font-size: 15px; }
+  .estado { font-size: 12px; opacity: 0.85; }
+  .franja-guardia { background: var(--alerta-fondo); color: var(--alerta-texto); font-size: 13px; font-weight: 600; padding: 8px 12px; }
+  .mensajes { flex: 1 1 auto; overflow-y: auto; padding: 10px 10px 4px; display: flex; flex-direction: column; gap: 6px; }
+  .burbuja { max-width: 85%; padding: 6px 9px 4px; border-radius: 8px; box-shadow: var(--sombra); font-size: 14.5px; line-height: 1.38; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .burbuja .hora { display: block; text-align: right; font-size: 11px; color: var(--texto-suave); margin-top: 2px; }
+  .ella { align-self: flex-start; background: var(--burbuja-ella); border-top-left-radius: 2px; }
+  .yo { align-self: flex-end; background: var(--burbuja-yo); border-top-right-radius: 2px; }
+  .sistema { align-self: center; background: var(--burbuja-sistema); font-size: 13px; max-width: 95%; }
+  .cita { color: var(--cita); font-size: 12px; font-weight: 600; }
+  .escribiendo { font-style: italic; color: var(--texto-suave); }
+  .ejemplos { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 10px; }
+  .ejemplos[hidden] { display: none; }
+  .ejemplos-titulo { width: 100%; font-size: 12px; color: var(--texto-suave); }
+  .chip { border: 1px solid var(--borde); background: var(--chip); color: var(--texto); border-radius: 16px; padding: 6px 10px; font-size: 13px; cursor: pointer; text-align: left; }
+  .acciones { display: flex; gap: 6px; padding: 6px 10px 0; flex-wrap: wrap; }
+  .accion { flex: 1 1 auto; border: 1px solid var(--borde); background: var(--chip); color: var(--texto); border-radius: 8px; padding: 6px 4px; font-size: 13px; cursor: pointer; min-width: 70px; }
+  .accion.peligro { color: var(--alerta-texto); }
+  .redactar { display: flex; gap: 6px; padding: 8px 10px 10px; align-items: flex-end; }
+  .redactar textarea { flex: 1 1 auto; resize: none; border: 1px solid var(--borde); border-radius: 20px; padding: 9px 14px; font: inherit; font-size: 15px; background: var(--burbuja-ella); color: var(--texto); max-height: 120px; }
+  .enviar { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--acento); color: #fff; font-size: 18px; cursor: pointer; flex: 0 0 auto; }
+  button:disabled, textarea:disabled { opacity: 0.55; cursor: not-allowed; }
+  button:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+  .lateral { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .caja { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 10px 12px; font-size: 13px; }
+  .caja summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  .caja h2 { margin: 0 0 6px; font-size: 14px; }
+  .meta { color: var(--texto-suave); font-size: 12px; margin: 6px 0; line-height: 1.4; }
+  .entrada-dentro { border-top: 1px solid var(--borde); padding: 8px 0; }
+  .entrada-dentro:first-child { border-top: 0; }
+  .entrada-dentro dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 8px; margin: 4px 0 0; }
+  .entrada-dentro dt { color: var(--texto-suave); }
+  .entrada-dentro dd { margin: 0; overflow-wrap: anywhere; }
+  .etiqueta { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 600; background: var(--fondo-chat); }
+  .etiqueta.roja { background: var(--alerta-fondo); color: var(--alerta-texto); }
+  .registro ol { margin: 0; padding-left: 18px; }
+  .registro li { margin: 3px 0; overflow-wrap: anywhere; }
+  .vacio { color: var(--texto-suave); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="app">
+  <p class="cabecera">Piloto v2 · orienta y remite, nunca diagnostica · no escribas nombres ni documentos</p>
+  <p class="aviso-piloto">Esto es un piloto: las conversaciones pueden revisarse para mejorar el servicio. Si estás en peligro, llama a la <strong>Línea 106</strong> o al <strong>123</strong>.</p>
+  <div class="disposicion">
+    <section class="telefono" aria-label="Chat con la Acompañante de la cuidadora">
+      <header class="barra">
+        <div class="avatar" aria-hidden="true">AC</div>
+        <div>
+          <div class="nombre">Acompañante de la cuidadora</div>
+          <div class="estado" id="estado">en línea</div>
+        </div>
+      </header>
+      <div class="franja-guardia" id="franjaGuardia" role="status" hidden></div>
+      <div class="mensajes" id="mensajes" aria-live="polite"></div>
+      <div class="ejemplos" id="ejemplos">
+        <span class="ejemplos-titulo">Toca un ejemplo para empezar:</span>
+        <button type="button" class="chip" data-ejemplo="mi hija no me mira a los ojos, ¿será autista?">mi hija no me mira a los ojos, ¿será autista?</button>
+        <button type="button" class="chip" data-ejemplo="la EPS me negó la cita con neuropediatra">la EPS me negó la cita con neuropediatra</button>
+        <button type="button" class="chip" data-ejemplo="ya no puedo más">ya no puedo más</button>
+      </div>
+      <div class="acciones">
+        <button type="button" class="accion" id="btnChequeo">Chequeo</button>
+        <button type="button" class="accion" id="btnResumen">Resumen</button>
+        <button type="button" class="accion" id="btnFuentes">Fuentes</button>
+        <button type="button" class="accion peligro" id="btnReiniciar">Reiniciar</button>
+      </div>
+      <form class="redactar" id="formulario" autocomplete="off">
+        <textarea id="entrada" rows="1" maxlength="2000" placeholder="Escribe un mensaje" aria-label="Mensaje"></textarea>
+        <button type="submit" class="enviar" id="btnEnviar" aria-label="Enviar">&#10148;</button>
+      </form>
+    </section>
+
+    <aside class="lateral">
+      <details class="caja" id="porDentro">
+        <summary>Por dentro</summary>
+        <p class="meta" id="metaBiblioteca"></p>
+        <div id="porDentroLista"><p class="vacio">Aquí verás, en cada respuesta, el candado que saltó, los fragmentos que encontró la biblioteca y las citas verificadas.</p></div>
+      </details>
+      <section class="caja registro">
+        <h2>Avisos a la guardia en esta conversación</h2>
+        <p class="meta">Cuando salta un candado, el servidor deja el aviso para la persona de guardia (solo la hora, el tipo y los primeros 80 caracteres). Aquí ves la hora y el tipo.</p>
+        <ol id="registroGuardia"></ol>
+        <p class="vacio" id="registroVacio">Sin avisos.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+"use strict";
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const CLAVE_GUARDADO = "acompanante-cuidadora-web-v2";
+  const ESPERA_MAXIMA_MS = 100000;
+  // Mismo texto que RESPUESTA_ERROR de src\prompt.js (se usa si no hay conexión).
+  const RESPUESTA_ERROR = "Tuve un problema técnico y no pude responderte. Intenta de nuevo en un rato.\nSi es urgente: *Línea 106* o *123*.";
+
+  let estadoServidor = null; // la sesión del agente: la guarda este navegador y viaja en cada POST
+  let conversacion = []; // [{rol: "yo"|"ella"|"sistema", texto, hora}]
+  let porDentro = []; // entradas del panel, la más nueva primero
+  let registro = []; // avisos a la guardia
+  let proveedor = null; // "gateway", "anthropic" o "manual", según responde el servidor
+  let ocupado = false;
+
+  // ---------------- servidor ----------------
+  async function llamar(cuerpo) {
+    const control = new AbortController();
+    const reloj = setTimeout(() => control.abort(), ESPERA_MAXIMA_MS);
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ estado: estadoServidor, ...cuerpo }),
+        signal: control.signal,
+        credentials: "same-origin",
+      });
+      let datos = null;
+      try {
+        datos = await r.json();
+      } catch (e) {
+        datos = null;
+      }
+      if (r.ok && datos && datos.respuesta) {
+        if (datos.estado) estadoServidor = datos.estado;
+        if (datos.meta && datos.meta.proveedor) proveedor = datos.meta.proveedor;
+        return datos.respuesta;
+      }
+      // Error con respuesta del servidor (límite, cuerpo inválido…): se muestra su texto.
+      const resp = datos && datos.respuesta ? datos.respuesta : { texto: RESPUESTA_ERROR, candado: "error", fuentes_usadas: [], uso: { llamadas: 0 } };
+      return { ...resp, error: (datos && datos.error) || `http-${r.status}` };
+    } catch (e) {
+      return { texto: RESPUESTA_ERROR, candado: "error", fuentes_usadas: [], uso: { llamadas: 0 }, error: e && e.name === "AbortError" ? "tiempo-agotado" : "sin-conexion" };
+    } finally {
+      clearTimeout(reloj);
+    }
+  }
+
+  // ---------------- utilidades de pantalla ----------------
+  function horaCorta(fecha) {
+    const d = fecha ? new Date(fecha) : new Date();
+    return d.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+  }
+  function escaparHtml(t) {
+    return String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  // Formato de WhatsApp: *negrita*; las citas [fuente: id] se ven más pequeñas.
+  function formatear(t) {
+    return escaparHtml(t)
+      .replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>")
+      .replace(/\[fuente:([^\]]+)\]/gi, '<span class="cita">[fuente:$1]</span>');
+  }
+
+  function mostrarFranja(aviso) {
+    const franja = $("franjaGuardia");
+    franja.textContent = `⚠ Aviso a la guardia: ${aviso.tipo} · ${horaCorta(aviso.hora)}`;
+    franja.hidden = false;
+  }
+
+  function pintarRegistro() {
+    const ol = $("registroGuardia");
+    ol.innerHTML = "";
+    for (const l of registro) {
+      const li = document.createElement("li");
+      li.textContent = `${new Date(l.hora).toLocaleTimeString("es-CO")} · ${l.tipo}${l.motivo ? ` (${l.motivo})` : ""}`;
+      ol.appendChild(li);
+    }
+    $("registroVacio").hidden = registro.length > 0;
+  }
+
+  function pintarMeta() {
+    const modelo = { gateway: "Claude por Vercel AI Gateway", anthropic: "Claude (API directa)", manual: "modo manual de prueba (sin API)" }[proveedor] || "se ve con el primer mensaje";
+    $("metaBiblioteca").textContent = `Biblioteca curada · búsqueda por palabras, 6 fragmentos por pregunta · Modelo: ${modelo}.`;
+  }
+
+  function burbuja(m) {
+    const div = document.createElement("div");
+    div.className = `burbuja ${m.rol}`;
+    div.innerHTML = `${formatear(m.texto)}<span class="hora">${escaparHtml(horaCorta(m.hora))}</span>`;
+    return div;
+  }
+
+  function pintarConversacion() {
+    const caja = $("mensajes");
+    caja.innerHTML = "";
+    for (const m of conversacion) caja.appendChild(burbuja(m));
+    $("ejemplos").hidden = conversacion.length > 0;
+    caja.scrollTop = caja.scrollHeight;
+  }
+
+  function agregar(rol, texto) {
+    const m = { rol, texto: String(texto), hora: new Date().toISOString() };
+    conversacion.push(m);
+    if (conversacion.length > 400) conversacion.splice(0, conversacion.length - 400);
+    const caja = $("mensajes");
+    caja.appendChild(burbuja(m));
+    $("ejemplos").hidden = true;
+    caja.scrollTop = caja.scrollHeight;
+  }
+
+  function lista(items) {
+    return items && items.length ? items.join(", ") : "—";
+  }
+
+  function pintarPorDentro() {
+    const cont = $("porDentroLista");
+    if (!porDentro.length) {
+      cont.innerHTML = '<p class="vacio">Aquí verás, en cada respuesta, el candado que saltó, los fragmentos que encontró la biblioteca y las citas verificadas.</p>';
+      return;
+    }
+    cont.innerHTML = "";
+    for (const e of porDentro) {
+      const div = document.createElement("div");
+      div.className = "entrada-dentro";
+      const rojo = ["crisis", "maltrato", "diagnostico", "rechazo", "error", "sin-fuente", "limite"].includes(e.candado);
+      const filas = [["Candado", `<span class="etiqueta${rojo ? " roja" : ""}">${escaparHtml(e.candado || "ninguno")}</span>`]];
+      if (e.motivo) filas.push(["Motivo", escaparHtml(e.motivo)]);
+      if (e.fragmentos) filas.push(["Fragmentos", escaparHtml(e.fragmentos.length ? e.fragmentos.map((f) => `${f.id_fuente} › ${f.seccion} (${f.puntaje})`).join(" · ") : "ninguno (la biblioteca no encontró nada)")]);
+      filas.push([e.fija ? "Fuentes de la respuesta fija" : "Citas verificadas", escaparHtml(lista(e.citas))]);
+      filas.push(["Llamadas al modelo", String(e.llamadas)]);
+      if (e.tokens) filas.push(["Tokens", escaparHtml(e.tokens)]);
+      if (e.origen) filas.push(["Resumen hecho por", escaparHtml(e.origen === "literal" ? "red de seguridad (notas tal cual)" : e.origen)]);
+      if (e.puntajes) filas.push(["Puntajes (no se le muestran)", escaparHtml(Object.entries(e.puntajes).map(([k, v]) => `${k.toUpperCase()}=${v}`).join(" · "))]);
+      if (e.guardia) filas.push(["Aviso a la guardia", escaparHtml(e.guardia)]);
+      if (e.error) filas.push(["Error", escaparHtml(e.error)]);
+      div.innerHTML = `<strong>${escaparHtml(horaCorta(e.hora))} · ${escaparHtml(e.que)}</strong><dl>${filas.map(([k, v]) => `<dt>${escaparHtml(k)}</dt><dd>${v}</dd>`).join("")}</dl>`;
+      cont.appendChild(div);
+    }
+  }
+
+  function anotarPorDentro(que, r) {
+    const u = r.uso || {};
+    const entrada = (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0);
+    porDentro.unshift({
+      hora: new Date().toISOString(),
+      que,
+      candado: r.candado || null,
+      motivo: r.motivo_candado || null,
+      fragmentos: Array.isArray(r.fragmentos) ? r.fragmentos : null,
+      citas: r.fuentes_usadas || [],
+      fija: r.candado === "crisis" || r.candado === "maltrato",
+      llamadas: u.llamadas || 0,
+      tokens: u.llamadas ? `entrada ${entrada} · salida ${u.output_tokens || 0}` : null,
+      origen: r.origen || null,
+      puntajes: r.puntajes || null,
+      guardia: r.guardia ? `${r.guardia.tipo} · ${horaCorta(r.guardia.hora)}` : null,
+      error: r.error || null,
+    });
+    if (porDentro.length > 50) porDentro.length = 50;
+    pintarPorDentro();
+  }
+
+  function ponerOcupado(si) {
+    ocupado = si;
+    for (const id of ["btnEnviar", "btnChequeo", "btnResumen", "btnFuentes", "btnReiniciar", "entrada"]) $(id).disabled = si;
+    for (const b of document.querySelectorAll(".chip")) b.disabled = si;
+    $("estado").textContent = si ? "escribiendo…" : "en línea";
+    const previo = document.getElementById("escribiendo");
+    if (previo) previo.remove();
+    if (si) {
+      const div = document.createElement("div");
+      div.id = "escribiendo";
+      div.className = "burbuja ella escribiendo";
+      div.textContent = "escribiendo…";
+      $("mensajes").appendChild(div);
+      $("mensajes").scrollTop = $("mensajes").scrollHeight;
+    }
+  }
+
+  // Corre una acción en el servidor y muestra el resultado.
+  async function ejecutar(que, cuerpo) {
+    if (ocupado) return;
+    ponerOcupado(true);
+    let r;
+    try {
+      r = await llamar(cuerpo);
+    } finally {
+      ponerOcupado(false);
+    }
+    if (que === "fuentes" && !r.error) agregar("sistema", r.texto);
+    else agregar("ella", r.texto);
+    if (r.guardia) {
+      registro.push(r.guardia);
+      mostrarFranja(r.guardia);
+      pintarRegistro();
+    }
+    if (que !== "fuentes" || r.error) anotarPorDentro(que, r);
+    pintarMeta();
+    guardar();
+    $("entrada").focus();
+  }
+
+  function enviar(texto) {
+    const t = String(texto ?? "").trim();
+    if (!t || ocupado) return;
+    agregar("yo", t);
+    $("entrada").value = "";
+    ajustarAltura();
+    ejecutar("mensaje", { accion: "mensaje", mensaje: t });
+  }
+
+  let reinicioPendiente = null;
+  function reiniciar() {
+    const btn = $("btnReiniciar");
+    if (!reinicioPendiente) {
+      // Doble toque en vez de una ventana de confirmación: el primero arma, el segundo borra.
+      btn.textContent = "¿Seguro? Toca otra vez";
+      reinicioPendiente = setTimeout(() => {
+        reinicioPendiente = null;
+        btn.textContent = "Reiniciar";
+      }, 4000);
+      return;
+    }
+    clearTimeout(reinicioPendiente);
+    reinicioPendiente = null;
+    btn.textContent = "Reiniciar";
+    estadoServidor = null;
+    conversacion = [];
+    porDentro = [];
+    registro = [];
+    $("franjaGuardia").hidden = true;
+    try {
+      localStorage.removeItem(CLAVE_GUARDADO);
+    } catch (e) {
+      /* sin almacenamiento: no pasa nada */
+    }
+    pintarConversacion();
+    pintarPorDentro();
+    pintarRegistro();
+  }
+
+  // ---------------- guardado local (la sesión vive en este navegador) ----------------
+  function guardar() {
+    try {
+      localStorage.setItem(CLAVE_GUARDADO, JSON.stringify({ v: 2, estado: estadoServidor, conversacion, porDentro, registro, proveedor }));
+    } catch (e) {
+      /* el navegador no deja guardar (modo privado, lleno): la conversación sigue mientras la página esté abierta */
+    }
+  }
+  function cargarGuardado() {
+    try {
+      const d = JSON.parse(localStorage.getItem(CLAVE_GUARDADO) || "null");
+      if (!d || d.v !== 2) return;
+      estadoServidor = d.estado && typeof d.estado === "object" ? d.estado : null;
+      conversacion = Array.isArray(d.conversacion) ? d.conversacion : [];
+      porDentro = Array.isArray(d.porDentro) ? d.porDentro : [];
+      registro = Array.isArray(d.registro) ? d.registro : [];
+      proveedor = typeof d.proveedor === "string" ? d.proveedor : null;
+      if (registro.length) mostrarFranja(registro[registro.length - 1]);
+    } catch (e) {
+      /* guardado dañado o bloqueado: se arranca de cero */
+    }
+  }
+
+  function ajustarAltura() {
+    const ta = $("entrada");
+    ta.style.height = "auto";
+    ta.style.height = `${Math.min(ta.scrollHeight, 120)}px`;
+  }
+
+  // ---------------- arranque ----------------
+  $("formulario").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    enviar($("entrada").value);
+  });
+  $("entrada").addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) {
+      ev.preventDefault();
+      enviar($("entrada").value);
+    }
+  });
+  $("entrada").addEventListener("input", ajustarAltura);
+  for (const b of document.querySelectorAll(".chip")) b.addEventListener("click", () => enviar(b.dataset.ejemplo));
+  $("btnChequeo").addEventListener("click", () => ejecutar("chequeo", { accion: "chequeo" }));
+  $("btnResumen").addEventListener("click", () => ejecutar("resumen", { accion: "resumen" }));
+  $("btnFuentes").addEventListener("click", () => ejecutar("fuentes", { accion: "fuentes" }));
+  $("btnReiniciar").addEventListener("click", reiniciar);
+  try {
+    if (window.matchMedia && window.matchMedia("(min-width: 900px)").matches) $("porDentro").open = true;
+  } catch (e) {
+    /* sin matchMedia: el panel queda cerrado */
+  }
+
+  cargarGuardado();
+  pintarConversacion();
+  pintarPorDentro();
+  pintarRegistro();
+  pintarMeta();
+})();
+</script>
+</body>
+</html>
