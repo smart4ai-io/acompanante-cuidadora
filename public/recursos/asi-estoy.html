@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="es-CO" data-tema="claro" data-suave="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Así estoy, esto necesito: 12 tarjetas para expresarse sin palabras y una hoja para todo el salón. Prototipo de Contigo.">
+<title>Así estoy, esto necesito · Contigo</title>
+<!-- Pieza 3 de la Ola 1 de «Recursos» de Contigo (2026-11-08). Página autocontenida: CSS, JS y dibujos aquí mismo.
+     La única carga externa es la fuente Poppins (con respaldo de sistema). La política de seguridad de arriba
+     (connect-src 'none') impide cualquier llamada de red desde el código de la página.
+     Vista niña: 12 tarjetas en posición fija (o «3 a la vez»), modo mostrar a pantalla completa. No guarda lo que toca.
+     Vista adulto (puerta de 3 s): qué tarjetas ve, sus palabras, voz y sonido. Hoja para todo el salón: #aula.
+     Dibujos: propios de Contigo, licencia CC BY 4.0. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común de las piezas de «Recursos». Se copia IDÉNTICO a cada pieza (ver CAPARAZON.md).
+   Trae: tokens de color del manual de Somos Extraordinarios, tema claro/oscuro, modo sensorial bajo
+   (en pantalla se llama «Modo suave»: sin degradados, sin movimiento, colores apagados), cabecera con sello,
+   barra fija «Pausa · Calma · Necesito ayuda · Salir» y sus capas. Letra mínima 17 px, botones mínimo 44 px. */
+:root {
+  /* Pasteles del manual: fondos, pétalos y chips. Encima siempre va texto oscuro (--sobre-pastel). */
+  --menta: #CCEADE; --lavanda: #BDCDFF; --rosa: #EDD5DF; --arena: #F7D4AA;
+  --menta-claro: #EAF6F1; --lavanda-claro: #F4F6FF; --rosa-claro: #FBF1F5; --arena-claro: #FDF6EC;
+  --sobre-pastel: #1E1E2A;          /* sobre cualquier pastel: más de 11:1 */
+  /* Superficies y texto · tema claro */
+  --fondo: #FBFAFD; --superficie: #FFFFFF; --superficie-2: #F4F6FF;
+  --texto: #1E1E2A;                 /* sobre blanco 16,5:1 */
+  --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
+  --borde: #DCDFEE;
+  /* Tonos profundos AA para botones, enlaces y acentos */
+  --principal: #1F7A55;             /* blanco encima 5,29:1 */
+  --principal-hondo: #176446;
+  --sobre-principal: #FFFFFF;
+  --hover-suave: #EAF6F1;
+  --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
+  --sobre-acento: #FFFFFF;
+  --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
+  --rotulo-fondo: #F7D4AA; --rotulo-texto: #8A3F14;   /* sello · 5,34:1 */
+  --foco: #3355D6;
+  /* Decoración (nunca para texto) */
+  --fondo-pagina: linear-gradient(165deg, #EAF6F1 0%, #F4F6FF 45%, #FBF1F5 100%);
+  --orbe: radial-gradient(circle at 30% 25%, #FFFFFF 0%, rgba(255,255,255,0) 45%), linear-gradient(150deg, #BDCDFF, #EDD5DF 55%, #F7D4AA);
+  --sombra: 0 1px 2px rgba(42,33,64,.05), 0 12px 32px rgba(42,33,64,.08);
+  --circulo-a: rgba(189,205,255,.55); --circulo-b: rgba(237,213,223,.65);
+  --radio: 24px;
+  --fuente: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --alto-barra: 88px;
+  color-scheme: light;
+}
+:root[data-tema="oscuro"] {
+  --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
+  --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
+  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
+  --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
+  --sombra: 0 12px 32px rgba(0,0,0,.35);
+  --circulo-a: rgba(87,128,255,.16); --circulo-b: rgba(230,29,115,.12);
+  color-scheme: dark;
+}
+/* Modo sensorial bajo («Modo suave»): colores apagados, sin degradados, sin sombras, sin movimiento */
+:root[data-suave="si"] {
+  --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
+  --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
+  --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
+  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
+}
+:root[data-suave="si"][data-tema="oscuro"] {
+  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
+}
+:root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; background: var(--fondo); color: var(--texto); font-family: var(--fuente); font-size: 18px; line-height: 1.55; padding-bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px) + 24px); overflow-x: hidden; }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.015em; }
+p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+.c-solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.c-saltar { position: absolute; left: 12px; top: -90px; z-index: 200; background: var(--texto); color: var(--fondo); padding: 12px 18px; border-radius: 12px; font-size: 17px; }
+.c-saltar:focus { top: 10px; }
+.c-fondo { position: fixed; inset: 0; z-index: -1; background: var(--fondo-pagina); overflow: hidden; pointer-events: none; }
+.c-fondo span { position: absolute; border-radius: 50%; }
+.c-fondo span:first-child { width: 420px; height: 420px; right: -170px; top: -130px; background: var(--circulo-a); }
+.c-fondo span:last-child { width: 340px; height: 340px; right: -30px; top: 70px; background: var(--circulo-b); mix-blend-mode: multiply; }
+:root[data-tema="oscuro"] .c-fondo span:last-child { mix-blend-mode: screen; }
+:root[data-suave="si"] .c-fondo span { display: none; }
+.c-icono { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.c-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; padding: 10px 14px 4px; }
+.c-marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; white-space: nowrap; }
+.c-marca-sub { font-weight: 400; color: var(--texto-suave); }
+@media (max-width: 379px) { .c-marca-sub { display: none; } }
+.c-orbe { width: 30px; height: 30px; border-radius: 50%; background: var(--orbe); position: relative; flex: none; }
+.c-orbe::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--menta); mix-blend-mode: multiply; opacity: .9; }
+.c-ajustes { display: flex; gap: 6px; }
+.c-boton-icono { min-height: 48px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 500; cursor: pointer; }
+.c-boton-icono span { white-space: nowrap; }
+@media (max-width: 399px) { .c-cabecera { padding: 10px 10px 4px; } #c-suave .c-icono { display: none; } }
+.c-boton-icono[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+:root[data-tema="oscuro"] .c-icono-luna, :root[data-tema="claro"] .c-icono-sol { display: none; }
+.c-sello { max-width: 640px; margin: 4px auto 0; padding: 0 14px; }
+.c-sello span { display: inline-flex; align-items: center; gap: 8px; background: var(--rotulo-fondo); color: var(--rotulo-texto); font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 999px; }
+.c-boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 24px; border-radius: 999px; border: 2px solid transparent; background: var(--principal); color: var(--sobre-principal); font-size: 18px; font-weight: 600; line-height: 1.25; text-align: center; cursor: pointer; text-decoration: none; transition: background .2s, transform .2s; }
+.c-boton:hover { background: var(--principal-hondo); }
+.c-boton:active { transform: translateY(1px); }
+.c-boton[disabled] { opacity: .45; cursor: not-allowed; }
+.c-boton.secundario { background: var(--superficie); color: var(--principal); border-color: var(--principal); }
+.c-boton.secundario:hover { background: var(--hover-suave); }
+.c-boton.texto { background: transparent; color: var(--principal); min-height: 48px; padding: 6px 12px; text-decoration: underline; text-underline-offset: 4px; }
+.c-boton.texto:hover { background: var(--hover-suave); }
+.c-boton.c-armado { background: var(--acento); color: var(--sobre-acento); text-decoration: none; }
+.c-puerta { position: relative; overflow: hidden; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.c-puerta::before { content: ""; position: absolute; inset: 0; transform-origin: left center; transform: scaleX(var(--progreso, 0)); background: rgba(255,255,255,.32); pointer-events: none; }
+:root[data-tema="oscuro"] .c-puerta::before { background: rgba(13,40,27,.28); }
+.c-puerta > * { position: relative; }
+.c-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 120; background: var(--superficie); border-top: 1px solid var(--borde); box-shadow: 0 -8px 24px rgba(42,33,64,.06); padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.c-barra ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; max-width: 640px; margin: 0 auto; padding: 0; list-style: none; }
+.c-barra button { width: 100%; min-height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 16px; background: transparent; color: var(--texto); font-size: 17px; font-weight: 500; line-height: 1.1; cursor: pointer; padding: 4px 1px; }
+.c-barra button:hover, .c-barra button[aria-expanded="true"] { background: var(--superficie-2); }
+.c-barra .c-boton-ayuda { color: var(--acento); font-weight: 600; }
+.c-capa { position: fixed; left: 0; right: 0; top: 0; bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px)); z-index: 110; background: var(--fondo); overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 20px; text-align: center; }
+.c-capa h2 { font-size: 30px; }
+.c-capa h2:focus { outline: none; }
+.c-capa p { font-size: 20px; max-width: 32ch; color: var(--texto-suave); }
+.c-respira { width: 190px; height: 190px; border-radius: 50%; background: var(--menta); box-shadow: 0 0 0 18px var(--menta-claro), 0 0 0 36px var(--lavanda-claro); transform: scale(.8); }
+.c-respira.activo { animation: c-respirar 10s ease-in-out infinite; }
+@keyframes c-respirar { 0%, 100% { transform: scale(.62); } 40%, 50% { transform: scale(1); } }
+.c-respira-texto { font-size: 26px !important; font-weight: 600; color: var(--texto) !important; min-height: 1.4em; }
+.c-tarjeta-ayuda { background: var(--superficie); border: 4px solid var(--acento); border-radius: 28px; padding: 26px 20px; width: min(100%, 520px); }
+.c-tarjeta-ayuda .c-grande { font-size: 44px; font-weight: 700; color: var(--texto); line-height: 1.1; }
+.c-tarjeta-ayuda .c-pide { font-size: 24px; color: var(--texto); margin: 12px auto 0; }
+.c-numeros { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; text-align: left; }
+.c-numeros li { background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 10px 14px; font-size: 18px; }
+.c-numeros strong { font-size: 26px; margin-right: 8px; }
+.c-nota-ayuda { font-size: 17px !important; margin-top: 14px !important; }
+/* === FIN CARAPAZON CONTIGO v1 === */
+
+/* ===== Pieza «Así estoy, esto necesito» ===== */
+main { max-width: 640px; margin: 0 auto; padding: 8px 14px 0; }
+main:focus { outline: none; }
+.vista h1:focus, .vista h2:focus { outline: none; }
+.titulo-nina { font-size: 24px; font-weight: 700; margin-top: 4px; }
+.pista { font-size: 17px; color: var(--texto-suave); }
+.centro { text-align: center; }
+.paso { font-size: 17px; font-weight: 600; color: var(--azul-hondo); margin-bottom: 6px; }
+.bajada { color: var(--texto-suave); margin-top: 10px; }
+.t-menta { --color-tarjeta: var(--menta); --color-claro: var(--menta-claro); }
+.t-lavanda { --color-tarjeta: var(--lavanda); --color-claro: var(--lavanda-claro); }
+.t-rosa { --color-tarjeta: var(--rosa); --color-claro: var(--rosa-claro); }
+.t-arena { --color-tarjeta: var(--arena); --color-claro: var(--arena-claro); }
+
+/* Tablero de la niña: 3 columnas siempre, así cada tarjeta queda en el mismo lugar en cualquier celular */
+.tablero { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tablero li, .sino li { display: flex; min-width: 0; }
+.hueco { visibility: hidden; }
+@media (max-width: 359px) { main { padding: 8px 10px 0; } .tablero { gap: 6px; } }
+.carta { flex: 1; width: 100%; min-height: 124px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding: 10px 2px 12px; letter-spacing: -0.01em; border-radius: 22px; border: 2px solid var(--color-tarjeta); background: var(--color-claro); color: var(--sobre-pastel); font-size: 17px; font-weight: 600; line-height: 1.15; text-align: center; cursor: pointer; overflow-wrap: break-word; hyphens: auto; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transition: transform .15s; }
+.carta span { max-width: 100%; }
+.carta svg { width: 58px; height: 58px; flex: none; }
+.carta:hover { border-color: var(--principal); }
+.carta:active { transform: scale(.97); }
+.tablero.tres { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.tablero.tres .carta { flex-direction: row; justify-content: flex-start; min-height: 108px; padding: 10px 18px; gap: 16px; font-size: 24px; text-align: left; }
+.tablero.tres .carta svg { width: 80px; height: 80px; }
+.sino { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sino .carta { min-height: 112px; justify-content: center; font-size: 24px; }
+.sino .carta svg { width: 64px; height: 64px; }
+.puerta-zona { margin: 20px 0 0; display: grid; gap: 6px; justify-items: center; text-align: center; }
+.puerta-nina { min-height: 64px; }
+.puerta-nina::before { background: rgba(31,122,85,.22); }
+:root[data-tema="oscuro"] .puerta-nina::before { background: rgba(127,216,174,.25); }
+
+/* Modo mostrar: la tarjeta a pantalla completa, alto contraste, para enseñársela a un adulto */
+.mostrar { position: fixed; inset: 0; z-index: 130; background: var(--fondo); display: flex; flex-direction: column; gap: 12px; padding: 14px 14px calc(14px + env(safe-area-inset-bottom, 0px)); }
+.mostrar-carta { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: #FFFFFF; color: #111111; border: 6px solid #111111; border-radius: 32px; padding: 16px; text-align: center; transform-origin: 0 0; overflow: hidden; }
+:root[data-tema="oscuro"] .mostrar-carta { background: #000000; color: #FFFFFF; border-color: #FFFFFF; }
+.mostrar-dibujo { width: min(72vw, 42vh, 360px); height: min(72vw, 42vh, 360px); flex: none; }
+.mostrar-palabra { font-size: 44px; font-weight: 700; line-height: 1.1; overflow-wrap: break-word; hyphens: auto; max-width: 100%; }
+@media (min-width: 420px) and (min-height: 600px) { .mostrar-palabra { font-size: 60px; } }
+.mostrar-acciones { display: grid; gap: 10px; }
+.boton-grande { width: 100%; min-height: 64px; font-size: 22px; }
+
+/* Vista adulto */
+.hoja { background: var(--superficie); border-radius: 28px; box-shadow: var(--sombra); padding: 20px 16px; border: 1px solid var(--borde); }
+.vista h2 { font-size: 27px; font-weight: 700; }
+.aviso-caa { margin: 14px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--arena-claro); color: var(--sobre-pastel); border-left: 8px solid #8A3F14; font-weight: 600; }
+.partida { margin: 12px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--lavanda-claro); color: var(--sobre-pastel); font-size: 17px; }
+.bloque { margin-top: 22px; }
+.bloque h3 { font-size: 20px; margin-bottom: 8px; }
+.grupo-botones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.opcion { min-height: 52px; border-radius: 16px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 600; line-height: 1.2; cursor: pointer; padding: 8px 10px; }
+.opcion:hover { border-color: var(--principal); }
+.opcion[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+.interruptor { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; margin-top: 8px; }
+.interruptor .estado { flex: none; border-radius: 999px; padding: 2px 12px; background: var(--superficie-2); color: var(--texto); }
+.interruptor[aria-pressed="true"] .estado { background: var(--principal); color: var(--sobre-principal); }
+.filas { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.fila { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px 8px; align-items: center; padding: 10px 8px; border-radius: 18px; border: 1px solid var(--borde); border-left: 8px solid var(--color-tarjeta); background: var(--superficie); }
+.fila svg { width: 44px; height: 44px; }
+.fila label { display: block; font-size: 17px; color: var(--texto-suave); }
+.fila input { width: 100%; min-height: 48px; border: 2px solid var(--borde); border-radius: 14px; padding: 8px 12px; background: var(--superficie); font-size: 18px; }
+.fila input:focus-visible { border-color: var(--foco); }
+.fila-botones { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fila-botones .opcion { flex: 1 1 100px; }
+.siempre { flex: 1 1 100px; font-size: 17px; color: var(--texto-suave); text-align: center; }
+.aviso-campo { color: var(--acento); font-weight: 500; font-size: 17px; margin-top: 8px; }
+.aviso-campo:empty { display: none; }
+.estado-guardado { min-height: 1.5em; font-size: 17px; color: var(--principal); font-weight: 600; margin-top: 12px; }
+.acciones { display: grid; gap: 12px; margin-top: 18px; }
+.zona-borrar { margin: 20px 0 0; text-align: center; }
+
+/* Hoja para todo el salón (vista maestra): se ve como papel, igual en tema claro u oscuro */
+.papel { background: #FFFFFF; color: #1E1E2A; border-radius: 20px; border: 1px solid var(--borde); padding: 18px 14px; margin-top: 16px; box-shadow: var(--sombra); }
+.papel-titulo { font-size: 22px; font-weight: 700; }
+.papel-sub { font-size: 17px; color: #4A4A5E; margin-top: 4px; }
+.papel-cuadricula { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.carta-hoja { border: 2px solid #1E1E2A; border-radius: 16px; background: var(--color-claro); color: #1E1E2A; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px 10px; text-align: center; font-size: 17px; font-weight: 700; line-height: 1.15; overflow-wrap: break-word; hyphens: auto; min-width: 0; }
+.carta-hoja span { max-width: 100%; }
+.carta-hoja svg { width: 52px; height: 52px; flex: none; }
+.papel-pie { margin-top: 12px; font-size: 17px; color: #4A4A5E; text-align: center; }
+/* Las tarjetas se acomodan en la hoja una sola vez (sin movimiento en modo suave ni con «reducir movimiento») */
+.papel.anima .carta-hoja { animation: asentar .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 45ms); }
+@keyframes asentar { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+
+/* Impresión: sale solo la hoja, en una carta vertical, desde cualquier vista */
+@page { size: letter portrait; margin: 12mm; }
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; animation: none !important; transition: none !important; }
+  body { background: #FFFFFF; color: #000000; padding: 0; min-height: 0; }
+  .c-fondo, .c-saltar, .c-cabecera, .c-sello, .c-barra, .c-capa, #c-anuncio, #vista-nina, #vista-adulto, .intro-aula, .mostrar { display: none !important; }
+  #vista-aula, #vista-aula[hidden] { display: block !important; }
+  main { max-width: none; padding: 0; margin: 0; }
+  .papel { border: 0; box-shadow: none; border-radius: 0; padding: 0; margin: 0; }
+  .papel-titulo { font-size: 20pt; }
+  .papel-sub { font-size: 12pt; margin-top: 1mm; }
+  .papel-cuadricula { grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 4mm; }
+  .carta-hoja { height: 50mm; justify-content: center; gap: 2mm; border: 0.6mm solid #1E1E2A; border-radius: 5mm; padding: 2mm; font-size: 15pt; break-inside: avoid; }
+  .carta-hoja svg { width: 28mm; height: 28mm; }
+  .papel-pie { font-size: 10pt; margin-top: 3mm; }
+}
+</style>
+<script>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común (JS). Se copia IDÉNTICO a cada pieza. Solo define funciones: nada corre solo,
+   salvo aplicar el tema guardado al cargar (para que no parpadee). Todo lo que toca el navegador
+   va en try/catch: si algo falla, la pieza sigue funcionando (sin guardar o sin voz). */
+var Contigo = (function () {
+  'use strict';
+  var PREFIJO = 'contigo.';
+
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* 1 · Baúl local: localStorage con claves contigo.* (nunca sale del celular) */
+  var baul = {
+    leer: function (clave) {
+      try { var t = window.localStorage.getItem(PREFIJO + clave); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+    },
+    guardar: function (clave, valor) {
+      try { window.localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); return true; } catch (e) { return false; }
+    },
+    quitar: function (clave) {
+      try { window.localStorage.removeItem(PREFIJO + clave); return true; } catch (e) { return false; }
+    },
+    claves: function () {
+      try {
+        var ls = window.localStorage, r = [];
+        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && k.indexOf(PREFIJO) === 0) r.push(k); }
+        return r;
+      } catch (e) { return []; }
+    },
+    borrarTodo: function () {
+      var lista = baul.claves();
+      try { lista.forEach(function (k) { window.localStorage.removeItem(k); }); return lista.length; } catch (e) { return -1; }
+    }
+  };
+
+  /* 2 · Bytes y base64url: el estado viaja comprimido después del # del enlace (el # no llega al servidor) */
+  function utf8(texto) { return Array.from(new TextEncoder().encode(String(texto == null ? '' : texto))); }
+  function deUtf8(arr) { return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(arr)); }
+  function recortarUtf8(texto, maxBytes) {
+    var r = [], letras = Array.from(String(texto == null ? '' : texto));
+    for (var i = 0; i < letras.length; i++) { var b = utf8(letras[i]); if (r.length + b.length > maxBytes) break; r = r.concat(b); }
+    return r;
+  }
+  function aBase64url(arr) {
+    var s = '';
+    for (var i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 255);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function deBase64url(txt) {
+    if (typeof txt !== 'string' || !/^[A-Za-z0-9_-]*$/.test(txt) || txt.length % 4 === 1) return null;
+    var b = txt.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    try { var s = atob(b), r = []; for (var i = 0; i < s.length; i++) r.push(s.charCodeAt(i)); return r; } catch (e) { return null; }
+  }
+  function Escritor() { this.b = []; }
+  Escritor.prototype.byte = function (n) { this.b.push(n & 255); return this; };
+  Escritor.prototype.texto = function (t, maxBytes) {
+    var u = recortarUtf8(t, Math.min(255, maxBytes || 255));
+    this.byte(u.length); for (var i = 0; i < u.length; i++) this.b.push(u[i]);
+    return this;
+  };
+  Escritor.prototype.bytes = function () { return this.b.slice(); };
+  function Lector(arr) { this.b = arr; this.i = 0; }
+  Lector.prototype.byte = function () { if (this.i >= this.b.length) throw new Error('corto'); return this.b[this.i++]; };
+  Lector.prototype.texto = function () {
+    var n = this.byte();
+    if (this.i + n > this.b.length) throw new Error('corto');
+    var t = deUtf8(this.b.slice(this.i, this.i + n)); this.i += n; return t;
+  };
+  Lector.prototype.fin = function () { return this.i === this.b.length; };
+  var bytes = { utf8: utf8, deUtf8: deUtf8, recortarUtf8: recortarUtf8, aBase64url: aBase64url, deBase64url: deBase64url, Escritor: Escritor, Lector: Lector };
+
+  /* Formato del #: <pieza>.<base64url>. Ej.: #a1.AARMdW5h... (a1 = «Así soy yo», versión 1) */
+  var enlace = {
+    empaquetar: function (pieza, arr) { return pieza + '.' + aBase64url(arr); },
+    desempaquetar: function (pieza, fragmento) {
+      var f = String(fragmento == null ? '' : fragmento);
+      if (f.charAt(0) === '#') f = f.slice(1);
+      if (f.indexOf(pieza + '.') !== 0) return null;
+      var datos = f.slice(pieza.length + 1).match(/^[A-Za-z0-9_-]*/)[0]; // ignora basura pegada al final (un punto, un paréntesis)
+      if (!datos) return null;
+      return deBase64url(datos);
+    }
+  };
+
+  /* 3 · Código QR propio (modo byte, corrección M o L, versiones 1 a 40). Sin librerías ni red.
+     Sigue la norma ISO/IEC 18004; el algoritmo es el de referencia (Reed-Solomon sobre GF(256)). */
+  var qr = (function () {
+    var ECC = {
+      L: [7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+      M: [10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28]
+    };
+    var BLOQUES = {
+      L: [1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8,8,9,9,10,12,12,12,13,14,15,16,17,18,19,19,20,21,22,24,25],
+      M: [1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49]
+    };
+    var FORMATO = { L: 1, M: 0 };
+    function modulosCrudos(v) {
+      var r = (16 * v + 128) * v + 64;
+      if (v >= 2) { var n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; }
+      return r;
+    }
+    function palabrasDatos(v, n) { return Math.floor(modulosCrudos(v) / 8) - ECC[n][v - 1] * BLOQUES[n][v - 1]; }
+    function mul(x, y) {
+      var z = 0;
+      for (var i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; }
+      return z;
+    }
+    function divisor(grado) {
+      var r = [], raiz = 1, i, j;
+      for (i = 0; i < grado - 1; i++) r.push(0);
+      r.push(1);
+      for (i = 0; i < grado; i++) {
+        for (j = 0; j < r.length; j++) { r[j] = mul(r[j], raiz); if (j + 1 < r.length) r[j] ^= r[j + 1]; }
+        raiz = mul(raiz, 0x02);
+      }
+      return r;
+    }
+    function resto(datos, div) {
+      var r = div.map(function () { return 0; });
+      datos.forEach(function (b) {
+        var f = b ^ r.shift(); r.push(0);
+        div.forEach(function (c, i) { r[i] ^= mul(c, f); });
+      });
+      return r;
+    }
+    function alineacion(v, t) {
+      if (v === 1) return [];
+      var n = Math.floor(v / 7) + 2, paso = Math.floor((v * 8 + n * 3 + 5) / (n * 4 - 4)) * 2, r = [6];
+      for (var p = t - 7; r.length < n; p -= paso) r.splice(1, 0, p);
+      return r;
+    }
+    function matriz(texto) {
+      var datos = utf8(texto), nivel = null, v = 0, cc = 8, niveles = ['M', 'L'];
+      for (var a = 0; a < niveles.length && !nivel; a++) {
+        for (v = 1; v <= 40; v++) {
+          cc = v <= 9 ? 8 : 16;
+          if (datos.length < Math.pow(2, cc) && 4 + cc + datos.length * 8 <= palabrasDatos(v, niveles[a]) * 8) { nivel = niveles[a]; break; }
+        }
+      }
+      if (!nivel) return null;
+      // Bits de datos: modo byte (0100) + largo + bytes + terminador + relleno
+      var bb = [];
+      function poner(val, largo) { for (var i = largo - 1; i >= 0; i--) bb.push((val >>> i) & 1); }
+      poner(4, 4); poner(datos.length, cc);
+      datos.forEach(function (b) { poner(b, 8); });
+      var cap = palabrasDatos(v, nivel) * 8;
+      poner(0, Math.min(4, cap - bb.length));
+      poner(0, (8 - bb.length % 8) % 8);
+      for (var pad = 0xEC; bb.length < cap; pad ^= 0xEC ^ 0x11) poner(pad, 8);
+      var cw = [];
+      for (var i = 0; i < bb.length; i += 8) { var x = 0; for (var k = 0; k < 8; k++) x = (x << 1) | bb[i + k]; cw.push(x); }
+      // Bloques con corrección de errores, intercalados
+      var nb = BLOQUES[nivel][v - 1], ecl = ECC[nivel][v - 1], crudas = Math.floor(modulosCrudos(v) / 8);
+      var cortos = nb - crudas % nb, largoCorto = Math.floor(crudas / nb), div = divisor(ecl), bloques = [], pos = 0;
+      for (i = 0; i < nb; i++) {
+        var d = cw.slice(pos, pos + largoCorto - ecl + (i < cortos ? 0 : 1));
+        pos += d.length;
+        var e = resto(d, div);
+        if (i < cortos) d.push(0);
+        bloques.push(d.concat(e));
+      }
+      var final = [];
+      for (i = 0; i < bloques[0].length; i++) {
+        for (var j = 0; j < bloques.length; j++) { if (i !== largoCorto - ecl || j >= cortos) final.push(bloques[j][i]); }
+      }
+      // Matriz: patrones fijos
+      var t = v * 4 + 17, m = [], f = [];
+      for (i = 0; i < t; i++) { m.push(new Array(t).fill(false)); f.push(new Array(t).fill(false)); }
+      function fijo(x, y, osc) { m[y][x] = osc; f[y][x] = true; }
+      for (i = 0; i < t; i++) { fijo(6, i, i % 2 === 0); fijo(i, 6, i % 2 === 0); }
+      [[3, 3], [t - 4, 3], [3, t - 4]].forEach(function (p) {
+        for (var dy = -4; dy <= 4; dy++) for (var dx = -4; dx <= 4; dx++) {
+          var dist = Math.max(Math.abs(dx), Math.abs(dy)), xx = p[0] + dx, yy = p[1] + dy;
+          if (xx >= 0 && xx < t && yy >= 0 && yy < t) fijo(xx, yy, dist !== 2 && dist !== 4);
+        }
+      });
+      var al = alineacion(v, t);
+      for (i = 0; i < al.length; i++) for (j = 0; j < al.length; j++) {
+        if ((i === 0 && j === 0) || (i === 0 && j === al.length - 1) || (i === al.length - 1 && j === 0)) continue;
+        for (var dy2 = -2; dy2 <= 2; dy2++) for (var dx2 = -2; dx2 <= 2; dx2++) fijo(al[i] + dx2, al[j] + dy2, Math.max(Math.abs(dx2), Math.abs(dy2)) !== 1);
+      }
+      function formato(mk) {
+        var dat = (FORMATO[nivel] << 3) | mk, r = dat, q;
+        for (q = 0; q < 10; q++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+        var b = ((dat << 10) | r) ^ 0x5412;
+        function bit(n) { return ((b >>> n) & 1) !== 0; }
+        for (q = 0; q <= 5; q++) fijo(8, q, bit(q));
+        fijo(8, 7, bit(6)); fijo(8, 8, bit(7)); fijo(7, 8, bit(8));
+        for (q = 9; q < 15; q++) fijo(14 - q, 8, bit(q));
+        for (q = 0; q < 8; q++) fijo(t - 1 - q, 8, bit(q));
+        for (q = 8; q < 15; q++) fijo(8, t - 15 + q, bit(q));
+        fijo(8, t - 8, true);
+      }
+      formato(0);
+      if (v >= 7) {
+        var rv = v;
+        for (i = 0; i < 12; i++) rv = (rv << 1) ^ ((rv >>> 11) * 0x1F25);
+        var vb = (v << 12) | rv;
+        for (i = 0; i < 18; i++) { var bt = ((vb >>> i) & 1) !== 0, aa = t - 11 + i % 3, bb2 = Math.floor(i / 3); fijo(aa, bb2, bt); fijo(bb2, aa, bt); }
+      }
+      // Datos en zigzag
+      var idx = 0;
+      for (var der = t - 1; der >= 1; der -= 2) {
+        if (der === 6) der = 5;
+        for (var vert = 0; vert < t; vert++) for (j = 0; j < 2; j++) {
+          var xx2 = der - j, arriba = ((der + 1) & 2) === 0, yy2 = arriba ? t - 1 - vert : vert;
+          if (!f[yy2][xx2] && idx < final.length * 8) { m[yy2][xx2] = ((final[idx >>> 3] >>> (7 - (idx & 7))) & 1) !== 0; idx++; }
+        }
+      }
+      function mascara(mk) {
+        for (var y = 0; y < t; y++) for (var x = 0; x < t; x++) {
+          var inv;
+          switch (mk) {
+            case 0: inv = (x + y) % 2 === 0; break;
+            case 1: inv = y % 2 === 0; break;
+            case 2: inv = x % 3 === 0; break;
+            case 3: inv = (x + y) % 3 === 0; break;
+            case 4: inv = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0; break;
+            case 5: inv = x * y % 2 + x * y % 3 === 0; break;
+            case 6: inv = (x * y % 2 + x * y % 3) % 2 === 0; break;
+            default: inv = ((x + y) % 2 + x * y % 3) % 2 === 0;
+          }
+          if (!f[y][x] && inv) m[y][x] = !m[y][x];
+        }
+      }
+      function celda(dir, a1, b1) { if (b1 < 0 || b1 >= t) return false; return dir ? m[b1][a1] : m[a1][b1]; }
+      function penalidad() {
+        var p = 0, a1, b1, dir, run, q, patron = [1, 0, 1, 1, 1, 0, 1];
+        for (dir = 0; dir < 2; dir++) for (a1 = 0; a1 < t; a1++) {
+          run = 1;
+          for (b1 = 1; b1 < t; b1++) {
+            if (celda(dir, a1, b1) === celda(dir, a1, b1 - 1)) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1;
+          }
+          for (b1 = 0; b1 <= t - 7; b1++) {
+            var ok = true;
+            for (q = 0; q < 7; q++) if (celda(dir, a1, b1 + q) !== (patron[q] === 1)) { ok = false; break; }
+            if (!ok) continue;
+            var antes = true, despues = true;
+            for (q = 1; q <= 4; q++) { if (celda(dir, a1, b1 - q)) antes = false; if (celda(dir, a1, b1 + 6 + q)) despues = false; }
+            if (antes || despues) p += 40;
+          }
+        }
+        for (var y = 0; y < t - 1; y++) for (var x = 0; x < t - 1; x++) {
+          var c = m[y][x]; if (c === m[y][x + 1] && c === m[y + 1][x] && c === m[y + 1][x + 1]) p += 3;
+        }
+        var osc = 0; m.forEach(function (fila) { fila.forEach(function (cc2) { if (cc2) osc++; }); });
+        var total = t * t; p += (Math.ceil(Math.abs(osc * 20 - total * 10) / total) - 1) * 10;
+        return p;
+      }
+      var mejor = 0, menor = Infinity;
+      for (var mk = 0; mk < 8; mk++) {
+        mascara(mk); formato(mk);
+        var pen = penalidad();
+        if (pen < menor) { menor = pen; mejor = mk; }
+        mascara(mk);
+      }
+      mascara(mejor); formato(mejor);
+      return { version: v, nivel: nivel, tamano: t, modulos: m, mascara: mejor };
+    }
+    function svg(texto, etiqueta) {
+      var q = matriz(texto);
+      if (!q) return '';
+      var borde = 4, n = q.tamano + borde * 2, d = '';
+      q.modulos.forEach(function (fila, y) {
+        var x = 0;
+        while (x < fila.length) {
+          if (!fila[x]) { x++; continue; }
+          var ini = x; while (x < fila.length && fila[x]) x++;
+          d += 'M' + (ini + borde) + ' ' + (y + borde) + 'h' + (x - ini) + 'v1h-' + (x - ini) + 'z';
+        }
+      });
+      return '<svg viewBox="0 0 ' + n + ' ' + n + '" role="img" aria-label="' + esc(etiqueta || 'Código QR') + '" shape-rendering="crispEdges"><rect width="' + n + '" height="' + n + '" fill="#FFFFFF"/><path fill="#1E1E2A" d="' + d + '"/></svg>';
+    }
+    return { matriz: matriz, svg: svg };
+  })();
+
+  /* 4 · Voz opcional («Escuchar»): solo con un toque; si no hay voz en español, el botón se esconde */
+  var voz = {
+    elegida: null,
+    buscar: function () {
+      try {
+        if (!('speechSynthesis' in window)) return null;
+        var vs = window.speechSynthesis.getVoices() || [];
+        var es = vs.filter(function (x) { return /^es([-_]|$)/i.test(x.lang || ''); });
+        if (!es.length) return null;
+        var orden = ['es-co', 'es-419', 'es-us', 'es-mx', 'es-es'];
+        for (var i = 0; i < orden.length; i++) {
+          var hit = es.filter(function (x) { return (x.lang || '').toLowerCase().replace('_', '-') === orden[i]; })[0];
+          if (hit) return hit;
+        }
+        return es[0];
+      } catch (e) { return null; }
+    },
+    actualizar: function () {
+      voz.elegida = voz.buscar();
+      var hay = !!voz.elegida;
+      try { document.querySelectorAll('[data-voz]').forEach(function (el) { el.hidden = !hay; }); } catch (e) {}
+    },
+    iniciar: function () {
+      voz.actualizar();
+      try { if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = voz.actualizar; } catch (e) {}
+    },
+    decir: function (texto) {
+      try {
+        var s = window.speechSynthesis;
+        if (s.speaking) { s.cancel(); return; } // segundo toque = parar
+        if (!voz.elegida || !texto) return;
+        var u = new SpeechSynthesisUtterance(texto);
+        u.voice = voz.elegida; u.lang = voz.elegida.lang; u.rate = 0.9;
+        s.speak(u);
+      } catch (e) {}
+    },
+    callar: function () { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  };
+
+  /* 5 · Ajustes: tema claro/oscuro y modo sensorial bajo («Modo suave»), recordados en contigo.ajustes */
+  function leerAjustes() { var a = baul.leer('ajustes'); return (a && typeof a === 'object') ? a : {}; }
+  function aplicarAjustes() {
+    try {
+      var a = leerAjustes(), raiz = document.documentElement, oscuroSistema = false;
+      try { oscuroSistema = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
+      var tema = (a.tema === 'oscuro' || a.tema === 'claro') ? a.tema : (oscuroSistema ? 'oscuro' : 'claro');
+      raiz.setAttribute('data-tema', tema);
+      raiz.setAttribute('data-suave', a.suave ? 'si' : 'no');
+      var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+      if (bs) bs.setAttribute('aria-pressed', a.suave ? 'true' : 'false');
+      if (bt) bt.setAttribute('aria-pressed', tema === 'oscuro' ? 'true' : 'false');
+    } catch (e) {}
+  }
+  function cambiarAjuste(clave, valor) { var a = leerAjustes(); a[clave] = valor; baul.guardar('ajustes', a); aplicarAjustes(); }
+  function suave() {
+    try { return document.documentElement.getAttribute('data-suave') === 'si' || window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* 6 · Anuncios para lector de pantalla */
+  function anunciar(msg) {
+    var el = document.getElementById('c-anuncio');
+    if (!el) return;
+    el.textContent = '';
+    setTimeout(function () { el.textContent = msg; }, 60);
+  }
+
+  /* 7 · Capas de la barra: Pausa, Calma (respiración), Necesito ayuda (tarjeta para mostrar), Salir */
+  var capaAbierta = null, focoPrevio = null, relojRespira = 0;
+  function marcarInerte(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.inert = si;
+      if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+  }
+  function empezarRespiracion() {
+    var txt = document.getElementById('c-respira-texto'), circulo = document.getElementById('c-respira');
+    var frases = ['Toma aire despacio…', 'Suéltalo despacio…'], tiempos = [4000, 6000], fase = 0;
+    if (circulo) { circulo.classList.remove('activo'); void circulo.offsetWidth; circulo.classList.add('activo'); }
+    (function ciclo() {
+      if (txt) txt.textContent = frases[fase];
+      relojRespira = setTimeout(function () { fase = 1 - fase; ciclo(); }, tiempos[fase]);
+    })();
+  }
+  function pararRespiracion() {
+    clearTimeout(relojRespira);
+    var c = document.getElementById('c-respira'); if (c) c.classList.remove('activo');
+  }
+  function botonesBarra(abierta) {
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', b.getAttribute('data-c-capa') === abierta ? 'true' : 'false');
+    });
+  }
+  function cerrarCapa(sinFoco) {
+    if (!capaAbierta) return;
+    capaAbierta.hidden = true;
+    if (capaAbierta.id === 'c-capa-calma') pararRespiracion();
+    capaAbierta = null;
+    marcarInerte(false); botonesBarra(null);
+    if (!sinFoco && focoPrevio && focoPrevio.focus) { try { focoPrevio.focus(); } catch (e) {} }
+  }
+  function abrirCapa(id) {
+    var yaEstaba = capaAbierta && capaAbierta.id === id;
+    if (capaAbierta) { var previo = focoPrevio; cerrarCapa(true); focoPrevio = previo; } else { focoPrevio = document.activeElement; }
+    if (yaEstaba) { if (focoPrevio && focoPrevio.focus) focoPrevio.focus(); return; } // segundo toque en el mismo botón = cerrar
+    var capa = document.getElementById(id);
+    if (!capa) return;
+    voz.callar();
+    capa.hidden = false; capaAbierta = capa;
+    marcarInerte(true); botonesBarra(id);
+    if (id === 'c-capa-calma') empezarRespiracion();
+    var destino = capa.querySelector('[data-foco]') || capa.querySelector('button');
+    if (destino) destino.focus();
+  }
+  function salir() {
+    voz.callar();
+    var enSitio = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
+    if (enSitio) location.assign('/'); else abrirCapa('c-capa-salir');
+  }
+
+  /* 8 · Puerta de adulto: mantener presionado 3 segundos (sin sumas, para que la abuela pueda) */
+  function puertaAdulto(boton, alAbrir, ms, alSoltar) {
+    ms = ms || 3000;
+    var t0 = 0, raf = 0, activo = false, abiertaHace = 0;
+    function paso() {
+      var p = Math.min(1, (performance.now() - t0) / ms);
+      boton.style.setProperty('--progreso', String(p));
+      if (p >= 1) { terminar(true); return; }
+      raf = requestAnimationFrame(paso);
+    }
+    function empezar(e) {
+      if (activo) return;
+      if (e && e.cancelable) e.preventDefault();
+      activo = true; t0 = performance.now();
+      boton.classList.add('c-presionando');
+      raf = requestAnimationFrame(paso);
+    }
+    function terminar(ok) {
+      if (!activo) return;
+      cancelAnimationFrame(raf); activo = false;
+      boton.classList.remove('c-presionando');
+      boton.style.setProperty('--progreso', '0');
+      if (ok) { abiertaHace = Date.now(); alAbrir(); } else if (alSoltar) alSoltar();
+    }
+    boton.addEventListener('pointerdown', function (e) { if (e.button === 0 || e.pointerType !== 'mouse') empezar(e); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { boton.addEventListener(ev, function () { terminar(false); }); });
+    boton.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) empezar(e); else if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+    boton.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') terminar(false); });
+    boton.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    boton.addEventListener('click', function (e) { e.preventDefault(); if (!activo && Date.now() - abiertaHace > 800 && alSoltar) alSoltar(); });
+  }
+
+  /* 9 · Doble toque para lo que no tiene reversa (p. ej., «Borrar todo lo de este celular») */
+  function dobleToque(boton, op) {
+    var armado = false, desde = 0, reloj = 0, original = boton.innerHTML;
+    function desarmar() { armado = false; boton.innerHTML = original; boton.classList.remove('c-armado'); }
+    boton.addEventListener('click', function () {
+      if (!armado) {
+        armado = true; desde = Date.now();
+        boton.textContent = op.confirmar; boton.classList.add('c-armado');
+        anunciar(op.confirmar);
+        reloj = setTimeout(desarmar, 6000);
+        return;
+      }
+      if (Date.now() - desde < 350) return; // un doble clic accidental no borra
+      clearTimeout(reloj); desarmar(); op.alConfirmar();
+    });
+  }
+
+  /* 10 · Copiar al portapapeles (con plan B si el navegador no deja) */
+  function copiar(texto) {
+    return new Promise(function (listo) {
+      function planB() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = texto; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand('copy'); ta.remove(); listo(!!ok);
+        } catch (e) { listo(false); }
+      }
+      try {
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(function () { listo(true); }, planB);
+        else planB();
+      } catch (e) { planB(); }
+    });
+  }
+
+  /* 11 · Arranque: lo llama cada pieza cuando la página cargó */
+  function iniciar(op) {
+    op = op || {};
+    aplicarAjustes();
+    var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+    if (bs) bs.addEventListener('click', function () { cambiarAjuste('suave', !leerAjustes().suave); anunciar(leerAjustes().suave ? 'Modo suave activado' : 'Modo suave apagado'); if (op.alCambiarAjustes) op.alCambiarAjustes(); });
+    if (bt) bt.addEventListener('click', function () { cambiarAjuste('tema', document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro'); });
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var acc = b.getAttribute('data-c-accion');
+        if (acc === 'salir') salir(); else abrirCapa(b.getAttribute('data-c-capa'));
+      });
+    });
+    document.querySelectorAll('[data-c-cerrar]').forEach(function (b) { b.addEventListener('click', function () { cerrarCapa(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && capaAbierta) cerrarCapa(false); });
+    var adulto = document.getElementById('c-ayuda-adulto');
+    if (adulto) adulto.hidden = op.vistaAdulto === false;
+    voz.iniciar();
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.c-escuchar') : null;
+      if (b) voz.decir(op.textoEscuchar ? op.textoEscuchar() : '');
+    });
+    try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', aplicarAjustes); } catch (e) {}
+  }
+
+  return {
+    version: 1, PREFIJO: PREFIJO, esc: esc, baul: baul, bytes: bytes, enlace: enlace, qr: qr, voz: voz,
+    aplicarAjustes: aplicarAjustes, cambiarAjuste: cambiarAjuste, suave: suave, anunciar: anunciar,
+    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar
+  };
+})();
+if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado antes de pintar
+/* === FIN CARAPAZON CONTIGO v1 === */
+</script>
+</head>
+<body>
+<!-- === CARAPAZON CONTIGO v1 · HTML (fondo, cabecera, sello) === -->
+<a class="c-saltar" href="#principal">Saltar al contenido</a>
+<div class="c-fondo" aria-hidden="true"><span></span><span></span></div>
+<header class="c-cabecera" id="c-cabecera">
+  <div class="c-marca"><span class="c-orbe" aria-hidden="true"></span><span>Contigo<span class="c-marca-sub"> · Recursos</span></span></div>
+  <div class="c-ajustes">
+    <button type="button" class="c-boton-icono" id="c-suave" aria-pressed="false" aria-describedby="c-suave-desc"><svg class="c-icono" aria-hidden="true"><use href="#i-suave"/></svg><span>Modo suave</span></button>
+    <button type="button" class="c-boton-icono" id="c-tema" aria-pressed="false" aria-label="Pantalla oscura"><svg class="c-icono c-icono-luna" aria-hidden="true"><use href="#i-luna"/></svg><svg class="c-icono c-icono-sol" aria-hidden="true"><use href="#i-sol"/></svg></button>
+  </div>
+  <span id="c-suave-desc" class="c-solo-lector">Sin movimiento y con colores más quietos. Se recuerda en este celular.</span>
+</header>
+<p class="c-sello" id="c-sello"><span>Prototipo · datos de ejemplo</span></p>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (arriba) === -->
+
+<!-- Dibujos propios de Contigo (CC BY 4.0). Planos, redondeados, con los pasteles del manual. -->
+<svg id="dibujos" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">
+<!-- Iconos de la interfaz (copiados del caparazón; trazo del color del texto) -->
+<symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+<symbol id="i-calma" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></symbol>
+<symbol id="i-ayuda" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></symbol>
+<symbol id="i-salir" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+<symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4zM15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<symbol id="i-suave" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l6.5-6.5"/></symbol>
+<symbol id="i-luna" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+<symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+<symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-compartir" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+<symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<!-- Las 12 tarjetas (64 × 64). La niña de pelo café es la misma en todas. -->
+<symbol id="d-pausa" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><rect x="18" y="14" width="6.5" height="22" rx="3.25" fill="#F7D4AA"/><rect x="25" y="10" width="6.5" height="25" rx="3.25" fill="#F7D4AA"/><rect x="32" y="11" width="6.5" height="24" rx="3.25" fill="#F7D4AA"/><rect x="39" y="15" width="6.5" height="21" rx="3.25" fill="#F7D4AA"/><rect x="44" y="30" width="6.5" height="15" rx="3.25" transform="rotate(35 47 37)" fill="#F7D4AA"/><path d="M18 30h27.5v8a12 12 0 0 1-12 12h-3.5a12 12 0 0 1-12-12z" fill="#F7D4AA"/><circle cx="51" cy="52" r="8.5" fill="#FFFFFF"/><path d="M48 48.5v7M54 48.5v7"/></g></symbol>
+<symbol id="d-ruido" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><path d="M6.5 23q-3 6 0 12M57.5 23q3 6 0 12M4 17q-5 12 0 24M60 17q5 12 0 24" stroke="#B8125C"/><circle cx="32" cy="35" r="15" fill="#F7D4AA"/><path d="M17 35a15 15 0 0 1 30 0c-4-6-9-8-15-8s-11 2-15 8z" fill="#8A5A44"/><path d="M24.5 34l4 2-4 2M39.5 34l-4 2 4 2"/><path d="M27 44.5q5-3.5 10 0"/><rect x="11" y="28" width="9" height="16" rx="4.5" fill="#F7D4AA"/><rect x="44" y="28" width="9" height="16" rx="4.5" fill="#F7D4AA"/></g></symbol>
+<symbol id="d-ayuda" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M13 58a15 15 0 0 1 30 0z" fill="#CCEADE"/><rect x="40.5" y="19" width="7" height="30" rx="3.5" transform="rotate(12 44 34)" fill="#F7D4AA"/><circle cx="47.5" cy="16" r="5.5" fill="#F7D4AA"/><circle cx="28" cy="35" r="10" fill="#F7D4AA"/><path d="M18 35a10 10 0 0 1 20 0c-3-4-6-5-10-5s-7 1-10 5z" fill="#8A5A44"/><circle cx="24.5" cy="37" r="1.5" fill="#2A2140" stroke="none"/><circle cx="31.5" cy="37" r="1.5" fill="#2A2140" stroke="none"/><path d="M25.5 41q2.5 2 5 0"/><path d="M55 9l3-3M56.5 16h4M49.5 6l-.5-4" stroke="#B8125C"/></g></symbol>
+<symbol id="d-duele" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><circle cx="32" cy="35" r="16" fill="#F7D4AA"/><path d="M16 35a16 16 0 0 1 32 0c-4-6.5-9.5-8.5-16-8.5s-12 2-16 8.5z" fill="#8A5A44"/><path d="M22.5 32.5l5-2M41.5 32.5l-5-2"/><circle cx="26" cy="36.5" r="1.8" fill="#2A2140" stroke="none"/><circle cx="38" cy="36.5" r="1.8" fill="#2A2140" stroke="none"/><path d="M26 44.5q2-2 4 0t4 0"/><g transform="rotate(32 39 25)"><rect x="32" y="22" width="14" height="6" rx="3" fill="#FFFFFF"/><path d="M37.5 25h.01M40.5 25h.01"/></g><path d="M40.5 39.5q-2 3.2 0 4.4q2-1.2 0-4.4z" fill="#8FA9FF"/></g></symbol>
+<symbol id="d-bano" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><rect x="15" y="10" width="15" height="21" rx="3" fill="#FFFFFF"/><path d="M19 15h7"/><path d="M25 44l-2 10h18l-2-10" fill="#FFFFFF"/><path d="M12 31h40c0 9.5-8.5 15-20 15S12 40.5 12 31z" fill="#FFFFFF"/><path d="M12 31h40"/><path d="M46 14c2.2 3.2 3.6 5.2 3.6 7a3.6 3.6 0 0 1-7.2 0c0-1.8 1.4-3.8 3.6-7z" fill="#BDCDFF"/></g></symbol>
+<symbol id="d-sed" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M19 15h26l-4.6 33.5a3.5 3.5 0 0 1-3.5 3h-9.8a3.5 3.5 0 0 1-3.5-3z" fill="#F4F6FF" stroke="none"/><path d="M21.3 28h21.4l-2.7 20.2a3 3 0 0 1-3 2.6h-10a3 3 0 0 1-3-2.6z" fill="#8FA9FF" stroke="none"/><path d="M19 15h26l-4.6 33.5a3.5 3.5 0 0 1-3.5 3h-9.8a3.5 3.5 0 0 1-3.5-3zM21.3 28h21.4"/><path d="M51 6c3 4.5 5 7.5 5 10a5 5 0 0 1-10 0c0-2.5 2-5.5 5-10z" fill="#5780FF"/></g></symbol>
+<symbol id="d-hambre" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#F7D4AA" stroke="none"/><circle cx="32" cy="35" r="15" fill="#FFFFFF"/><circle cx="32" cy="35" r="9.5" fill="#FDF6EC"/><path d="M11.5 16v9a3 3 0 0 0 6 0v-9M14.5 16v32"/><ellipse cx="52" cy="22" rx="4" ry="6" fill="#FFFFFF"/><path d="M52 28v20"/></g></symbol>
+<symbol id="d-sola" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><circle cx="32" cy="33" r="22" stroke="#1F7A55" stroke-dasharray="3.5 5"/><path d="M20 49q0-12 12-12t12 12z" fill="#BDCDFF"/><circle cx="32" cy="26" r="10" fill="#F7D4AA"/><path d="M22 26a10 10 0 0 1 20 0c-3-4-6-5-10-5s-7 1-10 5z" fill="#8A5A44"/><path d="M26.5 28.5q1.8 1.4 3.6 0M33.9 28.5q1.8 1.4 3.6 0"/><path d="M30.5 33h3"/></g></symbol>
+<symbol id="d-abrazo" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><path d="M15 58c0-11 7.5-17 17-17s17 6 17 17z" fill="#BDCDFF"/><circle cx="32" cy="27" r="10" fill="#F7D4AA"/><path d="M22 27a10 10 0 0 1 20 0c-3-4-6-5.5-10-5.5s-7 1.5-10 5.5z" fill="#8A5A44"/><circle cx="28.5" cy="28.5" r="1.6" fill="#2A2140" stroke="none"/><circle cx="35.5" cy="28.5" r="1.6" fill="#2A2140" stroke="none"/><path d="M29.5 32.5h5"/><rect x="18" y="45" width="28" height="6.5" rx="3.25" transform="rotate(16 32 48)" fill="#F7D4AA"/><rect x="18" y="45" width="28" height="6.5" rx="3.25" transform="rotate(-16 32 48)" fill="#F7D4AA"/><path d="M52 21s-6-3.6-6-7.8a3.2 3.2 0 0 1 6-1.6 3.2 3.2 0 0 1 6 1.6c0 4.2-6 7.8-6 7.8z" fill="#FFFFFF"/></g></symbol>
+<symbol id="d-si" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="26" fill="#CCEADE"/><path d="M19 33l9 9 17-19" stroke="#1F7A55" stroke-width="6.5"/></g></symbol>
+<symbol id="d-no" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="26" fill="#EDD5DF"/><path d="M22 22l20 20M42 22L22 42" stroke="#B8125C" stroke-width="6.5"/></g></symbol>
+<symbol id="d-otra" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M14 14h36a5 5 0 0 1 5 5v18a5 5 0 0 1-5 5H30l-9 8v-8h-7a5 5 0 0 1-5-5V19a5 5 0 0 1 5-5z" fill="#FFFFFF"/><circle cx="22" cy="28" r="2.8" fill="#2A2140" stroke="none"/><circle cx="32" cy="28" r="2.8" fill="#2A2140" stroke="none"/><circle cx="42" cy="28" r="2.8" fill="#2A2140" stroke="none"/></g></symbol>
+</svg>
+
+<main id="principal" tabindex="-1">
+  <!-- Vista de la niña (por defecto). No guarda nada de lo que toca. -->
+  <section class="vista" id="vista-nina" aria-labelledby="t-nina">
+    <h1 id="t-nina" class="titulo-nina" tabindex="-1">Así estoy, esto necesito</h1>
+    <p class="pista" id="pista-nina">Toca una tarjeta para mostrarla en grande.</p>
+    <ul class="tablero" id="tablero12" aria-labelledby="t-nina"></ul>
+    <div id="zona-tres" hidden>
+      <ul class="tablero tres" id="tablero3" aria-label="Tres tarjetas"></ul>
+      <ul class="sino" id="sino" aria-label="Sí o no"></ul>
+    </div>
+    <div class="puerta-zona">
+      <button type="button" class="c-boton secundario c-puerta puerta-nina" id="b-puerta" aria-describedby="pista-puerta"><span>Para adultos</span></button>
+      <p class="pista" id="pista-puerta">Mantén presionado 3 segundos.</p>
+    </div>
+  </section>
+
+  <!-- Vista adulto (detrás de la puerta de 3 segundos) -->
+  <section class="vista" id="vista-adulto" aria-labelledby="t-adulto" hidden>
+    <div class="hoja">
+      <p class="paso">Para el adulto</p>
+      <h2 id="t-adulto" tabindex="-1">Ajustes de las tarjetas</h2>
+      <p class="aviso-caa" role="note">No reemplaza su sistema de comunicación; si usa uno, sigue con ese.</p>
+      <p class="bajada">Eliges qué tarjetas ve y con qué palabras. Se guarda solo en este celular. Lo que ella toque no se guarda.</p>
+      <p class="partida" id="partida" hidden></p>
+      <div class="acciones" id="zona-suave-sugerido" hidden><button type="button" class="c-boton secundario" id="b-suave-sugerido">Activar el Modo suave</button></div>
+      <div class="bloque">
+        <h3 id="t-modo">Cuántas ve a la vez</h3>
+        <div class="grupo-botones" role="group" aria-labelledby="t-modo">
+          <button type="button" class="opcion" data-modo="12" aria-pressed="true">12 tarjetas</button>
+          <button type="button" class="opcion" data-modo="3" aria-pressed="false">3 a la vez</button>
+        </div>
+        <p class="pista" style="margin-top:8px">«3 a la vez»: 3 tarjetas grandes y, siempre abajo, «Sí» y «No». Para días difíciles o para empezar.</p>
+      </div>
+      <div class="bloque">
+        <h3>Voz y sonido</h3>
+        <button type="button" class="opcion interruptor" id="b-voz" aria-pressed="true"><span>Botón «Escuchar» en la tarjeta grande</span><span class="estado"></span></button>
+        <button type="button" class="opcion interruptor" id="b-sonido" aria-pressed="false"><span>Sonido suave al tocar una tarjeta</span><span class="estado"></span></button>
+        <p class="pista" style="margin-top:8px">«Escuchar» solo aparece si este celular tiene voz en español. Nada suena al abrir la página.</p>
+      </div>
+      <div class="bloque">
+        <h3>Las 12 tarjetas</h3>
+        <p class="pista">Cada una se queda siempre en su lugar. Si escondes una, su espacio queda vacío.</p>
+        <p class="aviso-campo" id="aviso-tres" aria-live="polite"></p>
+        <ul class="filas" id="filas"></ul>
+      </div>
+      <p class="estado-guardado" id="estado-guardado" role="status"></p>
+      <div class="acciones">
+        <button type="button" class="c-boton" id="b-listo">Listo, volver a las tarjetas</button>
+        <button type="button" class="c-boton secundario" id="b-ir-aula">Hoja para imprimir · todo el salón</button>
+      </div>
+      <div class="zona-borrar">
+        <button type="button" class="c-boton texto" id="b-borrar">Borrar todo lo de Contigo en este celular</button>
+        <p class="pista">Borra también la flor de «Así soy yo». Toca dos veces. No tiene reversa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hoja para todo el salón (vista maestra): se abre con #aula -->
+  <section class="vista" id="vista-aula" aria-labelledby="t-aula" hidden>
+    <div class="hoja intro-aula">
+      <p class="paso">Para la maestra</p>
+      <h2 id="t-aula" tabindex="-1">Tarjetas para todo el salón</h2>
+      <p class="bajada">Preséntalas a todo el grupo el primer día: cualquiera las puede usar cuando no le salen las palabras. Así no se señala a nadie.</p>
+      <p class="pista" style="margin-top:8px">Una hoja carta con las 12 tarjetas. Se recortan o se pegan en el tablero.</p>
+      <div class="acciones">
+        <button type="button" class="c-boton" id="b-descargar">Descargar hoja</button>
+        <p class="pista centro">o imprime esta página desde tu navegador.</p>
+        <p class="estado-guardado centro" id="estado-descarga" role="status"></p>
+        <button type="button" class="c-boton texto" id="b-aula-volver">Volver a las tarjetas</button>
+      </div>
+    </div>
+    <div class="papel" id="papel" role="group" aria-labelledby="papel-titulo">
+      <p class="papel-titulo" id="papel-titulo">Así estoy, esto necesito</p>
+      <p class="papel-sub">Tarjetas para todo el salón: señala la que necesitas o muéstrasela a un adulto.</p>
+      <ul class="papel-cuadricula" id="papel-cuadricula"></ul>
+      <p class="papel-pie">Dibujos: Contigo (Pulso Mundo + Smart4AI), CC BY 4.0 · Prototipo</p>
+    </div>
+  </section>
+</main>
+
+<!-- Modo mostrar (pantalla completa). Volver en un toque o con Escape. -->
+<div class="mostrar" id="mostrar" role="dialog" aria-modal="true" aria-labelledby="mostrar-palabra" hidden>
+  <div class="mostrar-carta" id="mostrar-carta">
+    <svg class="mostrar-dibujo" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use id="mostrar-use" href="#d-pausa"/></svg>
+    <h2 class="mostrar-palabra" id="mostrar-palabra" tabindex="-1"></h2>
+  </div>
+  <div class="mostrar-acciones">
+    <div id="mostrar-voz" hidden><button type="button" class="c-boton secundario boton-grande c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    <button type="button" class="c-boton boton-grande" id="b-volver">Volver</button>
+  </div>
+</div>
+
+<!-- === CARAPAZON CONTIGO v1 · HTML (barra fija y capas) === -->
+<nav class="c-barra" aria-label="Ayuda rápida">
+  <ul>
+    <li><button type="button" data-c-accion="pausa" data-c-capa="c-capa-pausa" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-pausa"/></svg>Pausa</button></li>
+    <li><button type="button" data-c-accion="calma" data-c-capa="c-capa-calma" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-calma"/></svg>Calma</button></li>
+    <li><button type="button" class="c-boton-ayuda" data-c-accion="ayuda" data-c-capa="c-capa-ayuda" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-ayuda"/></svg>Necesito ayuda</button></li>
+    <li><button type="button" data-c-accion="salir"><svg class="c-icono" aria-hidden="true"><use href="#i-salir"/></svg>Salir</button></li>
+  </ul>
+</nav>
+<div class="c-capa" id="c-capa-pausa" role="dialog" aria-modal="true" aria-labelledby="c-t-pausa" hidden>
+  <h2 id="c-t-pausa" tabindex="-1" data-foco>En pausa</h2>
+  <p>Tómate el tiempo que necesites. Cuando quieras, sigues donde ibas.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Seguir</button>
+</div>
+<div class="c-capa" id="c-capa-calma" role="dialog" aria-modal="true" aria-labelledby="c-t-calma" hidden>
+  <h2 id="c-t-calma" tabindex="-1" data-foco>Respira conmigo</h2>
+  <div class="c-respira" id="c-respira" aria-hidden="true"></div>
+  <p class="c-respira-texto" id="c-respira-texto" aria-hidden="true">Toma aire despacio…</p>
+  <p>Toma aire en 4 segundos y suéltalo en 6. Las veces que necesites.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Ya estoy mejor</button>
+</div>
+<div class="c-capa" id="c-capa-ayuda" role="dialog" aria-modal="true" aria-labelledby="c-t-ayuda" hidden>
+  <div class="c-tarjeta-ayuda">
+    <h2 id="c-t-ayuda" class="c-grande" tabindex="-1" data-foco>Necesito ayuda</h2>
+    <p class="c-pide">Por favor, quédate cerca y háblame despacio.</p>
+    <div id="c-ayuda-adulto">
+      <ul class="c-numeros">
+        <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
+        <li><strong>106</strong> Línea 106, para hablar con alguien</li>
+        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+      </ul>
+      <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
+    </div>
+  </div>
+  <button type="button" class="c-boton" data-c-cerrar>Cerrar</button>
+</div>
+<div class="c-capa" id="c-capa-salir" role="dialog" aria-modal="true" aria-labelledby="c-t-salir" hidden>
+  <h2 id="c-t-salir" tabindex="-1" data-foco>Listo</h2>
+  <p>Ya puedes cerrar esta pestaña. Lo que guardaste sigue en este celular.</p>
+  <button type="button" class="c-boton secundario" data-c-cerrar>Volver</button>
+</div>
+<div id="c-anuncio" class="c-solo-lector" aria-live="polite"></div>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (abajo) === -->
+
+<script>
+/* === ASI ESTOY · DATOS === */
+/* Parte pura (sin pantalla): las 12 tarjetas y los ajustes del adulto. Se prueba con node.
+   OJO: el orden de TARJETAS ES la posición fija de cada tarjeta en la pantalla (3 columnas × 4 filas).
+   No se reordena: la niña aprende dónde está cada una. */
+var AsiEstoy = (function () {
+  'use strict';
+  var CLAVE = 'asi-estoy', MAX_PALABRA = 24, MAX_TRES = 3;
+  var TARJETAS = [
+    { id: 'pausa', palabra: 'Necesito una pausa', color: 'menta' },
+    { id: 'ruido', palabra: 'Mucho ruido', color: 'rosa' },
+    { id: 'ayuda', palabra: 'Ayúdame', color: 'lavanda' },
+    { id: 'duele', palabra: 'Me duele', color: 'rosa' },
+    { id: 'bano', palabra: 'Baño', color: 'menta' },
+    { id: 'sed', palabra: 'Tengo sed', color: 'lavanda' },
+    { id: 'hambre', palabra: 'Tengo hambre', color: 'arena' },
+    { id: 'sola', palabra: 'Quiero estar sola', color: 'menta' },
+    { id: 'abrazo', palabra: 'Abrazo no, gracias', color: 'rosa' },
+    { id: 'si', palabra: 'Sí', color: 'menta' },
+    { id: 'no', palabra: 'No', color: 'rosa' },
+    { id: 'otra', palabra: 'Otra cosa', color: 'lavanda' }
+  ];
+  var FIJAS = ['si', 'no']; // en «3 a la vez» siempre están abajo
+  var IDS = TARJETAS.map(function (T) { return T.id; });
+  var CLAROS = { menta: '#EAF6F1', lavanda: '#F4F6FF', rosa: '#FBF1F5', arena: '#FDF6EC' }; // para la hoja en imagen
+
+  function tarjeta(id) { return TARJETAS.filter(function (T) { return T.id === id; })[0] || null; }
+  // Quita caracteres de control y espacios de más; corta por letras (no parte una tilde ni un emoji)
+  function limpiar(texto, max) {
+    if (typeof texto !== 'string') return '';
+    return Array.from(texto.replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ').replace(/\s+/g, ' ').trim()).slice(0, max).join('');
+  }
+  // ¿La familia marcó esto en «Así soy yo» → «Lo que la desborda»? (solo se lee; nada se interpreta)
+  function leDesborda(perfil, id) {
+    try { var o = perfil.tarjetas.desborda.opciones; return Array.isArray(o) && o.indexOf(id) !== -1; } catch (e) { return false; }
+  }
+  // Punto de partida: si el ruido fuerte la desborda, voz y sonido empiezan apagados. El sonido siempre empieza apagado.
+  function porDefecto(perfil) {
+    return { v: 1, modo: 12, ocultas: [], tres: ['pausa', 'ruido', 'ayuda'], palabras: {}, voz: !leDesborda(perfil, 'ruido'), sonido: false };
+  }
+  function normalizar(c, perfil) {
+    var n = porDefecto(perfil);
+    if (!c || typeof c !== 'object' || Array.isArray(c)) return n;
+    n.modo = c.modo === 3 ? 3 : 12;
+    if (Array.isArray(c.ocultas)) n.ocultas = IDS.filter(function (id) { return c.ocultas.indexOf(id) !== -1; });
+    if (Array.isArray(c.tres)) n.tres = IDS.filter(function (id) { return FIJAS.indexOf(id) === -1 && c.tres.indexOf(id) !== -1; }).slice(0, MAX_TRES);
+    if (c.palabras && typeof c.palabras === 'object' && !Array.isArray(c.palabras)) {
+      TARJETAS.forEach(function (T) {
+        var v = Object.prototype.hasOwnProperty.call(c.palabras, T.id) ? limpiar(c.palabras[T.id], MAX_PALABRA) : '';
+        if (v && v !== T.palabra) n.palabras[T.id] = v;
+      });
+    }
+    if (typeof c.voz === 'boolean') n.voz = c.voz;
+    n.sonido = c.sonido === true;
+    return n;
+  }
+  function palabra(cfg, id) { var T = tarjeta(id); return (cfg && cfg.palabras && cfg.palabras[id]) || (T ? T.palabra : ''); }
+  // Parte una palabra de tarjeta en renglones de hasta «max» letras (para la hoja en imagen)
+  function lineas(texto, max) {
+    var r = [], l = '';
+    String(texto == null ? '' : texto).split(' ').forEach(function (p) {
+      if (!p) return;
+      if (!l) l = p; else if (Array.from(l + ' ' + p).length <= max) l += ' ' + p; else { r.push(l); l = p; }
+    });
+    if (l) r.push(l);
+    return r.slice(0, 3);
+  }
+  return { CLAVE: CLAVE, MAX_PALABRA: MAX_PALABRA, MAX_TRES: MAX_TRES, TARJETAS: TARJETAS, FIJAS: FIJAS, IDS: IDS, CLAROS: CLAROS,
+    tarjeta: tarjeta, limpiar: limpiar, leDesborda: leDesborda, porDefecto: porDefecto, normalizar: normalizar, palabra: palabra, lineas: lineas };
+})();
+/* === FIN ASI ESTOY · DATOS === */
+
+/* ===== Pieza «Así estoy, esto necesito»: pantallas ===== */
+(function () {
+  'use strict';
+  var C = Contigo, A = AsiEstoy, esc = C.esc;
+  function $(s) { return document.querySelector(s); }
+  var perfil = C.baul.leer('perfil');                 // de «Así soy yo», si existe en este celular (solo se lee)
+  var cfg = A.normalizar(C.baul.leer(A.CLAVE), perfil);
+  var estado = { vista: null, mostrando: null, origen: null, abiertaEn: 0, primera: true };
+  function dibujo(id, clase) { return '<svg' + (clase ? ' class="' + clase + '"' : '') + ' viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#d-' + id + '"/></svg>'; }
+
+  /* === ASI ESTOY · VISTA NIÑA === */
+  /* No guarda nada: ni qué tarjeta toca ni cuándo. No hay historial. Solo lee los ajustes del adulto. */
+  function carta(T) {
+    return '<button type="button" class="carta t-' + T.color + '" data-carta="' + T.id + '" aria-describedby="pista-nina">' + dibujo(T.id) + '<span>' + esc(A.palabra(cfg, T.id)) + '</span></button>';
+  }
+  function pintarNina() {
+    var tres = cfg.modo === 3;
+    $('#tablero12').hidden = tres;
+    $('#zona-tres').hidden = !tres;
+    // Una tarjeta escondida deja su hueco: las demás no se mueven de lugar
+    $('#tablero12').innerHTML = A.TARJETAS.map(function (T) {
+      return cfg.ocultas.indexOf(T.id) !== -1 ? '<li class="hueco" aria-hidden="true"></li>' : '<li>' + carta(T) + '</li>';
+    }).join('');
+    $('#tablero3').innerHTML = A.TARJETAS.filter(function (T) { return cfg.tres.indexOf(T.id) !== -1; }).map(function (T) { return '<li>' + carta(T) + '</li>'; }).join('');
+    $('#sino').innerHTML = A.FIJAS.map(function (id) { return '<li>' + carta(A.tarjeta(id)) + '</li>'; }).join('');
+  }
+  // Sonido suave al tocar (solo si el adulto lo encendió). Se fabrica aquí mismo, sin archivos ni red.
+  var audio = null;
+  function tono() {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      audio = audio || new AC();
+      var t = audio.currentTime, o = audio.createOscillator(), g = audio.createGain();
+      o.type = 'sine'; o.frequency.value = 523;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+      o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + 0.4);
+    } catch (e) {}
+  }
+  function inertes(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id); if (!el) return;
+      el.inert = si; if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+    var barra = document.querySelector('.c-barra');
+    if (barra) { barra.inert = si; if (si) barra.setAttribute('aria-hidden', 'true'); else barra.removeAttribute('aria-hidden'); }
+  }
+  // La tarjeta crece desde su lugar hasta llenar la pantalla (nada de esto en modo suave o con «reducir movimiento»)
+  function crecer(desde, hacia) {
+    try {
+      var a = desde.getBoundingClientRect(), b = hacia.getBoundingClientRect();
+      if (!a.width || !b.width) return;
+      var fx = 'translate(' + (a.left - b.left) + 'px,' + (a.top - b.top) + 'px) scale(' + (a.width / b.width) + ',' + (a.height / b.height) + ')';
+      hacia.animate([{ transform: fx }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      Array.prototype.forEach.call(hacia.children, function (h) { h.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 170, easing: 'ease-out', fill: 'backwards' }); });
+      var capa = $('#mostrar'), fondo = getComputedStyle(capa).backgroundColor;
+      capa.animate([{ backgroundColor: 'rgba(0,0,0,0)' }, { backgroundColor: fondo }], { duration: 300, easing: 'ease-out' });
+      $('.mostrar-acciones').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, delay: 260, fill: 'backwards' });
+    } catch (e) {}
+  }
+  function abrirMostrar(id, boton) {
+    var T = A.tarjeta(id); if (!T) return;
+    if (cfg.sonido) tono();
+    C.voz.callar();
+    estado.mostrando = id; estado.origen = boton; estado.abiertaEn = Date.now();
+    var tarjetaGrande = $('#mostrar-carta');
+    tarjetaGrande.className = 'mostrar-carta t-' + T.color;
+    $('#mostrar-use').setAttribute('href', '#d-' + id);
+    $('#mostrar-palabra').textContent = A.palabra(cfg, id);
+    $('#mostrar-voz').hidden = !cfg.voz;
+    $('#mostrar').hidden = false;
+    inertes(true);
+    $('#mostrar-palabra').focus({ preventScroll: true });
+    if (!C.suave() && boton && tarjetaGrande.animate) crecer(boton, tarjetaGrande);
+  }
+  function cerrarMostrar() {
+    if (!estado.mostrando) return;
+    C.voz.callar();
+    $('#mostrar').hidden = true;
+    inertes(false);
+    var o = estado.origen; estado.mostrando = null; estado.origen = null;
+    if (o && document.body.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  $('#vista-nina').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-carta]') : null;
+    if (b) abrirMostrar(b.getAttribute('data-carta'), b);
+  });
+  // «Volver» no responde en los primeros 0,4 s: un doble toque sin querer no cierra la tarjeta
+  $('#b-volver').addEventListener('click', function () { if (Date.now() - estado.abiertaEn < 400) return; cerrarMostrar(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && estado.mostrando) cerrarMostrar(); });
+  /* === FIN ASI ESTOY · VISTA NIÑA === */
+
+  /* ---------- Vista adulto: aquí (y solo aquí) se guarda, en contigo.asi-estoy ---------- */
+  function guardar() {
+    var ok = C.baul.guardar(A.CLAVE, cfg);
+    $('#estado-guardado').textContent = ok ? 'Guardado en este celular.' : 'No se pudo guardar en este celular; el cambio dura mientras esta página siga abierta.';
+  }
+  function textoPartida() {
+    if (!perfil || typeof perfil !== 'object' || !perfil.tarjetas) return '';
+    var ap = A.limpiar(perfil.apodo, 20) || 'tu hija', t = 'Punto de partida, desde «Así soy yo» de ' + ap + ': ';
+    t += A.leDesborda(perfil, 'ruido') ? 'como el ruido fuerte la desborda, la voz y el sonido empiezan apagados.' : 'la voz empieza encendida y el sonido apagado.';
+    if (A.leDesborda(perfil, 'luz')) t += ' La luz muy fuerte también la desborda: el Modo suave deja la pantalla más quieta.';
+    return t;
+  }
+  // Ofrece el Modo suave solo si la familia marcó ruido o luz fuerte y todavía no está activo
+  function sugerirSuave() {
+    var marca = !!perfil && (A.leDesborda(perfil, 'ruido') || A.leDesborda(perfil, 'luz'));
+    $('#zona-suave-sugerido').hidden = !(marca && document.documentElement.getAttribute('data-suave') !== 'si');
+  }
+  function interruptor(boton, encendido) {
+    boton.setAttribute('aria-pressed', encendido ? 'true' : 'false');
+    boton.querySelector('.estado').textContent = encendido ? 'Encendido' : 'Apagado';
+  }
+  function htmlFila(T, i) {
+    var p = A.palabra(cfg, T.id), ve = cfg.ocultas.indexOf(T.id) === -1, enTres = cfg.tres.indexOf(T.id) !== -1, fija = A.FIJAS.indexOf(T.id) !== -1;
+    return '<li class="fila t-' + T.color + '">' + dibujo(T.id) +
+      '<div><label for="palabra-' + T.id + '">Tarjeta ' + (i + 1) + ' · palabra</label>' +
+      '<input id="palabra-' + T.id + '" data-palabra="' + T.id + '" type="text" maxlength="' + A.MAX_PALABRA + '" autocomplete="off" spellcheck="false" enterkeyhint="done" value="' + esc(p) + '" placeholder="' + esc(T.palabra) + '"></div>' +
+      '<div class="fila-botones"><button type="button" class="opcion" data-ver="' + T.id + '" aria-pressed="' + ve + '" aria-label="' + esc('La ve: ' + p) + '">La ve</button>' +
+      (fija ? '<span class="siempre">Siempre en «3 a la vez»</span>' : '<button type="button" class="opcion" data-tres="' + T.id + '" aria-pressed="' + enTres + '" aria-label="' + esc('En «3 a la vez»: ' + p) + '">En «3 a la vez»</button>') +
+      '</div></li>';
+  }
+  function pintarAdulto() {
+    document.querySelectorAll('[data-modo]').forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.getAttribute('data-modo')) === cfg.modo)); });
+    interruptor($('#b-voz'), cfg.voz);
+    interruptor($('#b-sonido'), cfg.sonido);
+    var t = textoPartida();
+    $('#partida').textContent = t; $('#partida').hidden = !t;
+    sugerirSuave();
+    $('#filas').innerHTML = A.TARJETAS.map(htmlFila).join('');
+    $('#aviso-tres').textContent = '';
+  }
+  document.querySelectorAll('[data-modo]').forEach(function (b) {
+    b.addEventListener('click', function () { cfg.modo = Number(b.getAttribute('data-modo')) === 3 ? 3 : 12; guardar(); pintarAdulto(); b.focus(); });
+  });
+  $('#b-voz').addEventListener('click', function () { cfg.voz = !cfg.voz; interruptor($('#b-voz'), cfg.voz); guardar(); });
+  $('#b-sonido').addEventListener('click', function () { cfg.sonido = !cfg.sonido; interruptor($('#b-sonido'), cfg.sonido); guardar(); });
+  $('#b-suave-sugerido').addEventListener('click', function () { C.cambiarAjuste('suave', true); C.anunciar('Modo suave activado'); sugerirSuave(); $('#t-adulto').focus(); });
+  $('#filas').addEventListener('click', function (e) {
+    var ver = e.target.closest('[data-ver]'), tres = e.target.closest('[data-tres]');
+    if (ver) {
+      var id = ver.getAttribute('data-ver'), i = cfg.ocultas.indexOf(id);
+      if (i === -1) cfg.ocultas.push(id); else cfg.ocultas.splice(i, 1);
+      cfg = A.normalizar(cfg, perfil); ver.setAttribute('aria-pressed', String(cfg.ocultas.indexOf(id) === -1)); guardar();
+    } else if (tres) {
+      var id2 = tres.getAttribute('data-tres'), k = cfg.tres.indexOf(id2);
+      if (k !== -1) { cfg.tres.splice(k, 1); $('#aviso-tres').textContent = ''; }
+      else if (cfg.tres.length >= A.MAX_TRES) { $('#aviso-tres').textContent = 'Ya hay 3 en «3 a la vez». Quita una para elegir otra.'; return; }
+      else cfg.tres.push(id2);
+      cfg = A.normalizar(cfg, perfil); tres.setAttribute('aria-pressed', String(cfg.tres.indexOf(id2) !== -1)); guardar();
+    }
+  });
+  $('#filas').addEventListener('input', function (e) {
+    var inp = e.target.closest('[data-palabra]'); if (!inp) return;
+    cfg.palabras[inp.getAttribute('data-palabra')] = inp.value;
+    cfg = A.normalizar(cfg, perfil); guardar();
+  });
+  $('#filas').addEventListener('change', function (e) {
+    var inp = e.target.closest('[data-palabra]'); if (!inp) return;
+    inp.value = A.palabra(cfg, inp.getAttribute('data-palabra')); // vacía = vuelve la palabra de siempre
+  });
+  $('#filas').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.closest('[data-palabra]')) e.target.blur(); });
+  $('#b-listo').addEventListener('click', function () { vista('nina'); });
+  $('#b-ir-aula').addEventListener('click', function () { location.hash = 'aula'; });
+  C.dobleToque($('#b-borrar'), {
+    confirmar: 'Toca otra vez para borrar todo',
+    alConfirmar: function () {
+      C.baul.borrarTodo();
+      perfil = null; cfg = A.normalizar(null, null);
+      C.aplicarAjustes(); pintarAdulto();
+      $('#estado-guardado').textContent = 'Listo: este celular ya no guarda nada de Contigo.';
+      C.anunciar($('#estado-guardado').textContent);
+    }
+  });
+  C.puertaAdulto($('#b-puerta'), function () { vista('adulto'); }, 3000, function () {
+    var p = $('#pista-puerta'); p.textContent = 'Sigue presionando hasta que se llene (3 segundos).'; C.anunciar(p.textContent);
+  });
+
+  /* ---------- Hoja para todo el salón (#aula) ---------- */
+  function pintarAula() {
+    $('#papel-cuadricula').innerHTML = A.TARJETAS.map(function (T, i) {
+      return '<li class="carta-hoja t-' + T.color + '" style="--i:' + i + '">' + dibujo(T.id) + '<span>' + esc(A.palabra(cfg, T.id)) + '</span></li>';
+    }).join('');
+    var p = $('#papel'); p.classList.remove('anima'); void p.offsetWidth; p.classList.add('anima');
+  }
+  // La hoja como imagen: carta vertical a 150 puntos por pulgada (1275 × 1650), dibujada en un canvas
+  var ANCHO = 1275, ALTO = 1650;
+  function svgHoja() {
+    var M = 64, G = 24, ARRIBA = 270, ABAJO = 110, cw = (ANCHO - 2 * M - 2 * G) / 3, ch = (ALTO - ARRIBA - ABAJO - 3 * G) / 4, d = 160;
+    var fam = ' font-family="Poppins, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif"';
+    var s = '<rect width="' + ANCHO + '" height="' + ALTO + '" fill="#FFFFFF"/>';
+    s += '<text x="' + M + '" y="122"' + fam + ' font-size="58" font-weight="700" fill="#1E1E2A">Así estoy, esto necesito</text>';
+    s += '<text x="' + M + '" y="180"' + fam + ' font-size="30" fill="#4A4A5E">Tarjetas para todo el salón: señala la que necesitas</text>';
+    s += '<text x="' + M + '" y="222"' + fam + ' font-size="30" fill="#4A4A5E">o muéstrasela a un adulto.</text>';
+    A.TARJETAS.forEach(function (T, i) {
+      var x = M + (i % 3) * (cw + G), y = ARRIBA + Math.floor(i / 3) * (ch + G);
+      var ls = A.lineas(A.palabra(cfg, T.id), 14), largo = Math.max.apply(null, ls.map(function (l) { return Array.from(l).length; }).concat([0]));
+      var fs = largo > 20 ? 26 : (ls.length > 2 || largo > 14) ? 30 : 40;
+      s += '<rect x="' + x + '" y="' + y + '" width="' + cw + '" height="' + ch + '" rx="28" fill="' + A.CLAROS[T.color] + '" stroke="#1E1E2A" stroke-width="3"/>';
+      s += '<use href="#d-' + T.id + '" x="' + (x + (cw - d) / 2) + '" y="' + (y + 22) + '" width="' + d + '" height="' + d + '"/>';
+      ls.forEach(function (l, k) {
+        s += '<text x="' + (x + cw / 2) + '" y="' + Math.round(y + 22 + d + fs + 4 + k * fs * 1.15) + '" text-anchor="middle"' + fam + ' font-size="' + fs + '" font-weight="700" fill="#1E1E2A">' + esc(l) + '</text>';
+      });
+    });
+    s += '<text x="' + (ANCHO / 2) + '" y="' + (ALTO - 52) + '" text-anchor="middle"' + fam + ' font-size="24" fill="#4A4A5E">Dibujos: Contigo (Pulso Mundo + Smart4AI), CC BY 4.0 · Prototipo</text>';
+    return s;
+  }
+  function hojaPNG() {
+    return new Promise(function (listo, falla) {
+      try {
+        var fuente = document.getElementById('dibujos'), NS = fuente.namespaceURI;
+        var svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('width', String(ANCHO)); svg.setAttribute('height', String(ALTO)); svg.setAttribute('viewBox', '0 0 ' + ANCHO + ' ' + ALTO);
+        svg.innerHTML = svgHoja();
+        var defs = document.createElementNS(NS, 'defs');
+        Array.prototype.forEach.call(fuente.querySelectorAll('symbol[id^="d-"]'), function (s) { defs.appendChild(s.cloneNode(true)); });
+        svg.insertBefore(defs, svg.firstChild);
+        var xml = new XMLSerializer().serializeToString(svg);
+        var dib = new Image();
+        dib.onload = function () {
+          try {
+            var lienzo = document.createElement('canvas'); lienzo.width = ANCHO; lienzo.height = ALTO;
+            var g = lienzo.getContext('2d'); g.fillStyle = '#FFFFFF'; g.fillRect(0, 0, ANCHO, ALTO); g.drawImage(dib, 0, 0, ANCHO, ALTO);
+            lienzo.toBlob(function (b) { if (b) listo(b); else falla(new Error('sin imagen')); }, 'image/png');
+          } catch (e) { falla(e); }
+        };
+        dib.onerror = function () { falla(new Error('no cargó el dibujo')); };
+        dib.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml); // la política solo deja imágenes data:
+      } catch (e) { falla(e); }
+    });
+  }
+  AsiEstoy.hojaPNG = hojaPNG; // para las pruebas en el navegador
+  $('#b-descargar').addEventListener('click', function () {
+    var aviso = $('#estado-descarga'); aviso.textContent = 'Creando la imagen…';
+    hojaPNG().then(function (b) {
+      var url = URL.createObjectURL(b), a = document.createElement('a');
+      a.href = url; a.download = 'contigo-tarjetas-para-todo-el-salon.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 15000);
+      aviso.textContent = 'Listo: revisa tus descargas. Si no aparece, imprime esta página desde tu navegador.';
+    }, function () { aviso.textContent = 'No se pudo crear la imagen aquí. Imprime esta página desde tu navegador.'; });
+  });
+  function quitarHash() { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { try { location.hash = ''; } catch (e2) {} } }
+  $('#b-aula-volver').addEventListener('click', function () { quitarHash(); vista('nina'); });
+
+  /* ---------- Vistas ---------- */
+  function vista(n) {
+    ['nina', 'adulto', 'aula'].forEach(function (v) { $('#vista-' + v).hidden = v !== n; });
+    estado.vista = n;
+    var numeros = document.getElementById('c-ayuda-adulto'); if (numeros) numeros.hidden = n === 'nina'; // 123/106/141 solo en vistas de adulto
+    if (n === 'nina') pintarNina(); else if (n === 'adulto') pintarAdulto(); else pintarAula();
+    if (!estado.primera) { window.scrollTo(0, 0); var h = $('#vista-' + n).querySelector('h1, h2'); if (h) h.focus({ preventScroll: true }); }
+    estado.primera = false;
+  }
+  function enrutar() { if ((location.hash || '') === '#aula') vista('aula'); else if (estado.vista !== 'adulto') vista('nina'); }
+  window.addEventListener('hashchange', enrutar);
+
+  C.iniciar({
+    vistaAdulto: false,
+    textoEscuchar: function () { return estado.mostrando ? A.palabra(cfg, estado.mostrando) : ''; },
+    alCambiarAjustes: function () { if (estado.vista === 'adulto') sugerirSuave(); }
+  });
+  enrutar();
+})();
+</script>
+</body>
+</html>

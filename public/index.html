@@ -975,14 +975,14 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     </div>
   </section>
 
-  <!-- 6 · Recursos (próximamente) -->
+  <!-- 6 · Recursos (las piezas viven en /recursos/; el resto, próximamente) -->
   <section class="seccion" id="recursos" aria-labelledby="t-recursos">
     <div class="contenedor">
       <div class="recursos-cabeza">
         <div class="revelar">
           <span class="etiqueta-mono">Recursos</span>
           <h2 id="t-recursos">Una biblioteca de herramientas que crece</h2>
-          <p class="intro">Herramientas sencillas para ti y para la niña. Algunas ya están dentro del chat; las demás vienen en camino.</p>
+          <p class="intro">Herramientas sencillas para ti, para la niña y para compartir con la maestra y el papá. Se abren sin cuenta y lo que escribes se queda en tu celular.</p>
         </div>
         <div class="foto revelar d1">
           <picture>
@@ -997,7 +997,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       </div>
       <div class="rejilla-recursos" id="panel-ti" role="tabpanel" aria-labelledby="tab-ti"></div>
       <div class="rejilla-recursos" id="panel-nina" role="tabpanel" aria-labelledby="tab-nina" hidden></div>
-      <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>«Avísame cuando esté» no envía nada: tu lista queda anotada solo en este celular.</span></p>
+      <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>Las herramientas no envían nada por su cuenta: solo sale lo que tú decides compartir. «Avísame cuando esté» queda anotado solo en este celular.</span></p>
     </div>
   </section>
 
@@ -1160,15 +1160,17 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   const ESCRITORIO = "(min-width: 900px)"; // mismo corte que el CSS: arriba, chat incrustado; abajo, pantalla completa
 
   // ---------------- Recursos: para agregar uno nuevo basta con sumar un objeto aquí ----------------
-  // grupo: "ti" | "nina" · estado: "disponible" | "pronto" · accion (solo disponibles): "chequeo" | "diario"
+  // grupo: "ti" | "nina" · estado: "pieza" (página propia en /recursos/, con enlace) | "disponible" (dentro del chat, con accion "chequeo" | "diario") | "pronto"
   const RECURSOS = [
-    { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan.", estado: "pronto" },
+    { id: "asi-soy-yo", grupo: "ti", icono: "i-persona", titulo: "Así soy yo", texto: "Arma en 90 segundos la flor de tu hija: qué la calma, qué la desborda y cómo avisa. Tú decides si la compartes con la maestra o el papá.", estado: "pieza", enlace: "/recursos/asi-soy-yo.html" },
+    { id: "el-vaso", grupo: "ti", icono: "i-corazon", titulo: "El vaso", texto: "Para mandarle a la maestra o al papá: en un minuto entiende por qué se desborda al final del día y qué 3 cosas ayudan.", estado: "pieza", enlace: "/recursos/el-vaso.html" },
     { id: "diario", grupo: "ti", icono: "i-libreta", titulo: "Tu diario para la consulta", texto: "Anota lo que ves y llévale un resumen al pediatra. Hoy vive dentro del chat; la versión para imprimir viene en camino.", estado: "disponible", accion: "diario" },
-    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Una tarjeta para tener a mano con las líneas de ayuda y qué hacer en un momento difícil.", estado: "pronto" },
     { id: "chequeo", grupo: "ti", icono: "i-pulso", titulo: "Chequeo de bienestar", texto: "Dos minutos para notar cómo estás tú. Si hace falta, te dice dónde pedir apoyo.", estado: "disponible", accion: "chequeo" },
+    { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan.", estado: "pronto" },
+    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Una tarjeta para tener a mano con las líneas de ayuda y qué hacer en un momento difícil.", estado: "pronto" },
+    { id: "asi-estoy", grupo: "nina", icono: "i-conversa", titulo: "Así estoy, esto necesito", texto: "12 tarjetas grandes para que diga cómo está sin tener que hablar. Trae una hoja para imprimir para todo el salón.", estado: "pieza", enlace: "/recursos/asi-estoy.html" },
     { id: "rutinas", grupo: "nina", icono: "i-cuadricula", titulo: "Rutinas visuales con pictogramas", texto: "Tarjetas para anticipar el día: lavar manos, comer, dormir, salir de casa.", estado: "pronto" },
     { id: "cuentos", grupo: "nina", icono: "i-libro", titulo: "Cuentos sociales", texto: "Historias cortas que explican situaciones nuevas, como ir al médico o a la escuela.", estado: "pronto" },
-    { id: "termometro", grupo: "nina", icono: "i-termometro", titulo: "Termómetro de emociones", texto: "Una forma visual de nombrar cómo se siente y qué la ayuda a calmarse.", estado: "pronto" },
     { id: "kit-sensorial", grupo: "nina", icono: "i-audifonos", titulo: "Kit sensorial", texto: "Ideas sencillas para los ruidos, las luces y las texturas que la abruman.", estado: "pronto" },
   ];
 
@@ -1593,11 +1595,19 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     const art = document.createElement("article");
     art.className = "recurso";
     art.dataset.id = r.id;
-    const disponible = r.estado === "disponible";
+    const disponible = r.estado === "disponible" || r.estado === "pieza";
     art.innerHTML =
       `<div class="arriba"><span class="chapa"><svg class="icono" aria-hidden="true"><use href="#${escaparHtml(r.icono)}"/></svg></span>` +
       `<span class="rotulo ${disponible ? "listo" : "futuro"}">${disponible ? "Ya disponible" : "Próximamente"}</span></div>` +
       `<h3>${escaparHtml(r.titulo)}</h3><p>${escaparHtml(r.texto)}</p>`;
+    if (r.estado === "pieza") {
+      const a = document.createElement("a");
+      a.className = "boton pequeno claro";
+      a.href = r.enlace;
+      a.innerHTML = 'Abrir<svg class="icono" aria-hidden="true"><use href="#i-flecha"/></svg>';
+      art.appendChild(a);
+      return art;
+    }
     const b = document.createElement("button");
     b.type = "button";
     if (disponible) {

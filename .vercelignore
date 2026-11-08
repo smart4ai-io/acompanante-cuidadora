@@ -17,3 +17,4 @@ pruebas/
 *.log
 alertas.log
 .vercel
+public/**/*.md

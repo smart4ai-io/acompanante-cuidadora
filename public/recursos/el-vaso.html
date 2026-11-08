@@ -1,0 +1,1494 @@
+<!doctype html>
+<html lang="es-CO" data-tema="claro" data-suave="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="El vaso: por qué una niña puede llegar bien del colegio y desbordarse en casa. Prototipo de Contigo.">
+<title>El vaso · Contigo</title>
+<!-- Pieza 2 de la Ola 1 de «Recursos» de Contigo (2026-11-08). Página autocontenida: CSS, JS y dibujos aquí mismo.
+     Une E2 «El vaso de la jornada» (vista colegio), P2 «El vaso de las 5 p. m.» (vista casa) y P6 «La máscara» (intro de 18 s).
+     Es una metáfora de carga, no un simulador de nada ni una medida: no interpreta a ninguna niña concreta.
+     No guarda nada en el celular: solo el ajuste de «Modo suave» y del tema, que guarda el caparazón.
+     La única carga externa es la fuente Poppins (con respaldo de sistema); la política de seguridad impide cualquier llamada de red.
+     Dibujos: propios de Contigo, licencia CC BY 4.0 (como los contenidos del repositorio). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común de las piezas de «Recursos». Se copia IDÉNTICO a cada pieza (ver CAPARAZON.md).
+   Trae: tokens de color del manual de Somos Extraordinarios, tema claro/oscuro, modo sensorial bajo
+   (en pantalla se llama «Modo suave»: sin degradados, sin movimiento, colores apagados), cabecera con sello,
+   barra fija «Pausa · Calma · Necesito ayuda · Salir» y sus capas. Letra mínima 17 px, botones mínimo 44 px. */
+:root {
+  /* Pasteles del manual: fondos, pétalos y chips. Encima siempre va texto oscuro (--sobre-pastel). */
+  --menta: #CCEADE; --lavanda: #BDCDFF; --rosa: #EDD5DF; --arena: #F7D4AA;
+  --menta-claro: #EAF6F1; --lavanda-claro: #F4F6FF; --rosa-claro: #FBF1F5; --arena-claro: #FDF6EC;
+  --sobre-pastel: #1E1E2A;          /* sobre cualquier pastel: más de 11:1 */
+  /* Superficies y texto · tema claro */
+  --fondo: #FBFAFD; --superficie: #FFFFFF; --superficie-2: #F4F6FF;
+  --texto: #1E1E2A;                 /* sobre blanco 16,5:1 */
+  --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
+  --borde: #DCDFEE;
+  /* Tonos profundos AA para botones, enlaces y acentos */
+  --principal: #1F7A55;             /* blanco encima 5,29:1 */
+  --principal-hondo: #176446;
+  --sobre-principal: #FFFFFF;
+  --hover-suave: #EAF6F1;
+  --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
+  --sobre-acento: #FFFFFF;
+  --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
+  --rotulo-fondo: #F7D4AA; --rotulo-texto: #8A3F14;   /* sello · 5,34:1 */
+  --foco: #3355D6;
+  /* Decoración (nunca para texto) */
+  --fondo-pagina: linear-gradient(165deg, #EAF6F1 0%, #F4F6FF 45%, #FBF1F5 100%);
+  --orbe: radial-gradient(circle at 30% 25%, #FFFFFF 0%, rgba(255,255,255,0) 45%), linear-gradient(150deg, #BDCDFF, #EDD5DF 55%, #F7D4AA);
+  --sombra: 0 1px 2px rgba(42,33,64,.05), 0 12px 32px rgba(42,33,64,.08);
+  --circulo-a: rgba(189,205,255,.55); --circulo-b: rgba(237,213,223,.65);
+  --radio: 24px;
+  --fuente: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --alto-barra: 88px;
+  color-scheme: light;
+}
+:root[data-tema="oscuro"] {
+  --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
+  --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
+  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
+  --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
+  --sombra: 0 12px 32px rgba(0,0,0,.35);
+  --circulo-a: rgba(87,128,255,.16); --circulo-b: rgba(230,29,115,.12);
+  color-scheme: dark;
+}
+/* Modo sensorial bajo («Modo suave»): colores apagados, sin degradados, sin sombras, sin movimiento */
+:root[data-suave="si"] {
+  --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
+  --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
+  --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
+  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
+}
+:root[data-suave="si"][data-tema="oscuro"] {
+  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
+}
+:root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; background: var(--fondo); color: var(--texto); font-family: var(--fuente); font-size: 18px; line-height: 1.55; padding-bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px) + 24px); overflow-x: hidden; }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.015em; }
+p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+.c-solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.c-saltar { position: absolute; left: 12px; top: -90px; z-index: 200; background: var(--texto); color: var(--fondo); padding: 12px 18px; border-radius: 12px; font-size: 17px; }
+.c-saltar:focus { top: 10px; }
+.c-fondo { position: fixed; inset: 0; z-index: -1; background: var(--fondo-pagina); overflow: hidden; pointer-events: none; }
+.c-fondo span { position: absolute; border-radius: 50%; }
+.c-fondo span:first-child { width: 420px; height: 420px; right: -170px; top: -130px; background: var(--circulo-a); }
+.c-fondo span:last-child { width: 340px; height: 340px; right: -30px; top: 70px; background: var(--circulo-b); mix-blend-mode: multiply; }
+:root[data-tema="oscuro"] .c-fondo span:last-child { mix-blend-mode: screen; }
+:root[data-suave="si"] .c-fondo span { display: none; }
+.c-icono { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.c-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; padding: 10px 14px 4px; }
+.c-marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; white-space: nowrap; }
+.c-marca-sub { font-weight: 400; color: var(--texto-suave); }
+@media (max-width: 379px) { .c-marca-sub { display: none; } }
+.c-orbe { width: 30px; height: 30px; border-radius: 50%; background: var(--orbe); position: relative; flex: none; }
+.c-orbe::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--menta); mix-blend-mode: multiply; opacity: .9; }
+.c-ajustes { display: flex; gap: 6px; }
+.c-boton-icono { min-height: 48px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 500; cursor: pointer; }
+.c-boton-icono span { white-space: nowrap; }
+@media (max-width: 399px) { .c-cabecera { padding: 10px 10px 4px; } #c-suave .c-icono { display: none; } }
+.c-boton-icono[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+:root[data-tema="oscuro"] .c-icono-luna, :root[data-tema="claro"] .c-icono-sol { display: none; }
+.c-sello { max-width: 640px; margin: 4px auto 0; padding: 0 14px; }
+.c-sello span { display: inline-flex; align-items: center; gap: 8px; background: var(--rotulo-fondo); color: var(--rotulo-texto); font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 999px; }
+.c-boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 24px; border-radius: 999px; border: 2px solid transparent; background: var(--principal); color: var(--sobre-principal); font-size: 18px; font-weight: 600; line-height: 1.25; text-align: center; cursor: pointer; text-decoration: none; transition: background .2s, transform .2s; }
+.c-boton:hover { background: var(--principal-hondo); }
+.c-boton:active { transform: translateY(1px); }
+.c-boton[disabled] { opacity: .45; cursor: not-allowed; }
+.c-boton.secundario { background: var(--superficie); color: var(--principal); border-color: var(--principal); }
+.c-boton.secundario:hover { background: var(--hover-suave); }
+.c-boton.texto { background: transparent; color: var(--principal); min-height: 48px; padding: 6px 12px; text-decoration: underline; text-underline-offset: 4px; }
+.c-boton.texto:hover { background: var(--hover-suave); }
+.c-boton.c-armado { background: var(--acento); color: var(--sobre-acento); text-decoration: none; }
+.c-puerta { position: relative; overflow: hidden; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.c-puerta::before { content: ""; position: absolute; inset: 0; transform-origin: left center; transform: scaleX(var(--progreso, 0)); background: rgba(255,255,255,.32); pointer-events: none; }
+:root[data-tema="oscuro"] .c-puerta::before { background: rgba(13,40,27,.28); }
+.c-puerta > * { position: relative; }
+.c-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 120; background: var(--superficie); border-top: 1px solid var(--borde); box-shadow: 0 -8px 24px rgba(42,33,64,.06); padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.c-barra ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; max-width: 640px; margin: 0 auto; padding: 0; list-style: none; }
+.c-barra button { width: 100%; min-height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 16px; background: transparent; color: var(--texto); font-size: 17px; font-weight: 500; line-height: 1.1; cursor: pointer; padding: 4px 1px; }
+.c-barra button:hover, .c-barra button[aria-expanded="true"] { background: var(--superficie-2); }
+.c-barra .c-boton-ayuda { color: var(--acento); font-weight: 600; }
+.c-capa { position: fixed; left: 0; right: 0; top: 0; bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px)); z-index: 110; background: var(--fondo); overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 20px; text-align: center; }
+.c-capa h2 { font-size: 30px; }
+.c-capa h2:focus { outline: none; }
+.c-capa p { font-size: 20px; max-width: 32ch; color: var(--texto-suave); }
+.c-respira { width: 190px; height: 190px; border-radius: 50%; background: var(--menta); box-shadow: 0 0 0 18px var(--menta-claro), 0 0 0 36px var(--lavanda-claro); transform: scale(.8); }
+.c-respira.activo { animation: c-respirar 10s ease-in-out infinite; }
+@keyframes c-respirar { 0%, 100% { transform: scale(.62); } 40%, 50% { transform: scale(1); } }
+.c-respira-texto { font-size: 26px !important; font-weight: 600; color: var(--texto) !important; min-height: 1.4em; }
+.c-tarjeta-ayuda { background: var(--superficie); border: 4px solid var(--acento); border-radius: 28px; padding: 26px 20px; width: min(100%, 520px); }
+.c-tarjeta-ayuda .c-grande { font-size: 44px; font-weight: 700; color: var(--texto); line-height: 1.1; }
+.c-tarjeta-ayuda .c-pide { font-size: 24px; color: var(--texto); margin: 12px auto 0; }
+.c-numeros { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; text-align: left; }
+.c-numeros li { background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 10px 14px; font-size: 18px; }
+.c-numeros strong { font-size: 26px; margin-right: 8px; }
+.c-nota-ayuda { font-size: 17px !important; margin-top: 14px !important; }
+/* === FIN CARAPAZON CONTIGO v1 === */
+
+/* ===== Pieza «El vaso» ===== */
+/* Colores del líquido (decoración, nunca para texto). En modo suave se apagan. */
+:root { --l0: #B7C3EC; --l1: #8FD3B6; --l2: #A3B6FF; --l3: #E9B3C8; --l4: #F4C38F; --l5: #C3B1F2; --l6: #8CCFD6; }
+:root[data-suave="si"] { --l0: #CDD3E3; --l1: #BFD6CB; --l2: #C8CFE6; --l3: #DCC9D0; --l4: #E3D2BD; --l5: #D2CCE3; --l6: #BFD5D7; }
+main { max-width: 640px; margin: 0 auto; padding: 12px 14px 0; }
+main:focus { outline: none; }
+.hoja { background: var(--superficie); border-radius: 28px; box-shadow: var(--sombra); padding: 22px 18px; border: 1px solid var(--borde); }
+.pantalla h1 { font-size: 38px; font-weight: 700; margin-top: 6px; }
+.pantalla h2 { font-size: 27px; font-weight: 700; }
+.pantalla h1:focus, .pantalla h2:focus { outline: none; }
+.pantalla h2.mensaje { color: var(--acento); font-size: 28px; }
+.bajada { color: var(--texto-suave); margin-top: 10px; }
+.centro { text-align: center; }
+.paso { font-size: 17px; font-weight: 600; color: var(--azul-hondo); margin-bottom: 6px; }
+.datos-rapidos { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; padding: 0; list-style: none; }
+.datos-rapidos li { background: var(--lavanda-claro); color: var(--sobre-pastel); border-radius: 999px; padding: 5px 14px; font-size: 17px; font-weight: 500; }
+.acciones { display: grid; gap: 12px; margin-top: 22px; }
+.pista { font-size: 17px; color: var(--texto-suave); }
+.fila-escuchar { display: flex; justify-content: center; margin-top: 10px; }
+.pregunta { margin-top: 18px; font-size: 20px; font-weight: 600; }
+.pregunta + .acciones { margin-top: 10px; }
+.portada { width: 92px; margin: 0 auto 2px; }
+.portada svg { display: block; width: 100%; height: auto; }
+.boton-rol { min-height: 68px; font-size: 19px; justify-content: flex-start; padding-left: 14px; text-align: left; }
+.boton-rol .disco { width: 46px; height: 46px; border-radius: 50%; background: var(--superficie); display: grid; place-items: center; flex: none; }
+.boton-rol .disco svg { width: 38px; height: 38px; }
+.rotulo { margin: 10px 0 0; padding: 8px 12px; border-radius: 14px; background: var(--arena-claro); color: var(--sobre-pastel); font-size: 17px; font-weight: 600; text-align: center; line-height: 1.3; }
+.aviso-fijo { margin: 14px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--arena-claro); color: var(--sobre-pastel); font-size: 17px; font-weight: 500; text-align: center; }
+.aviso-campo { color: var(--acento); font-weight: 500; font-size: 17px; margin-top: 10px; min-height: 1.5em; }
+.advertencia { margin-top: 14px; background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 12px 16px; font-size: 17px; }
+
+/* La máscara (intro) */
+.mascara-escena { width: min(100%, 290px); margin: 10px auto 0; }
+.nina svg { display: block; width: 100%; height: auto; }
+.nina-fondo { fill: var(--menta-claro); }
+.nina .mascara { transition: transform 1.3s cubic-bezier(.55,0,.7,1), opacity .8s ease-in; transform-box: fill-box; transform-origin: 50% 50%; }
+.nina.sin-mascara .mascara { transform: translate(70px, 50px) rotate(35deg); opacity: 0; }
+.nina .mascara-borde { opacity: 0; transition: opacity .7s; }
+.nina.ver-mascara .mascara-borde { opacity: 1; }
+.nina .cara-calma { display: none; }
+.nina.calma .cara-calma { display: inline; }
+.nina.calma .cara-cansada { display: none; }
+.mini-liquido { transform: translateY(42px); transition: transform 4.2s cubic-bezier(.45,.05,.4,1); }
+.fase-1 .mini-liquido { transform: translateY(34px); }
+.fase-2 .mini-liquido { transform: translateY(15px); }
+.fase-3 .mini-liquido { transform: translateY(6px); }
+.fase-4 .mini-liquido { transform: translateY(-3px); }
+.mini-ola { animation: mini-ola 2.4s linear infinite; }
+@keyframes mini-ola { from { transform: translateX(0); } to { transform: translateX(-20px); } }
+.mini-derrame { opacity: 0; transition: opacity .9s .6s; }
+.fase-4 .mini-derrame { opacity: 1; }
+.subtitulo { min-height: 3.3em; margin-top: 12px; font-size: 20px; font-weight: 500; text-align: center; color: var(--texto); }
+.lista-mascara { margin: 14px 0 0; padding-left: 24px; display: grid; gap: 8px; font-size: 18px; }
+.barra-tiempo { height: 6px; border-radius: 3px; background: var(--superficie-2); overflow: hidden; margin-top: 10px; }
+.barra-tiempo span { display: block; height: 100%; background: var(--principal); transform-origin: left center; transform: scaleX(0); }
+.barra-tiempo.corre span { animation: barra-tiempo 18s linear forwards; }
+@keyframes barra-tiempo { to { transform: scaleX(1); } }
+
+/* El escenario: por fuera (la niña) y por dentro (el vaso) */
+.escenario { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 4px 10px; align-items: end; margin-top: 12px; padding: 8px 10px; background: var(--superficie); border: 1px solid var(--borde); border-radius: 24px; position: sticky; top: 4px; z-index: 5; box-shadow: var(--sombra); }
+.escenario figure { margin: 0; text-align: center; position: relative; }
+.escenario figcaption { font-size: 17px; font-weight: 600; color: var(--texto-suave); }
+.fuera .nina { max-width: min(118px, 21vh); margin: 0 auto; }
+.globo { position: absolute; top: 0; left: 0; z-index: 1; white-space: nowrap; padding: 0 10px; border-radius: 14px; background: var(--arena-claro); color: var(--sobre-pastel); font-size: 17px; font-weight: 600; }
+.vaso-svg { display: block; width: 100%; height: min(23vh, 190px); overflow: visible; }
+.frase-gota { grid-column: 1 / -1; min-height: 1.6em; font-size: 17px; font-weight: 500; text-align: center; color: var(--texto); }
+.frase-gota:empty { min-height: 0; }
+.escenario .rotulo { grid-column: 1 / -1; margin-top: 0; }
+.vaso-cuerpo { fill: rgba(255,255,255,.6); }
+:root[data-tema="oscuro"] .vaso-cuerpo { fill: rgba(255,255,255,.07); }
+.vaso-borde { fill: none; stroke: var(--texto); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.vaso-brillo { fill: none; stroke: #FFFFFF; stroke-opacity: .75; stroke-width: 6; stroke-linecap: round; }
+.capa-atras { opacity: .45; }
+.espuma { fill: none; stroke: #FFFFFF; stroke-opacity: .6; stroke-width: 2.5; stroke-linecap: round; }
+.burbuja { fill: #FFFFFF; fill-opacity: .6; }
+.gota { stroke: rgba(42,33,64,.35); stroke-width: 1; }
+.chispa { fill: #FFFFFF; fill-opacity: .9; }
+.anillo { fill: none; stroke: #FFFFFF; stroke-width: 2; }
+.chorro { fill: none; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 1 1; }
+
+/* Botones de momentos y de ajustes (tarjetas con dibujo) */
+.momentos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; }
+@media (min-width: 560px) { .momentos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.momento { width: 100%; min-height: 108px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px; border-radius: 20px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 600; line-height: 1.2; cursor: pointer; position: relative; transition: background .15s, transform .15s; }
+.momento:hover { border-color: var(--principal); }
+.momento:active { transform: scale(.98); }
+.momento .dibujo { width: 56px; height: 56px; border-radius: 50%; background: var(--lavanda-claro); display: grid; place-items: center; }
+.ajustes .momento .dibujo { background: var(--menta-claro); }
+.momento .dibujo svg { width: 46px; height: 46px; }
+.momento .muestra { position: absolute; top: 8px; left: 10px; width: 16px; height: 20px; }
+.momento .muestra svg { display: block; width: 100%; height: 100%; }
+.momento[aria-pressed="true"] { background: var(--superficie-2); border: 3px solid var(--principal); }
+.momento[aria-pressed="true"]::after { content: "✓"; position: absolute; top: 6px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--principal); color: var(--sobre-principal); font-size: 17px; font-weight: 700; display: grid; place-items: center; line-height: 1; }
+.estado-cuenta { margin-top: 10px; font-size: 17px; color: var(--texto-suave); text-align: center; }
+
+/* Las 3 acciones */
+.lista-acciones { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; counter-reset: accion; }
+.lista-acciones li { display: flex; gap: 12px; align-items: center; background: var(--menta-claro); color: var(--sobre-pastel); border-radius: 18px; padding: 12px 14px; font-size: 18px; font-weight: 500; }
+.lista-acciones .dibujo { width: 50px; height: 50px; border-radius: 50%; background: var(--superficie); display: grid; place-items: center; flex: none; }
+:root[data-tema="oscuro"] .lista-acciones .dibujo { background: #FFFFFF; }
+.lista-acciones .dibujo svg { width: 40px; height: 40px; }
+.subtitulo-chico { margin-top: 22px; font-size: 21px; }
+.estado-copia { margin-top: 12px; font-weight: 600; color: var(--principal); min-height: 1.5em; text-align: center; }
+.copia-manual textarea { width: 100%; margin-top: 8px; border: 2px solid var(--borde); border-radius: 14px; padding: 10px; background: var(--superficie); font-size: 17px; }
+</style>
+<script>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común (JS). Se copia IDÉNTICO a cada pieza. Solo define funciones: nada corre solo,
+   salvo aplicar el tema guardado al cargar (para que no parpadee). Todo lo que toca el navegador
+   va en try/catch: si algo falla, la pieza sigue funcionando (sin guardar o sin voz). */
+var Contigo = (function () {
+  'use strict';
+  var PREFIJO = 'contigo.';
+
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* 1 · Baúl local: localStorage con claves contigo.* (nunca sale del celular) */
+  var baul = {
+    leer: function (clave) {
+      try { var t = window.localStorage.getItem(PREFIJO + clave); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+    },
+    guardar: function (clave, valor) {
+      try { window.localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); return true; } catch (e) { return false; }
+    },
+    quitar: function (clave) {
+      try { window.localStorage.removeItem(PREFIJO + clave); return true; } catch (e) { return false; }
+    },
+    claves: function () {
+      try {
+        var ls = window.localStorage, r = [];
+        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && k.indexOf(PREFIJO) === 0) r.push(k); }
+        return r;
+      } catch (e) { return []; }
+    },
+    borrarTodo: function () {
+      var lista = baul.claves();
+      try { lista.forEach(function (k) { window.localStorage.removeItem(k); }); return lista.length; } catch (e) { return -1; }
+    }
+  };
+
+  /* 2 · Bytes y base64url: el estado viaja comprimido después del # del enlace (el # no llega al servidor) */
+  function utf8(texto) { return Array.from(new TextEncoder().encode(String(texto == null ? '' : texto))); }
+  function deUtf8(arr) { return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(arr)); }
+  function recortarUtf8(texto, maxBytes) {
+    var r = [], letras = Array.from(String(texto == null ? '' : texto));
+    for (var i = 0; i < letras.length; i++) { var b = utf8(letras[i]); if (r.length + b.length > maxBytes) break; r = r.concat(b); }
+    return r;
+  }
+  function aBase64url(arr) {
+    var s = '';
+    for (var i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 255);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function deBase64url(txt) {
+    if (typeof txt !== 'string' || !/^[A-Za-z0-9_-]*$/.test(txt) || txt.length % 4 === 1) return null;
+    var b = txt.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    try { var s = atob(b), r = []; for (var i = 0; i < s.length; i++) r.push(s.charCodeAt(i)); return r; } catch (e) { return null; }
+  }
+  function Escritor() { this.b = []; }
+  Escritor.prototype.byte = function (n) { this.b.push(n & 255); return this; };
+  Escritor.prototype.texto = function (t, maxBytes) {
+    var u = recortarUtf8(t, Math.min(255, maxBytes || 255));
+    this.byte(u.length); for (var i = 0; i < u.length; i++) this.b.push(u[i]);
+    return this;
+  };
+  Escritor.prototype.bytes = function () { return this.b.slice(); };
+  function Lector(arr) { this.b = arr; this.i = 0; }
+  Lector.prototype.byte = function () { if (this.i >= this.b.length) throw new Error('corto'); return this.b[this.i++]; };
+  Lector.prototype.texto = function () {
+    var n = this.byte();
+    if (this.i + n > this.b.length) throw new Error('corto');
+    var t = deUtf8(this.b.slice(this.i, this.i + n)); this.i += n; return t;
+  };
+  Lector.prototype.fin = function () { return this.i === this.b.length; };
+  var bytes = { utf8: utf8, deUtf8: deUtf8, recortarUtf8: recortarUtf8, aBase64url: aBase64url, deBase64url: deBase64url, Escritor: Escritor, Lector: Lector };
+
+  /* Formato del #: <pieza>.<base64url>. Ej.: #a1.AARMdW5h... (a1 = «Así soy yo», versión 1) */
+  var enlace = {
+    empaquetar: function (pieza, arr) { return pieza + '.' + aBase64url(arr); },
+    desempaquetar: function (pieza, fragmento) {
+      var f = String(fragmento == null ? '' : fragmento);
+      if (f.charAt(0) === '#') f = f.slice(1);
+      if (f.indexOf(pieza + '.') !== 0) return null;
+      var datos = f.slice(pieza.length + 1).match(/^[A-Za-z0-9_-]*/)[0]; // ignora basura pegada al final (un punto, un paréntesis)
+      if (!datos) return null;
+      return deBase64url(datos);
+    }
+  };
+
+  /* 3 · Código QR propio (modo byte, corrección M o L, versiones 1 a 40). Sin librerías ni red.
+     Sigue la norma ISO/IEC 18004; el algoritmo es el de referencia (Reed-Solomon sobre GF(256)). */
+  var qr = (function () {
+    var ECC = {
+      L: [7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+      M: [10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28]
+    };
+    var BLOQUES = {
+      L: [1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8,8,9,9,10,12,12,12,13,14,15,16,17,18,19,19,20,21,22,24,25],
+      M: [1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49]
+    };
+    var FORMATO = { L: 1, M: 0 };
+    function modulosCrudos(v) {
+      var r = (16 * v + 128) * v + 64;
+      if (v >= 2) { var n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; }
+      return r;
+    }
+    function palabrasDatos(v, n) { return Math.floor(modulosCrudos(v) / 8) - ECC[n][v - 1] * BLOQUES[n][v - 1]; }
+    function mul(x, y) {
+      var z = 0;
+      for (var i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; }
+      return z;
+    }
+    function divisor(grado) {
+      var r = [], raiz = 1, i, j;
+      for (i = 0; i < grado - 1; i++) r.push(0);
+      r.push(1);
+      for (i = 0; i < grado; i++) {
+        for (j = 0; j < r.length; j++) { r[j] = mul(r[j], raiz); if (j + 1 < r.length) r[j] ^= r[j + 1]; }
+        raiz = mul(raiz, 0x02);
+      }
+      return r;
+    }
+    function resto(datos, div) {
+      var r = div.map(function () { return 0; });
+      datos.forEach(function (b) {
+        var f = b ^ r.shift(); r.push(0);
+        div.forEach(function (c, i) { r[i] ^= mul(c, f); });
+      });
+      return r;
+    }
+    function alineacion(v, t) {
+      if (v === 1) return [];
+      var n = Math.floor(v / 7) + 2, paso = Math.floor((v * 8 + n * 3 + 5) / (n * 4 - 4)) * 2, r = [6];
+      for (var p = t - 7; r.length < n; p -= paso) r.splice(1, 0, p);
+      return r;
+    }
+    function matriz(texto) {
+      var datos = utf8(texto), nivel = null, v = 0, cc = 8, niveles = ['M', 'L'];
+      for (var a = 0; a < niveles.length && !nivel; a++) {
+        for (v = 1; v <= 40; v++) {
+          cc = v <= 9 ? 8 : 16;
+          if (datos.length < Math.pow(2, cc) && 4 + cc + datos.length * 8 <= palabrasDatos(v, niveles[a]) * 8) { nivel = niveles[a]; break; }
+        }
+      }
+      if (!nivel) return null;
+      // Bits de datos: modo byte (0100) + largo + bytes + terminador + relleno
+      var bb = [];
+      function poner(val, largo) { for (var i = largo - 1; i >= 0; i--) bb.push((val >>> i) & 1); }
+      poner(4, 4); poner(datos.length, cc);
+      datos.forEach(function (b) { poner(b, 8); });
+      var cap = palabrasDatos(v, nivel) * 8;
+      poner(0, Math.min(4, cap - bb.length));
+      poner(0, (8 - bb.length % 8) % 8);
+      for (var pad = 0xEC; bb.length < cap; pad ^= 0xEC ^ 0x11) poner(pad, 8);
+      var cw = [];
+      for (var i = 0; i < bb.length; i += 8) { var x = 0; for (var k = 0; k < 8; k++) x = (x << 1) | bb[i + k]; cw.push(x); }
+      // Bloques con corrección de errores, intercalados
+      var nb = BLOQUES[nivel][v - 1], ecl = ECC[nivel][v - 1], crudas = Math.floor(modulosCrudos(v) / 8);
+      var cortos = nb - crudas % nb, largoCorto = Math.floor(crudas / nb), div = divisor(ecl), bloques = [], pos = 0;
+      for (i = 0; i < nb; i++) {
+        var d = cw.slice(pos, pos + largoCorto - ecl + (i < cortos ? 0 : 1));
+        pos += d.length;
+        var e = resto(d, div);
+        if (i < cortos) d.push(0);
+        bloques.push(d.concat(e));
+      }
+      var final = [];
+      for (i = 0; i < bloques[0].length; i++) {
+        for (var j = 0; j < bloques.length; j++) { if (i !== largoCorto - ecl || j >= cortos) final.push(bloques[j][i]); }
+      }
+      // Matriz: patrones fijos
+      var t = v * 4 + 17, m = [], f = [];
+      for (i = 0; i < t; i++) { m.push(new Array(t).fill(false)); f.push(new Array(t).fill(false)); }
+      function fijo(x, y, osc) { m[y][x] = osc; f[y][x] = true; }
+      for (i = 0; i < t; i++) { fijo(6, i, i % 2 === 0); fijo(i, 6, i % 2 === 0); }
+      [[3, 3], [t - 4, 3], [3, t - 4]].forEach(function (p) {
+        for (var dy = -4; dy <= 4; dy++) for (var dx = -4; dx <= 4; dx++) {
+          var dist = Math.max(Math.abs(dx), Math.abs(dy)), xx = p[0] + dx, yy = p[1] + dy;
+          if (xx >= 0 && xx < t && yy >= 0 && yy < t) fijo(xx, yy, dist !== 2 && dist !== 4);
+        }
+      });
+      var al = alineacion(v, t);
+      for (i = 0; i < al.length; i++) for (j = 0; j < al.length; j++) {
+        if ((i === 0 && j === 0) || (i === 0 && j === al.length - 1) || (i === al.length - 1 && j === 0)) continue;
+        for (var dy2 = -2; dy2 <= 2; dy2++) for (var dx2 = -2; dx2 <= 2; dx2++) fijo(al[i] + dx2, al[j] + dy2, Math.max(Math.abs(dx2), Math.abs(dy2)) !== 1);
+      }
+      function formato(mk) {
+        var dat = (FORMATO[nivel] << 3) | mk, r = dat, q;
+        for (q = 0; q < 10; q++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+        var b = ((dat << 10) | r) ^ 0x5412;
+        function bit(n) { return ((b >>> n) & 1) !== 0; }
+        for (q = 0; q <= 5; q++) fijo(8, q, bit(q));
+        fijo(8, 7, bit(6)); fijo(8, 8, bit(7)); fijo(7, 8, bit(8));
+        for (q = 9; q < 15; q++) fijo(14 - q, 8, bit(q));
+        for (q = 0; q < 8; q++) fijo(t - 1 - q, 8, bit(q));
+        for (q = 8; q < 15; q++) fijo(8, t - 15 + q, bit(q));
+        fijo(8, t - 8, true);
+      }
+      formato(0);
+      if (v >= 7) {
+        var rv = v;
+        for (i = 0; i < 12; i++) rv = (rv << 1) ^ ((rv >>> 11) * 0x1F25);
+        var vb = (v << 12) | rv;
+        for (i = 0; i < 18; i++) { var bt = ((vb >>> i) & 1) !== 0, aa = t - 11 + i % 3, bb2 = Math.floor(i / 3); fijo(aa, bb2, bt); fijo(bb2, aa, bt); }
+      }
+      // Datos en zigzag
+      var idx = 0;
+      for (var der = t - 1; der >= 1; der -= 2) {
+        if (der === 6) der = 5;
+        for (var vert = 0; vert < t; vert++) for (j = 0; j < 2; j++) {
+          var xx2 = der - j, arriba = ((der + 1) & 2) === 0, yy2 = arriba ? t - 1 - vert : vert;
+          if (!f[yy2][xx2] && idx < final.length * 8) { m[yy2][xx2] = ((final[idx >>> 3] >>> (7 - (idx & 7))) & 1) !== 0; idx++; }
+        }
+      }
+      function mascara(mk) {
+        for (var y = 0; y < t; y++) for (var x = 0; x < t; x++) {
+          var inv;
+          switch (mk) {
+            case 0: inv = (x + y) % 2 === 0; break;
+            case 1: inv = y % 2 === 0; break;
+            case 2: inv = x % 3 === 0; break;
+            case 3: inv = (x + y) % 3 === 0; break;
+            case 4: inv = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0; break;
+            case 5: inv = x * y % 2 + x * y % 3 === 0; break;
+            case 6: inv = (x * y % 2 + x * y % 3) % 2 === 0; break;
+            default: inv = ((x + y) % 2 + x * y % 3) % 2 === 0;
+          }
+          if (!f[y][x] && inv) m[y][x] = !m[y][x];
+        }
+      }
+      function celda(dir, a1, b1) { if (b1 < 0 || b1 >= t) return false; return dir ? m[b1][a1] : m[a1][b1]; }
+      function penalidad() {
+        var p = 0, a1, b1, dir, run, q, patron = [1, 0, 1, 1, 1, 0, 1];
+        for (dir = 0; dir < 2; dir++) for (a1 = 0; a1 < t; a1++) {
+          run = 1;
+          for (b1 = 1; b1 < t; b1++) {
+            if (celda(dir, a1, b1) === celda(dir, a1, b1 - 1)) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1;
+          }
+          for (b1 = 0; b1 <= t - 7; b1++) {
+            var ok = true;
+            for (q = 0; q < 7; q++) if (celda(dir, a1, b1 + q) !== (patron[q] === 1)) { ok = false; break; }
+            if (!ok) continue;
+            var antes = true, despues = true;
+            for (q = 1; q <= 4; q++) { if (celda(dir, a1, b1 - q)) antes = false; if (celda(dir, a1, b1 + 6 + q)) despues = false; }
+            if (antes || despues) p += 40;
+          }
+        }
+        for (var y = 0; y < t - 1; y++) for (var x = 0; x < t - 1; x++) {
+          var c = m[y][x]; if (c === m[y][x + 1] && c === m[y + 1][x] && c === m[y + 1][x + 1]) p += 3;
+        }
+        var osc = 0; m.forEach(function (fila) { fila.forEach(function (cc2) { if (cc2) osc++; }); });
+        var total = t * t; p += (Math.ceil(Math.abs(osc * 20 - total * 10) / total) - 1) * 10;
+        return p;
+      }
+      var mejor = 0, menor = Infinity;
+      for (var mk = 0; mk < 8; mk++) {
+        mascara(mk); formato(mk);
+        var pen = penalidad();
+        if (pen < menor) { menor = pen; mejor = mk; }
+        mascara(mk);
+      }
+      mascara(mejor); formato(mejor);
+      return { version: v, nivel: nivel, tamano: t, modulos: m, mascara: mejor };
+    }
+    function svg(texto, etiqueta) {
+      var q = matriz(texto);
+      if (!q) return '';
+      var borde = 4, n = q.tamano + borde * 2, d = '';
+      q.modulos.forEach(function (fila, y) {
+        var x = 0;
+        while (x < fila.length) {
+          if (!fila[x]) { x++; continue; }
+          var ini = x; while (x < fila.length && fila[x]) x++;
+          d += 'M' + (ini + borde) + ' ' + (y + borde) + 'h' + (x - ini) + 'v1h-' + (x - ini) + 'z';
+        }
+      });
+      return '<svg viewBox="0 0 ' + n + ' ' + n + '" role="img" aria-label="' + esc(etiqueta || 'Código QR') + '" shape-rendering="crispEdges"><rect width="' + n + '" height="' + n + '" fill="#FFFFFF"/><path fill="#1E1E2A" d="' + d + '"/></svg>';
+    }
+    return { matriz: matriz, svg: svg };
+  })();
+
+  /* 4 · Voz opcional («Escuchar»): solo con un toque; si no hay voz en español, el botón se esconde */
+  var voz = {
+    elegida: null,
+    buscar: function () {
+      try {
+        if (!('speechSynthesis' in window)) return null;
+        var vs = window.speechSynthesis.getVoices() || [];
+        var es = vs.filter(function (x) { return /^es([-_]|$)/i.test(x.lang || ''); });
+        if (!es.length) return null;
+        var orden = ['es-co', 'es-419', 'es-us', 'es-mx', 'es-es'];
+        for (var i = 0; i < orden.length; i++) {
+          var hit = es.filter(function (x) { return (x.lang || '').toLowerCase().replace('_', '-') === orden[i]; })[0];
+          if (hit) return hit;
+        }
+        return es[0];
+      } catch (e) { return null; }
+    },
+    actualizar: function () {
+      voz.elegida = voz.buscar();
+      var hay = !!voz.elegida;
+      try { document.querySelectorAll('[data-voz]').forEach(function (el) { el.hidden = !hay; }); } catch (e) {}
+    },
+    iniciar: function () {
+      voz.actualizar();
+      try { if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = voz.actualizar; } catch (e) {}
+    },
+    decir: function (texto) {
+      try {
+        var s = window.speechSynthesis;
+        if (s.speaking) { s.cancel(); return; } // segundo toque = parar
+        if (!voz.elegida || !texto) return;
+        var u = new SpeechSynthesisUtterance(texto);
+        u.voice = voz.elegida; u.lang = voz.elegida.lang; u.rate = 0.9;
+        s.speak(u);
+      } catch (e) {}
+    },
+    callar: function () { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  };
+
+  /* 5 · Ajustes: tema claro/oscuro y modo sensorial bajo («Modo suave»), recordados en contigo.ajustes */
+  function leerAjustes() { var a = baul.leer('ajustes'); return (a && typeof a === 'object') ? a : {}; }
+  function aplicarAjustes() {
+    try {
+      var a = leerAjustes(), raiz = document.documentElement, oscuroSistema = false;
+      try { oscuroSistema = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
+      var tema = (a.tema === 'oscuro' || a.tema === 'claro') ? a.tema : (oscuroSistema ? 'oscuro' : 'claro');
+      raiz.setAttribute('data-tema', tema);
+      raiz.setAttribute('data-suave', a.suave ? 'si' : 'no');
+      var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+      if (bs) bs.setAttribute('aria-pressed', a.suave ? 'true' : 'false');
+      if (bt) bt.setAttribute('aria-pressed', tema === 'oscuro' ? 'true' : 'false');
+    } catch (e) {}
+  }
+  function cambiarAjuste(clave, valor) { var a = leerAjustes(); a[clave] = valor; baul.guardar('ajustes', a); aplicarAjustes(); }
+  function suave() {
+    try { return document.documentElement.getAttribute('data-suave') === 'si' || window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* 6 · Anuncios para lector de pantalla */
+  function anunciar(msg) {
+    var el = document.getElementById('c-anuncio');
+    if (!el) return;
+    el.textContent = '';
+    setTimeout(function () { el.textContent = msg; }, 60);
+  }
+
+  /* 7 · Capas de la barra: Pausa, Calma (respiración), Necesito ayuda (tarjeta para mostrar), Salir */
+  var capaAbierta = null, focoPrevio = null, relojRespira = 0;
+  function marcarInerte(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.inert = si;
+      if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+  }
+  function empezarRespiracion() {
+    var txt = document.getElementById('c-respira-texto'), circulo = document.getElementById('c-respira');
+    var frases = ['Toma aire despacio…', 'Suéltalo despacio…'], tiempos = [4000, 6000], fase = 0;
+    if (circulo) { circulo.classList.remove('activo'); void circulo.offsetWidth; circulo.classList.add('activo'); }
+    (function ciclo() {
+      if (txt) txt.textContent = frases[fase];
+      relojRespira = setTimeout(function () { fase = 1 - fase; ciclo(); }, tiempos[fase]);
+    })();
+  }
+  function pararRespiracion() {
+    clearTimeout(relojRespira);
+    var c = document.getElementById('c-respira'); if (c) c.classList.remove('activo');
+  }
+  function botonesBarra(abierta) {
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', b.getAttribute('data-c-capa') === abierta ? 'true' : 'false');
+    });
+  }
+  function cerrarCapa(sinFoco) {
+    if (!capaAbierta) return;
+    capaAbierta.hidden = true;
+    if (capaAbierta.id === 'c-capa-calma') pararRespiracion();
+    capaAbierta = null;
+    marcarInerte(false); botonesBarra(null);
+    if (!sinFoco && focoPrevio && focoPrevio.focus) { try { focoPrevio.focus(); } catch (e) {} }
+  }
+  function abrirCapa(id) {
+    var yaEstaba = capaAbierta && capaAbierta.id === id;
+    if (capaAbierta) { var previo = focoPrevio; cerrarCapa(true); focoPrevio = previo; } else { focoPrevio = document.activeElement; }
+    if (yaEstaba) { if (focoPrevio && focoPrevio.focus) focoPrevio.focus(); return; } // segundo toque en el mismo botón = cerrar
+    var capa = document.getElementById(id);
+    if (!capa) return;
+    voz.callar();
+    capa.hidden = false; capaAbierta = capa;
+    marcarInerte(true); botonesBarra(id);
+    if (id === 'c-capa-calma') empezarRespiracion();
+    var destino = capa.querySelector('[data-foco]') || capa.querySelector('button');
+    if (destino) destino.focus();
+  }
+  function salir() {
+    voz.callar();
+    var enSitio = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
+    if (enSitio) location.assign('/'); else abrirCapa('c-capa-salir');
+  }
+
+  /* 8 · Puerta de adulto: mantener presionado 3 segundos (sin sumas, para que la abuela pueda) */
+  function puertaAdulto(boton, alAbrir, ms, alSoltar) {
+    ms = ms || 3000;
+    var t0 = 0, raf = 0, activo = false, abiertaHace = 0;
+    function paso() {
+      var p = Math.min(1, (performance.now() - t0) / ms);
+      boton.style.setProperty('--progreso', String(p));
+      if (p >= 1) { terminar(true); return; }
+      raf = requestAnimationFrame(paso);
+    }
+    function empezar(e) {
+      if (activo) return;
+      if (e && e.cancelable) e.preventDefault();
+      activo = true; t0 = performance.now();
+      boton.classList.add('c-presionando');
+      raf = requestAnimationFrame(paso);
+    }
+    function terminar(ok) {
+      if (!activo) return;
+      cancelAnimationFrame(raf); activo = false;
+      boton.classList.remove('c-presionando');
+      boton.style.setProperty('--progreso', '0');
+      if (ok) { abiertaHace = Date.now(); alAbrir(); } else if (alSoltar) alSoltar();
+    }
+    boton.addEventListener('pointerdown', function (e) { if (e.button === 0 || e.pointerType !== 'mouse') empezar(e); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { boton.addEventListener(ev, function () { terminar(false); }); });
+    boton.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) empezar(e); else if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+    boton.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') terminar(false); });
+    boton.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    boton.addEventListener('click', function (e) { e.preventDefault(); if (!activo && Date.now() - abiertaHace > 800 && alSoltar) alSoltar(); });
+  }
+
+  /* 9 · Doble toque para lo que no tiene reversa (p. ej., «Borrar todo lo de este celular») */
+  function dobleToque(boton, op) {
+    var armado = false, desde = 0, reloj = 0, original = boton.innerHTML;
+    function desarmar() { armado = false; boton.innerHTML = original; boton.classList.remove('c-armado'); }
+    boton.addEventListener('click', function () {
+      if (!armado) {
+        armado = true; desde = Date.now();
+        boton.textContent = op.confirmar; boton.classList.add('c-armado');
+        anunciar(op.confirmar);
+        reloj = setTimeout(desarmar, 6000);
+        return;
+      }
+      if (Date.now() - desde < 350) return; // un doble clic accidental no borra
+      clearTimeout(reloj); desarmar(); op.alConfirmar();
+    });
+  }
+
+  /* 10 · Copiar al portapapeles (con plan B si el navegador no deja) */
+  function copiar(texto) {
+    return new Promise(function (listo) {
+      function planB() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = texto; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand('copy'); ta.remove(); listo(!!ok);
+        } catch (e) { listo(false); }
+      }
+      try {
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(function () { listo(true); }, planB);
+        else planB();
+      } catch (e) { planB(); }
+    });
+  }
+
+  /* 11 · Arranque: lo llama cada pieza cuando la página cargó */
+  function iniciar(op) {
+    op = op || {};
+    aplicarAjustes();
+    var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+    if (bs) bs.addEventListener('click', function () { cambiarAjuste('suave', !leerAjustes().suave); anunciar(leerAjustes().suave ? 'Modo suave activado' : 'Modo suave apagado'); if (op.alCambiarAjustes) op.alCambiarAjustes(); });
+    if (bt) bt.addEventListener('click', function () { cambiarAjuste('tema', document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro'); });
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var acc = b.getAttribute('data-c-accion');
+        if (acc === 'salir') salir(); else abrirCapa(b.getAttribute('data-c-capa'));
+      });
+    });
+    document.querySelectorAll('[data-c-cerrar]').forEach(function (b) { b.addEventListener('click', function () { cerrarCapa(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && capaAbierta) cerrarCapa(false); });
+    var adulto = document.getElementById('c-ayuda-adulto');
+    if (adulto) adulto.hidden = op.vistaAdulto === false;
+    voz.iniciar();
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.c-escuchar') : null;
+      if (b) voz.decir(op.textoEscuchar ? op.textoEscuchar() : '');
+    });
+    try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', aplicarAjustes); } catch (e) {}
+  }
+
+  return {
+    version: 1, PREFIJO: PREFIJO, esc: esc, baul: baul, bytes: bytes, enlace: enlace, qr: qr, voz: voz,
+    aplicarAjustes: aplicarAjustes, cambiarAjuste: cambiarAjuste, suave: suave, anunciar: anunciar,
+    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar
+  };
+})();
+if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado antes de pintar
+/* === FIN CARAPAZON CONTIGO v1 === */
+</script>
+</head>
+<body>
+<!-- === CARAPAZON CONTIGO v1 · HTML (fondo, cabecera, sello) === -->
+<a class="c-saltar" href="#principal">Saltar al contenido</a>
+<div class="c-fondo" aria-hidden="true"><span></span><span></span></div>
+<header class="c-cabecera" id="c-cabecera">
+  <div class="c-marca"><span class="c-orbe" aria-hidden="true"></span><span>Contigo<span class="c-marca-sub"> · Recursos</span></span></div>
+  <div class="c-ajustes">
+    <button type="button" class="c-boton-icono" id="c-suave" aria-pressed="false" aria-describedby="c-suave-desc"><svg class="c-icono" aria-hidden="true"><use href="#i-suave"/></svg><span>Modo suave</span></button>
+    <button type="button" class="c-boton-icono" id="c-tema" aria-pressed="false" aria-label="Pantalla oscura"><svg class="c-icono c-icono-luna" aria-hidden="true"><use href="#i-luna"/></svg><svg class="c-icono c-icono-sol" aria-hidden="true"><use href="#i-sol"/></svg></button>
+  </div>
+  <span id="c-suave-desc" class="c-solo-lector">Sin movimiento y con colores más quietos. Se recuerda en este celular.</span>
+</header>
+<p class="c-sello" id="c-sello"><span>Prototipo · datos de ejemplo</span></p>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (arriba) === -->
+
+<!-- Dibujos propios de Contigo (CC BY 4.0). Planos, redondeados, con los pasteles del manual. -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">
+<!-- Iconos de la interfaz (trazo del color del texto) -->
+<symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+<symbol id="i-calma" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></symbol>
+<symbol id="i-ayuda" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></symbol>
+<symbol id="i-salir" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+<symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4zM15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<symbol id="i-suave" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l6.5-6.5"/></symbol>
+<symbol id="i-luna" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+<symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+<symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-compartir" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+<symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<!-- Quién eres -->
+<symbol id="r-maestra" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="38" height="24" rx="3" fill="#CCEADE"/><path d="M11 17h14M11 23h9M16 33l-4 8M32 33l4 8"/><path d="M33 15l3 3 5-6" stroke="#1F7A55"/></g></symbol>
+<symbol id="r-familia" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22L24 8l17 14v16a2.5 2.5 0 0 1-2.5 2.5h-29A2.5 2.5 0 0 1 7 38z" fill="#F7D4AA"/><path d="M24 34s-6-3.6-6-7.8a3.3 3.3 0 0 1 6-1.7 3.3 3.3 0 0 1 6 1.7c0 4.2-6 7.8-6 7.8z" fill="#EDD5DF"/></g></symbol>
+<!-- Momentos del colegio -->
+<symbol id="v-timbre" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 10c-7 0-11 5.5-11 12v7l-4 5h30l-4-5v-7c0-6.5-4-12-11-12z" fill="#F7D4AA"/><path d="M20.5 38a3.5 3.5 0 0 0 7 0M24 10V7"/><path d="M5 16q-3 6 0 12M43 16q3 6 0 12M9.5 19q-1.5 3 0 6M38.5 19q1.5 3 0 6" stroke="#E61D73"/></g></symbol>
+<symbol id="v-filas" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="17" r="4.5" fill="#BDCDFF"/><circle cx="24" cy="15" r="4.5" fill="#EDD5DF"/><circle cx="37" cy="17" r="4.5" fill="#CCEADE"/><path d="M4 39a7 7 0 0 1 14 0zM17 37a7 7 0 0 1 14 0zM30 39a7 7 0 0 1 14 0z" fill="#F7D4AA"/><path d="M15 9l3-3M33 9l-3-3" stroke="#E61D73"/></g></symbol>
+<symbol id="v-descanso" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="29" r="11" fill="#FFFFFF"/><path d="M17 23.5l5 3.6-1.9 5.9h-6.2l-1.9-5.9z" fill="#2A2140"/><path d="M31 13q5 4.5 0 10M36 8q10 9.5 0 20M41 4q14 14 0 28" stroke="#E61D73"/></g></symbol>
+<symbol id="v-cambio" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="19" height="34" rx="2" fill="#CCEADE"/><circle cx="21" cy="25" r="1.7" fill="#2A2140" stroke="none"/><path d="M30 24h13M38 19l5 5-5 5" stroke="#3355D6"/></g></symbol>
+<symbol id="v-luces" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v5M36 5v5"/><rect x="5" y="10" width="38" height="9" rx="4.5" fill="#F4F6FF"/><path d="M13 24l-3 6 4 1-3 7M25 24l-3 6 4 1-3 7M37 24l-3 6 4 1-3 7" stroke="#E8703D"/></g></symbol>
+<symbol id="v-grupo" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h17a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-8l-5 4v-4H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z" fill="#BDCDFF"/><path d="M25 15h17a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-2v4l-5-4H25a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3z" fill="#EDD5DF"/><path d="M8 27h14a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-7l-4 3.5V38H8a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3z" fill="#CCEADE"/></g></symbol>
+<symbol id="v-casa" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22L24 9l16 13v16a2.5 2.5 0 0 1-2.5 2.5h-27A2.5 2.5 0 0 1 8 38z" fill="#CCEADE"/><path d="M20 40.5V30h8v10.5" fill="#FFFFFF"/></g></symbol>
+<!-- Momentos de la tarde en casa -->
+<symbol id="v-viaje" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="36" height="27" rx="5" fill="#F7D4AA"/><rect x="10" y="13" width="12" height="7" rx="1.5" fill="#F4F6FF"/><rect x="26" y="13" width="12" height="7" rx="1.5" fill="#F4F6FF"/><path d="M6 25h36"/><circle cx="15" cy="37" r="3.6" fill="#2A2140"/><circle cx="33" cy="37" r="3.6" fill="#2A2140"/></g></symbol>
+<symbol id="v-ruido" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="13" width="27" height="20" rx="3" fill="#BDCDFF"/><path d="M11 7l6.5 6 6.5-6M12 39h11"/><path d="M35 17q4 6 0 12M40 13q7.5 10 0 20" stroke="#E61D73"/></g></symbol>
+<symbol id="v-preguntas" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8h30a4 4 0 0 1 4 4v15a4 4 0 0 1-4 4H23l-8 7v-7H9a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="#EDD5DF"/><path d="M20 15.5a4 4 0 1 1 5.5 3.7c-1 .5-1.5 1.3-1.5 2.4v.9"/><circle cx="24" cy="26.5" r="1.6" fill="#2A2140" stroke="none"/></g></symbol>
+<symbol id="v-comida" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="33" rx="18" ry="7.5" fill="#FFFFFF"/><ellipse cx="24" cy="32" rx="9.5" ry="3.6" fill="#F7D4AA"/><path d="M17 21q-3-4 0-8M24 21q-3-4 0-8M31 21q-3-4 0-8" stroke="#E8703D"/></g></symbol>
+<symbol id="v-tarea" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="25" height="33" rx="3" fill="#F4F6FF"/><path d="M12 15h15M12 21h15M12 27h9"/><path d="M29 41l2-7 9.5-9.5a2.6 2.6 0 0 1 3.7 3.7L34.7 37.7z" fill="#F7D4AA"/></g></symbol>
+<!-- Lo que baja el vaso -->
+<symbol id="a-aviso" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="26" r="15" fill="#CCEADE"/><path d="M24 17v9l6 4M19 6h10"/></g></symbol>
+<symbol id="a-pausa" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 38c0-17 11-28 28-28 0 17-11 28-28 28z" fill="#CCEADE"/><path d="M10 38l13-13"/></g></symbol>
+<symbol id="a-rincon" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 41L24 8l19 33z" fill="#EDD5DF"/><path d="M18 41l6-12 6 12z" fill="#FFFFFF"/><path d="M38 7v4M36 9h4" stroke="#3355D6"/></g></symbol>
+<symbol id="a-audifonos" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 30v-5a14 14 0 0 1 28 0v5"/><rect x="6" y="27" width="8" height="13" rx="3.5" fill="#BDCDFF"/><rect x="34" y="27" width="8" height="13" rx="3.5" fill="#BDCDFF"/></g></symbol>
+<symbol id="a-pareja" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="5.5" fill="#F7D4AA"/><circle cx="32" cy="16" r="5.5" fill="#CCEADE"/><path d="M6 39a10 10 0 0 1 20 0zM22 39a10 10 0 0 1 20 0z" fill="#BDCDFF"/></g></symbol>
+<symbol id="a-fila" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 41V8h19v33" fill="#CCEADE"/><path d="M5 41h38"/><path d="M31 24h12M39 20l4 4-4 4" stroke="#3355D6"/></g></symbol>
+<symbol id="a-silencio" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19h6l8-7v24l-8-7H7z" fill="#BDCDFF"/><path d="M29 19l10 10M39 19L29 29"/></g></symbol>
+<symbol id="a-rato" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7c0 9 8 11 8 17s-8 8-8 17h16c0-9-8-11-8-17s8-8 8-17z" fill="#F4F6FF"/><path d="M19 12h10c-1 3-3 5-5 6-2-1-4-3-5-6zM19 38c1-4 5-6 5-8 0 2 4 4 5 8z" fill="#F7D4AA"/><path d="M14 7h20M14 41h20"/></g></symbol>
+<symbol id="a-menos" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h30a4 4 0 0 1 4 4v15a4 4 0 0 1-4 4H23l-8 7v-7H9a4 4 0 0 1-4-4V13a4 4 0 0 1 4-4z" fill="#CCEADE"/><path d="M24 27s-6-3.6-6-7.6a3.2 3.2 0 0 1 6-1.6 3.2 3.2 0 0 1 6 1.6c0 4-6 7.6-6 7.6z" fill="#EDD5DF"/></g></symbol>
+<symbol id="a-comida" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23h36a18 14 0 0 1-36 0z" fill="#F7D4AA"/><path d="M28 17l11-11"/><path d="M15 33q9 4 18 0" stroke="#E8703D"/></g></symbol>
+<symbol id="a-tarea" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="13" width="23" height="28" rx="3" fill="#F4F6FF"/><path d="M10 21h13M10 27h13M10 33h8"/><path d="M38 6a8.5 8.5 0 1 0 6.5 11.5A7 7 0 0 1 38 6z" fill="#F7D4AA"/></g></symbol>
+</svg>
+
+<main id="principal" tabindex="-1">
+  <!-- Inicio: quién eres (vista colegio o vista 5 p. m.) -->
+  <section class="pantalla" data-pantalla="inicio" id="pantalla-inicio" aria-labelledby="t-inicio">
+    <div class="hoja">
+      <div class="portada" aria-hidden="true"><svg viewBox="0 0 220 280"><defs><clipPath id="p-clip"><path d="M35 22L53.5 241Q55 251 66 251L154 251Q165 251 166.5 241L185 22Z"/></clipPath></defs><path class="vaso-cuerpo" d="M30 24L49 243Q50.5 256 63 256L157 256Q169.5 256 171 243L190 24Z"/><g clip-path="url(#p-clip)"><path d="M20 92Q47 84 74 92T128 92T182 92T236 92V272H20Z" style="fill:var(--l4)"/><path d="M20 150Q47 144 74 150T128 150T182 150T236 150V272H20Z" style="fill:var(--l3)"/><path d="M20 204Q47 199 74 204T128 204T182 204T236 204V272H20Z" style="fill:var(--l1)"/></g><path class="vaso-borde" d="M30 24L49 243Q50.5 256 63 256L157 256Q169.5 256 171 243L190 24"/><path class="vaso-brillo" d="M44 46L58 206"/></svg></div>
+      <h1 id="t-inicio" class="centro" tabindex="-1" data-leer>El vaso</h1>
+      <p class="bajada" data-leer>Por qué una niña puede llegar «bien» del colegio y desbordarse en casa.</p>
+      <ul class="datos-rapidos" data-leer aria-label="Cómo es"><li>90 segundos</li><li>Sin datos</li><li>No guarda nada</li></ul>
+      <p class="pregunta" data-leer>¿Quién eres?</p>
+      <div class="acciones">
+        <button type="button" class="c-boton boton-rol" data-vista="maestra"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#r-maestra"/></svg></span><span>Soy maestra</span></button>
+        <button type="button" class="c-boton boton-rol" data-vista="familia"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#r-familia"/></svg></span><span>Soy papá / familia</span></button>
+      </div>
+      <p class="pista centro" style="margin-top:14px">¿Prefieres la pantalla quieta? Toca «Modo suave» arriba.</p>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+  <!-- FIN pantalla-inicio -->
+
+  <!-- La máscara: intro de 18 s, saltable -->
+  <section class="pantalla" data-pantalla="mascara" aria-labelledby="t-mascara" hidden>
+    <div class="hoja">
+      <p class="paso" id="mascara-paso"></p>
+      <h2 id="t-mascara" tabindex="-1">La máscara</h2>
+      <div class="mascara-escena" id="mascara-escena"><div class="nina" id="nina-grande"></div></div>
+      <p class="subtitulo" id="mascara-texto" aria-live="polite"></p>
+      <ol class="lista-mascara" id="mascara-lista" hidden></ol>
+      <div class="barra-tiempo" id="mascara-barra" aria-hidden="true"><span></span></div>
+      <p class="rotulo">Es una imagen para entender, no una medida.</p>
+      <div class="acciones"><button type="button" class="c-boton secundario" id="b-mascara-seguir">Saltar</button></div>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+
+  <!-- El vaso: llenar → rebosa → lo que baja el vaso -->
+  <section class="pantalla" data-pantalla="vaso" aria-labelledby="t-vaso" hidden>
+    <div class="hoja">
+      <p class="paso" id="vaso-paso"></p>
+      <h2 id="t-vaso" tabindex="-1"></h2>
+      <p class="bajada" id="vaso-bajada"></p>
+      <div class="escenario" id="escenario">
+        <figure class="fuera"><div class="nina" id="nina-chica"></div><figcaption>Por fuera</figcaption><p class="globo" id="globo">«Estoy bien»</p></figure>
+        <figure class="dentro">
+          <svg class="vaso-svg" id="vaso" viewBox="0 -16 220 296" role="img" aria-label="Vaso por dentro">
+            <defs>
+              <clipPath id="v-clip"><path d="M35 22L53.5 241Q55 251 66 251L154 251Q165 251 166.5 241L185 22Z"/></clipPath>
+              <clipPath id="v-clip-rebosa"><path d="M35 22L53.5 241Q55 251 66 251L154 251Q165 251 166.5 241L185 22Z"/><rect x="26" y="4" width="168" height="24"/></clipPath>
+            </defs>
+            <path class="vaso-cuerpo" d="M30 24L49 243Q50.5 256 63 256L157 256Q169.5 256 171 243L190 24Z"/>
+            <g id="v-liquido" clip-path="url(#v-clip)"><path id="v-atras" class="capa-atras" display="none"/><g id="v-capas"></g><path id="v-espuma" class="espuma" display="none"/><g id="v-burbujas"></g></g>
+            <g id="v-derrame" opacity="0"><path id="v-chorro-izq" class="chorro" pathLength="1" stroke-dashoffset="1" d="M33 20Q21 22 24 38L43 238Q45 252 38 266"/><path id="v-chorro-der" class="chorro" pathLength="1" stroke-dashoffset="1" d="M187 20Q199 22 196 38L177 238Q175 252 182 266"/><ellipse id="v-charco" cx="110" cy="268" rx="0" ry="0"/></g>
+            <g id="v-gotas"></g>
+            <path class="vaso-borde" d="M30 24L49 243Q50.5 256 63 256L157 256Q169.5 256 171 243L190 24"/>
+            <path class="vaso-brillo" d="M44 46L58 206"/>
+          </svg>
+          <figcaption>Por dentro</figcaption>
+        </figure>
+        <p class="frase-gota" id="frase-gota" aria-live="polite"></p>
+        <p class="rotulo" id="rotulo-vaso">Es una imagen para entender, no una medida.</p>
+      </div>
+      <div id="panel-llenar">
+        <ul class="momentos" id="momentos" aria-label="Momentos del día"></ul>
+        <p class="estado-cuenta" id="estado-cuenta"></p>
+        <div class="acciones"><button type="button" class="c-boton" id="b-final" hidden></button></div>
+      </div>
+      <div id="panel-rebosa" hidden>
+        <div class="acciones"><button type="button" class="c-boton" id="b-bajar">Ver lo que baja el vaso</button></div>
+      </div>
+      <div id="panel-bajar" hidden>
+        <ul class="momentos ajustes" id="ajustes" aria-label="Lo que baja el vaso"></ul>
+        <p class="aviso-campo" id="ajustes-aviso" aria-live="polite"></p>
+        <div class="acciones"><button type="button" class="c-boton" id="b-ver-acciones" hidden>Ver mis 3 acciones</button></div>
+      </div>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+
+  <!-- Cierre: exactamente 3 acciones y «mandárselo a…» -->
+  <section class="pantalla" data-pantalla="acciones" aria-labelledby="t-acciones" hidden>
+    <div class="hoja">
+      <p class="paso" id="acciones-paso"></p>
+      <h2 id="t-acciones" tabindex="-1"></h2>
+      <p class="bajada">Ninguna cuesta plata.</p>
+      <ol class="lista-acciones" id="lista-acciones"></ol>
+      <p class="aviso-fijo">Es una imagen para entender, no una medida. No sirve para saber qué le pasa a una niña en particular.</p>
+      <h3 class="subtitulo-chico">Mándaselo a alguien</h3>
+      <p class="pista" style="margin-top:6px">Se copia un mensaje corto con el enlace. Lo pegas en WhatsApp. No lleva datos de nadie.</p>
+      <div class="acciones" style="margin-top:12px">
+        <button type="button" class="c-boton" id="b-mandar-1"><svg class="c-icono" aria-hidden="true"><use href="#i-copiar"/></svg><span></span></button>
+        <button type="button" class="c-boton secundario" id="b-mandar-2"><svg class="c-icono" aria-hidden="true"><use href="#i-copiar"/></svg><span></span></button>
+      </div>
+      <p class="estado-copia" id="estado-copia" aria-live="polite"></p>
+      <div class="copia-manual" id="copia-manual" hidden>
+        <label for="texto-manual" class="pista">No se pudo copiar solo. Mantén presionado este texto y elige «Copiar»:</label>
+        <textarea id="texto-manual" readonly rows="5"></textarea>
+      </div>
+      <p class="advertencia" id="aviso-local" hidden>Esta página no está publicada en el sitio de Contigo, así que el enlace solo abre aquí. Publicada en el sitio, abre en cualquier celular.</p>
+      <div class="acciones">
+        <button type="button" class="c-boton texto" id="b-otro-lado"></button>
+        <button type="button" class="c-boton texto" id="b-otra-vez">Empezar otra vez</button>
+      </div>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- === CARAPAZON CONTIGO v1 · HTML (barra fija y capas) === -->
+<nav class="c-barra" aria-label="Ayuda rápida">
+  <ul>
+    <li><button type="button" data-c-accion="pausa" data-c-capa="c-capa-pausa" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-pausa"/></svg>Pausa</button></li>
+    <li><button type="button" data-c-accion="calma" data-c-capa="c-capa-calma" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-calma"/></svg>Calma</button></li>
+    <li><button type="button" class="c-boton-ayuda" data-c-accion="ayuda" data-c-capa="c-capa-ayuda" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-ayuda"/></svg>Necesito ayuda</button></li>
+    <li><button type="button" data-c-accion="salir"><svg class="c-icono" aria-hidden="true"><use href="#i-salir"/></svg>Salir</button></li>
+  </ul>
+</nav>
+<div class="c-capa" id="c-capa-pausa" role="dialog" aria-modal="true" aria-labelledby="c-t-pausa" hidden>
+  <h2 id="c-t-pausa" tabindex="-1" data-foco>En pausa</h2>
+  <p>Tómate el tiempo que necesites. Cuando quieras, sigues donde ibas.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Seguir</button>
+</div>
+<div class="c-capa" id="c-capa-calma" role="dialog" aria-modal="true" aria-labelledby="c-t-calma" hidden>
+  <h2 id="c-t-calma" tabindex="-1" data-foco>Respira conmigo</h2>
+  <div class="c-respira" id="c-respira" aria-hidden="true"></div>
+  <p class="c-respira-texto" id="c-respira-texto" aria-hidden="true">Toma aire despacio…</p>
+  <p>Toma aire en 4 segundos y suéltalo en 6. Las veces que necesites.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Ya estoy mejor</button>
+</div>
+<div class="c-capa" id="c-capa-ayuda" role="dialog" aria-modal="true" aria-labelledby="c-t-ayuda" hidden>
+  <div class="c-tarjeta-ayuda">
+    <h2 id="c-t-ayuda" class="c-grande" tabindex="-1" data-foco>Necesito ayuda</h2>
+    <p class="c-pide">Por favor, quédate cerca y háblame despacio.</p>
+    <div id="c-ayuda-adulto">
+      <ul class="c-numeros">
+        <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
+        <li><strong>106</strong> Línea 106, para hablar con alguien</li>
+        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+      </ul>
+      <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
+    </div>
+  </div>
+  <button type="button" class="c-boton" data-c-cerrar>Cerrar</button>
+</div>
+<div class="c-capa" id="c-capa-salir" role="dialog" aria-modal="true" aria-labelledby="c-t-salir" hidden>
+  <h2 id="c-t-salir" tabindex="-1" data-foco>Listo</h2>
+  <p>Ya puedes cerrar esta pestaña. Lo que guardaste sigue en este celular.</p>
+  <button type="button" class="c-boton secundario" data-c-cerrar>Volver</button>
+</div>
+<div id="c-anuncio" class="c-solo-lector" aria-live="polite"></div>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (abajo) === -->
+
+<script>
+/* === EL VASO · DATOS === */
+/* Parte pura (sin pantalla): las dos vistas, sus momentos, lo que baja el vaso y los mensajes. Se prueba con node.
+   Los niveles son una imagen (0 = vacío, 100 = lleno hasta el borde), no una medida de nada. */
+var ElVaso = (function () {
+  'use strict';
+  var LLENO = 100, MAX_AJUSTES = 3, BAJA_POR_AJUSTE = 21;
+  function m(id, titulo, frase, icono, color, sube) { return { id: id, titulo: titulo, frase: frase, icono: icono, color: color, sube: sube }; }
+  function a(id, titulo, accion, icono) { return { id: id, titulo: titulo, accion: accion, icono: icono }; }
+  var MENSAJE = 'No es mala crianza ni capricho: el vaso venía lleno.';
+  var FRASES_MASCARA = [
+    'Por fuera, sonríe. Parece que todo está bien.',
+    'Por dentro, cada ruido, cada cambio y cada esfuerzo se va sumando.',
+    'Muchas niñas aprenden a aguantar para que no se note. Es como llevar una máscara.',
+    'Donde por fin puede soltarse, la máscara cae. Y el vaso se riega.'
+  ];
+  var VISTAS = {
+    maestra: {
+      id: 'maestra', etiqueta: 'Vista colegio', otra: 'familia', otroLado: 'Ver cómo se vive en casa (vista 5 p. m.)',
+      titulo: 'Un día en el colegio', bajada: 'Toca cada momento del día. Mira qué pasa por dentro.',
+      base: null,
+      momentos: [
+        m('timbre', 'El timbre', 'Suena duro y sin aviso. A ella le retumba.', 'v-timbre', 'l1', 14),
+        m('filas', 'Las filas', 'Gente muy cerca, empujones y esperar quieta.', 'v-filas', 'l2', 14),
+        m('descanso', 'El ruido del descanso', 'Gritos, balones y todo a la vez.', 'v-descanso', 'l3', 14),
+        m('cambio', 'Cambio de salón', 'Otro lugar y otra profe, sin saber antes.', 'v-cambio', 'l4', 14),
+        m('luces', 'Las luces', 'Luz blanca y fuerte que titila y zumba.', 'v-luces', 'l5', 14),
+        m('grupo', 'Trabajo en grupo', 'Muchas voces y adivinar qué esperan de ella.', 'v-grupo', 'l6', 14)
+      ],
+      casiLleno: { titulo: 'Suena la salida', bajada: 'Por fuera se ve tranquila. Por dentro, el vaso va casi lleno. Toca para ver qué pasa al llegar a casa.' },
+      final: m('casa', 'Llega a casa', 'Le preguntan «¿cómo te fue?». Es solo una gota más.', 'v-casa', 'l3', 18),
+      explica: 'En el salón aguantó todo el día para que no se notara. En casa, donde por fin puede soltarse, cualquier gota hace que se riegue.',
+      bajadaBajar: 'Toca 3 ajustes que puedes hacer en el salón. Ninguno cuesta plata.',
+      ajustes: [
+        a('aviso', 'Avisar antes de un cambio', 'Avísale 5 minutos antes de cada cambio de salón o de actividad.', 'a-aviso'),
+        a('pausa', 'Una pausa tranquila', 'Después del descanso, dale 2 minutos de calma antes de empezar.', 'a-pausa'),
+        a('rincon', 'Un rincón tranquilo', 'Arma un rincón con poca luz y poco ruido. Que pueda ir con una seña, sin pedirlo en voz alta.', 'a-rincon'),
+        a('audifonos', 'Permitir audífonos', 'Déjala usar audífonos o tapones en el descanso y en los actos.', 'a-audifonos'),
+        a('pareja', 'Parejas, no grupos', 'En los trabajos, ponla con una sola compañera que ya conozca.', 'a-pareja'),
+        a('fila', 'Salir sin empujones', 'Déjala salir de primera o de última, sin la fila apretada.', 'a-fila')
+      ],
+      tituloAcciones: 'Tus 3 acciones para mañana'
+    },
+    familia: {
+      id: 'familia', etiqueta: 'Vista 5 p. m.', otra: 'maestra', otroLado: 'Ver cómo se vive en el colegio',
+      titulo: 'La tarde en casa', bajada: 'Así llega del colegio: el vaso ya viene cargado, aunque por fuera se vea bien. Toca lo que pasa en la tarde.',
+      base: m('colegio', 'Lo que trae del colegio', 'Todo el día aguantando para que no se notara.', 'v-casa', 'l0', 60),
+      momentos: [
+        m('viaje', 'El viaje', 'Bus o carro: pito, calor y todos apretados.', 'v-viaje', 'l1', 9),
+        m('ruido', 'El ruido de la casa', 'Televisor, hermanos y la licuadora a la vez.', 'v-ruido', 'l2', 9),
+        m('preguntas', 'Las preguntas', '«¿Cómo te fue? ¿Qué hiciste? ¿Por qué esa cara?»', 'v-preguntas', 'l3', 9),
+        m('comida', 'La comida', 'Olores fuertes o algo nuevo en el plato.', 'v-comida', 'l4', 9),
+        m('tarea', 'La tarea', 'Otra vez sentarse a hacer lo que pide el colegio.', 'v-tarea', 'l5', 9)
+      ],
+      casiLleno: null,
+      final: null,
+      explica: 'Aguantó todo el día en el colegio para que no se notara. En la casa, donde por fin puede soltarse, cualquier gota hace que se riegue.',
+      bajadaBajar: 'Toca 3 cosas que puedes hacer en casa. Ninguna cuesta plata.',
+      ajustes: [
+        a('silencio', 'Llegar en silencio', 'En el camino a casa, nada de preguntas ni radio fuerte.', 'a-silencio'),
+        a('rato', 'Un rato a solas', 'Al llegar, dale 20 minutos tranquila antes de pedirle algo.', 'a-rato'),
+        a('rincon', 'Su rincón', 'Ten listo su rincón: cobija, luz bajita y su objeto favorito.', 'a-rincon'),
+        a('menos', 'Menos preguntas', 'Cambia «¿cómo te fue?» por «qué bueno verte». Las preguntas, más tarde.', 'a-menos'),
+        a('comida', 'Comida conocida', 'Para la merienda, ofrécele algo que ya conoce y le gusta.', 'a-comida'),
+        a('tarea', 'La tarea, después', 'Deja la tarea para después del descanso, no apenas llega.', 'a-tarea')
+      ],
+      tituloAcciones: 'Tus 3 acciones para hoy'
+    }
+  };
+  /* Mensajes para WhatsApp: sin datos de nadie y sin palabras que pongan a la defensiva */
+  var MENSAJES = {
+    maestra: [
+      { id: 'profe', boton: 'Mandárselo a otra profe', abre: 'maestra', texto: function (url) { return 'Hola, profe. Te comparto «El vaso»: en 90 segundos explica por qué una niña puede verse tranquila en el salón y desbordarse en casa. Trae ajustes que no cuestan plata:\n' + url; } },
+      { id: 'familia', boton: 'Mandárselo a la familia', abre: 'familia', texto: function (url) { return 'Hola. Les comparto «El vaso»: explica por qué una niña puede llegar bien del colegio y desbordarse en casa. Se abre en el celular y no pide datos:\n' + url; } }
+    ],
+    familia: [
+      { id: 'familia', boton: 'Mandárselo a la familia', abre: 'familia', texto: function (url) { return 'Mira esto, se ve en 90 segundos: explica por qué a veces llega bien del colegio y en la casa se desborda. Se abre en el celular y no pide nada:\n' + url; } },
+      { id: 'profe', boton: 'Mandárselo a la profe', abre: 'maestra', texto: function (url) { return 'Hola, profe. Te comparto «El vaso»: explica en 90 segundos por qué una niña puede verse tranquila en el salón y desbordarse en casa:\n' + url; } }
+    ]
+  };
+
+  function vistaDeHash(h) {
+    var t = String(h == null ? '' : h).replace(/^#/, '').toLowerCase();
+    return Object.prototype.hasOwnProperty.call(VISTAS, t) ? t : null;
+  }
+  function bandasIniciales(v) { return v.base ? [{ id: v.base.id, color: v.base.color, cant: v.base.sube }] : []; }
+  function momento(v, id) { return v.momentos.filter(function (x) { return x.id === id; })[0] || null; }
+  function ajuste(v, id) { return v.ajustes.filter(function (x) { return x.id === id; })[0] || null; }
+  // Nivel del vaso después de tocar esos momentos (y la gota final, si la vista la tiene)
+  function nivelCon(v, ids, conFinal) {
+    var n = v.base ? v.base.sube : 0;
+    v.momentos.forEach(function (x) { if ((ids || []).indexOf(x.id) !== -1) n += x.sube; });
+    if (conFinal && v.final) n += v.final.sube;
+    return n;
+  }
+  function rebosa(n) { return n >= LLENO; }
+  // Cada ajuste baja el vaso un escalón (0 ajustes = sigue como estaba)
+  function nivelTrasAjustes(nivelLleno, k) {
+    k = Math.max(0, Math.min(MAX_AJUSTES, k | 0));
+    return k === 0 ? nivelLleno : Math.min(nivelLleno, LLENO - k * BAJA_POR_AJUSTE);
+  }
+  // Las acciones de cierre: las de los ajustes elegidos, sin repetir, máximo 3
+  function acciones(v, ids) {
+    var r = [];
+    (ids || []).forEach(function (id) { var x = ajuste(v, id); if (x && r.indexOf(x) === -1 && r.length < MAX_AJUSTES) r.push(x); });
+    return r;
+  }
+  function enPalabras(n) {
+    if (n >= LLENO) return 'rebosando';
+    if (n >= 80) return 'casi lleno';
+    if (n >= 62) return 'más de la mitad';
+    if (n >= 40) return 'por la mitad';
+    if (n >= 12) return 'con un poquito';
+    return 'casi vacío';
+  }
+  function mensaje(vistaId, destinoId, direccion) {
+    var d = (MENSAJES[vistaId] || []).filter(function (x) { return x.id === destinoId; })[0];
+    if (!d) return null;
+    return d.texto(String(direccion == null ? '' : direccion).split('#')[0] + '#' + d.abre);
+  }
+  return {
+    LLENO: LLENO, MAX_AJUSTES: MAX_AJUSTES, MENSAJE: MENSAJE, FRASES_MASCARA: FRASES_MASCARA, VISTAS: VISTAS, MENSAJES: MENSAJES,
+    vistaDeHash: vistaDeHash, bandasIniciales: bandasIniciales, momento: momento, ajuste: ajuste, nivelCon: nivelCon, rebosa: rebosa,
+    nivelTrasAjustes: nivelTrasAjustes, acciones: acciones, enPalabras: enPalabras, mensaje: mensaje
+  };
+})();
+/* === FIN EL VASO · DATOS === */
+
+/* ===== Pieza «El vaso»: el líquido ===== */
+/* Dibuja el líquido por capas de colores (una por gota) con una onda viva en la superficie.
+   Con «Modo suave» o «reducir movimiento» no hay bucle: el nivel cambia de una vez, sin onda ni gotas que caen. */
+var Motor = (function () {
+  'use strict';
+  var Y_FONDO = 251, Y_BORDE = 28, X0 = 20, X1 = 200, PASO = 6, AMP_BASE = 1.8, TOPE = 103;
+  var GOTA = 'M0 -11C5 -4 8 0.5 8 4.5A8 8 0 0 1 -8 4.5C-8 0.5 -5 -4 0 -11Z';
+  var ns, gLiquido, gCapas, atras, espuma, gBurbujas, gDerrame, chorros, charco, gGotas;
+  var bandas = [], actual = [], caminos = [], amp = AMP_BASE, fase = 0, raf = 0, ult = 0, andando = false;
+  var cayendo = [], chispas = [], burbujas = [], derrame = 0, rebosando = false;
+
+  function y(n) { return Y_FONDO - Math.min(Math.max(n, 0), TOPE) * (Y_FONDO - Y_BORDE) / 100; }
+  function nuevo(tag, clase, padre) { var e = document.createElementNS(ns, tag); if (clase) e.setAttribute('class', clase); if (padre) padre.appendChild(e); return e; }
+  function color(el, c, prop) { el.setAttribute('style', (prop || 'fill') + ':var(--' + c + ')'); }
+  function iniciar(svg) {
+    ns = svg.namespaceURI;
+    gLiquido = svg.querySelector('#v-liquido'); gCapas = svg.querySelector('#v-capas'); atras = svg.querySelector('#v-atras');
+    espuma = svg.querySelector('#v-espuma'); gBurbujas = svg.querySelector('#v-burbujas'); gDerrame = svg.querySelector('#v-derrame');
+    chorros = [svg.querySelector('#v-chorro-izq'), svg.querySelector('#v-chorro-der')]; charco = svg.querySelector('#v-charco'); gGotas = svg.querySelector('#v-gotas');
+    for (var i = 0; i < 4; i++) burbujas.push({ el: nuevo('circle', 'burbuja', gBurbujas), x: 66 + i * 28, y: 246 - i * 47, r: 1.8 + (i % 2) * 1.2, v: 10 + i * 3 });
+  }
+  function objetivos() { var s = 0; return bandas.map(function (b) { s += b.cant; return s; }); }
+  function total() { var o = objetivos(); return o.length ? o[o.length - 1] : 0; }
+  function rehacer() {
+    gCapas.textContent = ''; caminos = [];
+    for (var i = bandas.length - 1; i >= 0; i--) { caminos[i] = nuevo('path', 'capa', gCapas); color(caminos[i], bandas[i].color); } // la de arriba se pinta primero
+  }
+  function ola(x, s, A, k, dir) { return s + A * (0.65 * Math.sin(x * 0.045 + fase * dir + k * 0.9) + 0.35 * Math.sin(x * 0.11 - fase * 1.7 * dir + k * 1.3)); }
+  function linea(s, A, k, dir) { var d = 'M' + X0 + ' ' + ola(X0, s, A, k, dir).toFixed(1); for (var x = X0 + PASO; x <= X1; x += PASO) d += 'L' + x + ' ' + ola(x, s, A, k, dir).toFixed(1); return d; }
+  function cerrar(d) { return d + 'L' + X1 + ' 272L' + X0 + ' 272Z'; }
+  function pintar() {
+    var n = bandas.length;
+    for (var i = 0; i < n; i++) caminos[i].setAttribute('d', cerrar(linea(y(actual[i]), i === n - 1 ? amp : amp * 0.4, i, 1)));
+    if (n) {
+      var s = y(actual[n - 1]), arriba = bandas[n - 1].color;
+      espuma.setAttribute('d', linea(s, amp, n - 1, 1)); espuma.removeAttribute('display');
+      atras.setAttribute('d', cerrar(linea(s - 3, amp * 0.9, n + 3, -1))); color(atras, arriba); atras.removeAttribute('display');
+      gLiquido.setAttribute('clip-path', actual[n - 1] >= 99.5 ? 'url(#v-clip-rebosa)' : 'url(#v-clip)');
+      chorros.forEach(function (c) { color(c, arriba, 'stroke'); c.setAttribute('stroke-dashoffset', (1 - derrame).toFixed(3)); });
+      color(charco, arriba);
+    } else { espuma.setAttribute('display', 'none'); atras.setAttribute('display', 'none'); }
+    charco.setAttribute('rx', (derrame * 92).toFixed(1)); charco.setAttribute('ry', (derrame * 7).toFixed(1));
+    gDerrame.setAttribute('opacity', Math.min(1, derrame * 4).toFixed(2));
+  }
+  function sumar(c, cant) {
+    bandas.push({ color: c, cant: cant, orig: cant });
+    actual.push(actual.length ? actual[actual.length - 1] : 0); // la capa nueva nace en la superficie y sube
+    rehacer();
+  }
+  function caer(d) { // la gota llega al líquido: sube el nivel, la onda se agita y salpica
+    if (d.el.parentNode) d.el.parentNode.removeChild(d.el);
+    sumar(d.color, d.cant);
+    amp = Math.min(amp + 4.5, 9);
+    var s = y(actual[actual.length - 1]);
+    var anillo = nuevo('ellipse', 'anillo', gGotas); anillo.setAttribute('cx', d.x.toFixed(1)); anillo.setAttribute('cy', s.toFixed(1));
+    chispas.push({ el: anillo, anillo: true, t: 0 });
+    [-1, 1].forEach(function (lado) {
+      var c = nuevo('circle', 'chispa', gGotas); c.setAttribute('r', '2.6');
+      chispas.push({ el: c, x: d.x, y: s - 2, vx: lado * (28 + Math.random() * 20), vy: -95 - Math.random() * 30, t: 0 });
+    });
+    if (d.alCaer) d.alCaer();
+  }
+  function moverGotas(dt) {
+    cayendo = cayendo.filter(function (d) {
+      d.t += dt;
+      var p = Math.min(1, d.t / 0.62), destino = y(total()), yy = -12 + (destino + 12) * p * p;
+      d.el.setAttribute('transform', 'translate(' + d.x.toFixed(1) + ' ' + yy.toFixed(1) + ') scale(1 ' + (1 + p * 0.25).toFixed(2) + ')');
+      if (p >= 1) { caer(d); return false; }
+      return true;
+    });
+  }
+  function moverChispas(dt) {
+    chispas = chispas.filter(function (c) {
+      c.t += dt;
+      if (c.anillo) {
+        c.el.setAttribute('rx', (4 + c.t * 52).toFixed(1)); c.el.setAttribute('ry', (1.2 + c.t * 9).toFixed(1));
+        c.el.setAttribute('stroke-opacity', Math.max(0, 0.9 - c.t * 1.9).toFixed(2));
+      } else {
+        c.vy += 320 * dt; c.x += c.vx * dt; c.y += c.vy * dt;
+        c.el.setAttribute('cx', c.x.toFixed(1)); c.el.setAttribute('cy', c.y.toFixed(1));
+      }
+      if (c.t > 0.5) { if (c.el.parentNode) c.el.parentNode.removeChild(c.el); return false; }
+      return true;
+    });
+  }
+  function moverBurbujas(dt) {
+    var hay = bandas.length > 0, s = hay ? y(actual[actual.length - 1]) : Y_FONDO;
+    burbujas.forEach(function (b, i) {
+      b.y -= b.v * dt;
+      if (b.y < s + 6) b.y = 248;
+      var visible = hay && s < 232 && b.y > s + 6;
+      b.el.setAttribute('cx', (b.x + Math.sin(fase * 1.3 + i) * 3).toFixed(1)); b.el.setAttribute('cy', b.y.toFixed(1)); b.el.setAttribute('r', visible ? String(b.r) : '0');
+    });
+  }
+  function cuadro(t) {
+    raf = 0;
+    if (!andando) return;
+    var dt = ult ? Math.min(0.05, (t - ult) / 1000) : 0.016; ult = t;
+    fase += dt * 2.1;
+    amp += (AMP_BASE - amp) * Math.min(1, dt * 1.5);
+    var obj = objetivos();
+    for (var i = 0; i < actual.length; i++) actual[i] += (obj[i] - actual[i]) * Math.min(1, dt * 3);
+    derrame += ((rebosando ? 1 : 0) - derrame) * Math.min(1, dt * (rebosando ? 1.3 : 3));
+    moverGotas(dt); moverChispas(dt); moverBurbujas(dt);
+    pintar();
+    raf = requestAnimationFrame(cuadro);
+  }
+  function soltarPendientes() { // sin bucle, lo que venía cayendo llega de una
+    var lista = cayendo; cayendo = [];
+    lista.forEach(caer);
+    chispas.forEach(function (c) { if (c.el.parentNode) c.el.parentNode.removeChild(c.el); }); chispas = [];
+  }
+  function quieto() { // modo suave: el nivel queda donde va, superficie plana, nada se mueve
+    andando = false; if (raf) cancelAnimationFrame(raf); raf = 0;
+    soltarPendientes();
+    amp = 0; actual = objetivos(); derrame = rebosando ? 1 : 0;
+    burbujas.forEach(function (b) { b.el.setAttribute('r', '0'); });
+    pintar();
+  }
+  function arrancar() {
+    if (Contigo.suave()) return quieto();
+    if (andando) return;
+    andando = true; ult = 0;
+    raf = requestAnimationFrame(cuadro);
+  }
+  function parar() { andando = false; if (raf) cancelAnimationFrame(raf); raf = 0; soltarPendientes(); }
+  function poner(lista) { // arranca el vaso con estas capas (sin animación)
+    soltarPendientes();
+    bandas = []; actual = [];
+    lista.forEach(function (b) { bandas.push({ color: b.color, cant: b.cant, orig: b.cant }); });
+    actual = objetivos(); rebosando = false; derrame = 0;
+    rehacer(); pintar();
+  }
+  function gota(c, cant, alCaer) {
+    if (!andando) { sumar(c, cant); if (Contigo.suave()) quieto(); else pintar(); if (alCaer) alCaer(); return; }
+    var el = nuevo('path', 'gota', gGotas); el.setAttribute('d', GOTA); color(el, c);
+    cayendo.push({ el: el, x: 72 + Math.random() * 76, t: 0, color: c, cant: cant, alCaer: alCaer });
+  }
+  function escalar(nuevoTotal) { // baja (o sube) todas las capas en proporción
+    var so = 0; bandas.forEach(function (b) { so += b.orig; });
+    if (!so) return;
+    bandas.forEach(function (b) { b.cant = b.orig * nuevoTotal / so; });
+    if (!andando) quietoSiToca();
+  }
+  function quietoSiToca() { if (Contigo.suave()) quieto(); else { actual = objetivos(); pintar(); } }
+  function rebosar(si) { rebosando = !!si; if (!andando) { derrame = rebosando ? 1 : 0; pintar(); } }
+  function lineaSuperficie() { return espuma.getAttribute('d') || ''; }
+  return { iniciar: iniciar, poner: poner, gota: gota, escalar: escalar, rebosar: rebosar, arrancar: arrancar, parar: parar, quieto: quieto, total: total, lineaSuperficie: lineaSuperficie };
+})();
+
+/* ===== Pieza «El vaso»: pantallas ===== */
+(function () {
+  'use strict';
+  var C = Contigo, V = ElVaso, esc = C.esc;
+  function $(s) { return document.querySelector(s); }
+  function seccion(n) { return document.querySelector('[data-pantalla="' + n + '"]'); }
+  var GOTA = 'M0 -11C5 -4 8 0.5 8 4.5A8 8 0 0 1 -8 4.5C-8 0.5 -5 -4 0 -11Z';
+  var estado = { pantalla: 'inicio', vista: null, fase: 'llenar', tocados: [], finalHecho: false, ajustes: [] };
+  var primeraVez = true, relojMascara = 0, relojRebosa = 0;
+
+  /* ---------- La niña (dibujo propio). Con «vaso», lleva el vaso por dentro (intro de la máscara) ---------- */
+  function svgNina(op) {
+    var s = '<svg viewBox="0 0 200 240"' + (op.etiqueta ? ' role="img" aria-label="' + esc(op.etiqueta) + '"' : ' aria-hidden="true"') + '>';
+    s += '<circle class="nina-fondo" cx="100" cy="132" r="96"/>';
+    s += '<g stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">';
+    s += '<path d="M136 58C164 66 170 112 152 136C148 112 141 94 128 80Z" fill="#4A2E2A"/>';
+    s += '<path d="M90 124V160H110V124Z" fill="#C68A64"/>';
+    s += '<path d="M38 240C38 188 64 156 100 156C136 156 162 188 162 240Z" fill="#BDCDFF"/>';
+    s += '<path d="M84 158L100 176L116 158" fill="#FFFFFF"/>';
+    s += '<circle cx="100" cy="88" r="44" fill="#C68A64"/>';
+    s += '<path d="M56 86C54 50 78 38 100 38C124 38 147 52 144 86C134 68 116 60 98 62C80 64 64 72 56 86Z" fill="#4A2E2A"/>';
+    s += '<circle cx="74" cy="106" r="6" fill="#E89AAE" stroke="none" opacity=".75"/><circle cx="126" cy="106" r="6" fill="#E89AAE" stroke="none" opacity=".75"/>';
+    s += '<g class="cara-cansada" fill="none"><path d="M76 92q6 4 12 0M112 92q6 4 12 0"/><path d="M90 114q10-6 20 0"/><path d="M75 83l12-4M125 83l-12-4"/></g>';
+    s += '<g class="cara-calma" fill="none"><path d="M76 94q6-5 12 0M112 94q6-5 12 0"/><path d="M89 110q11 8 22 0"/></g>';
+    if (op.vaso) {
+      s += '<defs><clipPath id="m-clip"><path d="M86 184L89.5 225Q90.5 228 94 228L106 228Q109.5 228 110.5 225L114 184Z"/></clipPath></defs>';
+      s += '<path d="M84 186L88 226Q89 230 93 230L107 230Q111 230 112 226L116 186Z" fill="#FFFFFF" stroke="none" opacity=".8"/>';
+      s += '<g clip-path="url(#m-clip)" stroke="none"><g class="mini-liquido"><path class="mini-ola" d="M66 186q5-3 10 0t10 0t10 0t10 0t10 0t10 0t10 0t10 0V244H66Z" style="fill:var(--l3)"/></g></g>';
+      s += '<g class="mini-derrame" fill="none" stroke-width="4" style="stroke:var(--l3)"><path d="M85 184q-6 2-5 10l3 30"/><path d="M115 184q6 2 5 10l-3 30"/></g>';
+      s += '<path d="M84 186L88 226Q89 230 93 230L107 230Q111 230 112 226L116 186" fill="none"/>';
+    }
+    s += '<g class="mascara"><path d="M60 80L52 73M140 80L148 73" fill="none"/><path d="M60 80C60 64 80 62 100 66C120 62 140 64 140 80C142 104 124 122 100 122C76 122 58 104 60 80Z" fill="#F7D4AA"/><circle cx="83" cy="88" r="4.5" fill="#2A2140" stroke="none"/><circle cx="117" cy="88" r="4.5" fill="#2A2140" stroke="none"/><path d="M80 101q20 16 40 0" fill="none"/><circle cx="71" cy="102" r="5" fill="#E89AAE" stroke="none"/><circle cx="129" cy="102" r="5" fill="#E89AAE" stroke="none"/></g>';
+    s += '<path class="mascara-borde" d="M53 80C53 57 80 55 100 59C120 55 147 57 147 80C149 111 126 129 100 129C74 129 51 111 53 80Z" fill="none" stroke="#B8125C" stroke-dasharray="6 6"/>';
+    s += '</g></svg>';
+    return s;
+  }
+  function ponerNina(el, clases, etiqueta) {
+    el.className = 'nina' + (clases ? ' ' + clases : '');
+    var svg = el.querySelector('svg'); if (svg && etiqueta) svg.setAttribute('aria-label', etiqueta);
+  }
+
+  /* ---------- Pantallas ---------- */
+  function mostrar(nombre) {
+    document.querySelectorAll('.pantalla').forEach(function (s) { s.hidden = s.getAttribute('data-pantalla') !== nombre; });
+    estado.pantalla = nombre;
+    C.voz.callar();
+    if (nombre !== 'mascara') clearTimeout(relojMascara);
+    var pintor = pintores[nombre]; if (pintor) pintor();
+    if (nombre === 'vaso') Motor.arrancar(); else Motor.parar();
+    if (!primeraVez) {
+      window.scrollTo(0, 0);
+      var h = seccion(nombre).querySelector('h1, h2'); if (h) h.focus({ preventScroll: true });
+    }
+    primeraVez = false;
+  }
+  var pintores = {
+    mascara: function () { $('#mascara-paso').textContent = V.VISTAS[estado.vista].etiqueta; iniciarMascara(); },
+    acciones: pintarAcciones
+  };
+  function vista() { return V.VISTAS[estado.vista]; }
+
+  /* ---------- La máscara: 4 frases × 4,5 s. Saltable. En modo suave, quieta y con las 4 frases a la vista ---------- */
+  var FASE_MS = 4500;
+  function iniciarMascara() {
+    clearTimeout(relojMascara);
+    var escena = $('#mascara-escena'), nina = $('#nina-grande'), sub = $('#mascara-texto'), lista = $('#mascara-lista'), barra = $('#mascara-barra'), b = $('#b-mascara-seguir');
+    if (C.suave()) {
+      escena.className = 'mascara-escena fase-3'; ponerNina(nina, 'ver-mascara');
+      sub.hidden = true; sub.textContent = ''; lista.hidden = false; barra.hidden = true;
+      b.textContent = 'Seguir al vaso'; b.className = 'c-boton';
+      return;
+    }
+    lista.hidden = true; sub.hidden = false; barra.hidden = false;
+    barra.className = 'barra-tiempo'; void barra.offsetWidth; barra.className = 'barra-tiempo corre';
+    b.textContent = 'Saltar'; b.className = 'c-boton secundario';
+    escena.className = 'mascara-escena'; ponerNina(nina, '');
+    var i = 0, clases = ['', '', 'ver-mascara', 'sin-mascara'];
+    (function paso() {
+      if (estado.pantalla !== 'mascara') return;
+      escena.className = 'mascara-escena fase-' + (i + 1); ponerNina(nina, clases[i]);
+      sub.textContent = V.FRASES_MASCARA[i];
+      i++;
+      relojMascara = setTimeout(i < V.FRASES_MASCARA.length ? paso : fin, FASE_MS);
+    })();
+    function fin() {
+      if (estado.pantalla !== 'mascara') return;
+      b.textContent = 'Seguir al vaso'; b.className = 'c-boton';
+      C.anunciar('Terminó la intro. Toca «Seguir al vaso».');
+    }
+  }
+  $('#mascara-lista').innerHTML = V.FRASES_MASCARA.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('');
+  $('#nina-grande').innerHTML = svgNina({ vaso: true });
+  $('#nina-chica').innerHTML = svgNina({ etiqueta: 'Por fuera: sonríe' });
+  Motor.iniciar($('#vaso'));
+  $('#b-mascara-seguir').addEventListener('click', function () { clearTimeout(relojMascara); mostrar('vaso'); });
+
+  /* ---------- El vaso ---------- */
+  function titulo(t, bajada, esMensaje) { var h = $('#t-vaso'); h.textContent = t; h.className = esMensaje ? 'mensaje' : ''; $('#vaso-bajada').textContent = bajada; }
+  function paneles(cual) { ['llenar', 'rebosa', 'bajar'].forEach(function (p) { $('#panel-' + p).hidden = p !== cual; }); estado.fase = cual; }
+  function nivelLleno() { return V.nivelCon(vista(), estado.tocados, estado.finalHecho); }
+  function nivelAhora() { return estado.fase === 'bajar' ? V.nivelTrasAjustes(nivelLleno(), estado.ajustes.length) : nivelLleno(); }
+  function describirVaso() { $('#vaso').setAttribute('aria-label', 'Vaso por dentro: ' + V.enPalabras(nivelAhora()) + '.'); }
+  function tarjeta(x, tipo) {
+    return '<li><button type="button" class="momento" data-' + tipo + '="' + x.id + '" aria-pressed="false">' +
+      (x.color ? '<span class="muestra" aria-hidden="true"><svg viewBox="-9 -12 18 22"><path d="' + GOTA + '" stroke="#2A2140" stroke-width="1.2" style="fill:var(--' + x.color + ')"/></svg></span>' : '') +
+      '<span class="dibujo" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#' + x.icono + '"/></svg></span><span>' + esc(x.titulo) + '</span></button></li>';
+  }
+  function fraseGota(t, f) { $('#frase-gota').innerHTML = '<strong>' + esc(t) + '.</strong> ' + esc(f); }
+  function cuenta() {
+    var v = vista(), n = estado.tocados.length, faltan = v.momentos.length - n;
+    $('#estado-cuenta').textContent = faltan > 0 ? (n === 0 ? 'Toca los ' + v.momentos.length + ' momentos, en el orden que quieras.' : (faltan === 1 ? 'Falta 1 momento.' : 'Faltan ' + faltan + ' momentos.')) : '';
+  }
+  function prepararVaso() {
+    var v = vista();
+    clearTimeout(relojRebosa);
+    estado.tocados = []; estado.finalHecho = false; estado.ajustes = [];
+    Motor.poner(V.bandasIniciales(v)); Motor.rebosar(false);
+    $('#vaso-paso').textContent = v.etiqueta;
+    titulo(v.titulo, v.bajada, false);
+    $('#momentos').innerHTML = v.momentos.map(function (x) { return tarjeta(x, 'momento'); }).join('');
+    $('#ajustes').innerHTML = v.ajustes.map(function (x) { return tarjeta(x, 'ajuste'); }).join('');
+    var bf = $('#b-final'); bf.hidden = true;
+    if (v.final) bf.innerHTML = '<svg class="c-icono" aria-hidden="true" viewBox="0 0 48 48"><use href="#' + v.final.icono + '"/></svg><span>' + esc(v.final.titulo) + '</span>';
+    $('#ajustes-aviso').textContent = ''; $('#b-ver-acciones').hidden = true;
+    if (v.base) fraseGota(v.base.titulo, v.base.frase); else $('#frase-gota').textContent = '';
+    $('#globo').hidden = false;
+    ponerNina($('#nina-chica'), '', 'Por fuera: sonríe');
+    paneles('llenar'); cuenta(); describirVaso();
+  }
+  function tocarMomento(boton) {
+    var v = vista(), id = boton.getAttribute('data-momento'), x = V.momento(v, id);
+    if (!x || estado.fase !== 'llenar') return;
+    if (estado.tocados.indexOf(id) !== -1) { $('#frase-gota').textContent = x.titulo + ' ya está en el vaso.'; return; }
+    estado.tocados.push(id); boton.setAttribute('aria-pressed', 'true');
+    var completo = estado.tocados.length === v.momentos.length;
+    Motor.gota(x.color, x.sube, null);
+    fraseGota(x.titulo, x.frase);
+    cuenta(); describirVaso();
+    if (!completo) return;
+    if (v.final) { titulo(v.casiLleno.titulo, v.casiLleno.bajada, false); $('#b-final').hidden = false; }
+    else programarRebosa();
+  }
+  function programarRebosa() { clearTimeout(relojRebosa); relojRebosa = setTimeout(rebosa, C.suave() ? 60 : 1100); }
+  function rebosa() {
+    var v = vista();
+    Motor.rebosar(true);
+    ponerNina($('#nina-chica'), 'sin-mascara', 'Por fuera: ya no puede aguantar más');
+    $('#globo').hidden = true;
+    titulo(V.MENSAJE, v.explica, true);
+    paneles('rebosa'); describirVaso();
+    window.scrollTo(0, 0); $('#t-vaso').focus({ preventScroll: true });
+  }
+  function irABajar() {
+    var v = vista();
+    titulo('Lo que baja el vaso', v.bajadaBajar, false);
+    paneles('bajar');
+    $('#ajustes-aviso').textContent = 'Elige 3.';
+    describirVaso();
+    window.scrollTo(0, 0); $('#t-vaso').focus({ preventScroll: true });
+  }
+  function tocarAjuste(boton) {
+    var v = vista(), id = boton.getAttribute('data-ajuste'), x = V.ajuste(v, id), i = estado.ajustes.indexOf(id);
+    if (!x || estado.fase !== 'bajar') return;
+    if (i !== -1) { estado.ajustes.splice(i, 1); boton.setAttribute('aria-pressed', 'false'); }
+    else if (estado.ajustes.length >= V.MAX_AJUSTES) { $('#ajustes-aviso').textContent = 'Ya elegiste 3. Quita uno para cambiarlo.'; return; }
+    else { estado.ajustes.push(id); boton.setAttribute('aria-pressed', 'true'); }
+    var k = estado.ajustes.length, n = V.nivelTrasAjustes(nivelLleno(), k);
+    Motor.escalar(n); Motor.rebosar(V.rebosa(n));
+    ponerNina($('#nina-chica'), k ? 'sin-mascara calma' : 'sin-mascara', k ? 'Por fuera: más tranquila' : 'Por fuera: ya no puede aguantar más');
+    $('#frase-gota').textContent = (i === -1 ? 'Con «' + x.titulo + '», el vaso baja. ' : '') + 'Ahora va ' + V.enPalabras(n) + '.';
+    $('#ajustes-aviso').textContent = k < V.MAX_AJUSTES ? (V.MAX_AJUSTES - k === 1 ? 'Elige 1 más.' : 'Elige ' + (V.MAX_AJUSTES - k) + ' más.') : 'Listo. Mira tus 3 acciones.';
+    $('#b-ver-acciones').hidden = k !== V.MAX_AJUSTES;
+    describirVaso();
+  }
+  $('#momentos').addEventListener('click', function (e) { var b = e.target.closest('[data-momento]'); if (b) tocarMomento(b); });
+  $('#ajustes').addEventListener('click', function (e) { var b = e.target.closest('[data-ajuste]'); if (b) tocarAjuste(b); });
+  $('#b-final').addEventListener('click', function () {
+    var v = vista(); if (!v.final || estado.finalHecho) return;
+    estado.finalHecho = true; $('#b-final').hidden = true;
+    Motor.gota(v.final.color, v.final.sube, null);
+    fraseGota(v.final.titulo, v.final.frase);
+    describirVaso(); programarRebosa();
+  });
+  $('#b-bajar').addEventListener('click', irABajar);
+  $('#b-ver-acciones').addEventListener('click', function () { if (estado.ajustes.length === V.MAX_AJUSTES) mostrar('acciones'); });
+
+  /* ---------- Cierre: 3 acciones y mandárselo a alguien ---------- */
+  function pintarAcciones() {
+    var v = vista(), lista = V.acciones(v, estado.ajustes), destinos = V.MENSAJES[v.id];
+    $('#acciones-paso').textContent = v.etiqueta;
+    $('#t-acciones').textContent = v.tituloAcciones;
+    $('#lista-acciones').innerHTML = lista.map(function (x) { return '<li><span class="dibujo" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#' + x.icono + '"/></svg></span><span>' + esc(x.accion) + '</span></li>'; }).join('');
+    $('#b-mandar-1 span').textContent = destinos[0].boton; $('#b-mandar-1').setAttribute('data-destino', destinos[0].id);
+    $('#b-mandar-2 span').textContent = destinos[1].boton; $('#b-mandar-2').setAttribute('data-destino', destinos[1].id);
+    $('#b-otro-lado').textContent = v.otroLado;
+    $('#aviso-local').hidden = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
+    $('#estado-copia').textContent = ''; $('#copia-manual').hidden = true;
+  }
+  function mandar(boton) {
+    var texto = V.mensaje(estado.vista, boton.getAttribute('data-destino'), location.href);
+    if (!texto) return;
+    C.copiar(texto).then(function (ok) {
+      if (ok) { $('#estado-copia').textContent = 'Copiado. Ahora abre WhatsApp y pégalo en el chat.'; $('#copia-manual').hidden = true; }
+      else { $('#estado-copia').textContent = ''; $('#copia-manual').hidden = false; var ta = $('#texto-manual'); ta.value = texto; ta.focus(); ta.select(); }
+    });
+  }
+  $('#b-mandar-1').addEventListener('click', function () { mandar($('#b-mandar-1')); });
+  $('#b-mandar-2').addEventListener('click', function () { mandar($('#b-mandar-2')); });
+  $('#b-otro-lado').addEventListener('click', function () { empezar(vista().otra, true); });
+  function quitarHash() { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+  $('#b-otra-vez').addEventListener('click', function () { quitarHash(); estado.vista = null; mostrar('inicio'); });
+
+  /* ---------- Entrada ---------- */
+  function empezar(v, sinIntro) {
+    if (!V.VISTAS[v]) return;
+    estado.vista = v;
+    prepararVaso();
+    mostrar(sinIntro ? 'vaso' : 'mascara');
+  }
+  document.querySelectorAll('[data-vista]').forEach(function (b) { b.addEventListener('click', function () { empezar(b.getAttribute('data-vista'), false); }); });
+  window.addEventListener('hashchange', function () { var v = V.vistaDeHash(location.hash); if (v) empezar(v, false); }); // #principal (saltar al contenido) no cambia nada
+
+  /* ---------- Escuchar ---------- */
+  function textoEscuchar() {
+    var n = estado.pantalla;
+    if (n === 'mascara') return V.FRASES_MASCARA.join(' ');
+    if (n === 'vaso') {
+      var v = vista(), t = $('#t-vaso').textContent + '. ' + $('#vaso-bajada').textContent + ' ' + $('#frase-gota').textContent;
+      if (estado.fase === 'llenar') t += ' Momentos: ' + v.momentos.map(function (x) { return x.titulo; }).join(', ') + '.';
+      if (estado.fase === 'bajar') t += ' Opciones: ' + v.ajustes.map(function (x) { return x.titulo; }).join(', ') + '.';
+      return t + ' Es una imagen para entender, no una medida.';
+    }
+    if (n === 'acciones') return $('#t-acciones').textContent + '. ' + V.acciones(vista(), estado.ajustes).map(function (x) { return x.accion; }).join(' ');
+    return Array.prototype.map.call(seccion(n).querySelectorAll('[data-leer]'), function (el) { return (el.innerText || el.textContent).replace(/\s*\n\s*/g, ', ').trim(); }).join('. ');
+  }
+
+  // Si cambia «Modo suave» (o «reducir movimiento» del celular), la pantalla actual se ajusta en el acto
+  function alCambiarMovimiento() {
+    if (estado.pantalla === 'mascara') iniciarMascara();
+    if (estado.pantalla === 'vaso') { if (C.suave()) Motor.quieto(); else Motor.arrancar(); }
+  }
+  try { window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', alCambiarMovimiento); } catch (e) {}
+
+  C.iniciar({ vistaAdulto: true, textoEscuchar: textoEscuchar, alCambiarAjustes: alCambiarMovimiento });
+  var inicial = V.vistaDeHash(location.hash);
+  if (inicial) empezar(inicial, false); else mostrar('inicio');
+})();
+</script>
+</body>
+</html>
