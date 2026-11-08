@@ -80,4 +80,4 @@ La misma Acompañante, en una página web con la pantalla tipo WhatsApp y el pan
 - Las conversaciones se borran al cerrar el programa (viven en memoria). En la web viven en el navegador de cada persona.
 - La búsqueda es por palabras; la búsqueda por significado (embeddings abiertos) es de v0.2.
 - No se ha probado con un modelo de pesos abiertos (CA6) ni con cuidadoras reales (CA11, CA12).
-- Las preguntas del chequeo y los textos de crisis y maltrato están pendientes del aval de la especialista clínica.
+- Las preguntas del chequeo y los textos de crisis y maltrato fueron revisados y aprobados por la terapeuta (2026-11-08).

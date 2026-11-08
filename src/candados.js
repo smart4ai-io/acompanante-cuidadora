@@ -19,7 +19,7 @@ const PATRONES_CRISIS = [
   [/\bno (quiero|deseo) (seguir )?(existiendo|estar viva|despertar)\b/, "no quiero existir"],
   [/\b(me quiero|quiero|quisiera|quisieramos) morir(me)?\b(?!\s+de\s+(la\s+)?(risa|pena|verguenza|amor))/, "quiero morir"],
   [/\bganas de morir(me)?\b/, "ganas de morir"],
-  // Añadido 2026-11-02 por decisión de Santiago; pendiente de aval de la especialista clínica.
+  // Añadido 2026-11-02 por decisión de Santiago; revisado y aprobado por la terapeuta el 2026-11-08.
   [/\bya no puedo mas\b/, "ya no puedo más"],
   [/\b(estaria|estariamos|estaremos|estariamos) mejor muert[ao]s?\b|\bmejor muert[ao]\b/, "mejor muerta"],
   [/\bquitarme la vida\b|\bme quito la vida\b/, "quitarme la vida"],

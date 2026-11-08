@@ -241,7 +241,7 @@ function rechazo(sesionId, s, texto, uso, recuperados) {
 // ---------------------------------------------------------------- chequeo de bienestar (CA4)
 // PHQ-2 (= ítems 1 y 2 del PHQ-9) y GAD-2. Si PHQ-2 >= 3, ofrece el PHQ-9
 // (ítems 3 a 9) y contacto humano. Nunca muestra un diagnóstico.
-// Redacción en español pendiente de validar con la especialista clínica.
+// Redacción en español revisada y aprobada por la terapeuta el 2026-11-08.
 
 const OPCIONES = "Responde con un número:\n0 = nunca · 1 = varios días · 2 = más de la mitad de los días · 3 = casi todos los días";
 const PHQ9 = [
