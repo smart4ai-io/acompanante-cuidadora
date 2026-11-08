@@ -139,7 +139,7 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
   const n = normalizar(texto).replace(/[^a-z ]/g, "").trim();
   if (n === "persona" || n === "quiero hablar con una persona") {
     const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide hablar con una persona" });
-    return resultado(s, "Listo. Le avisé a una persona del equipo para que te escriba. Si es urgente: *Línea 106* o *123*.", { otros: { guardia: aviso(linea) } });
+    return resultado(s, "Listo. Dejé registrada tu solicitud para que el equipo la revise; en este piloto la respuesta de una persona puede tardar. Si necesitas hablar ya con alguien: *Línea 106* (apoyo emocional) o *123* (emergencias).", { otros: { guardia: aviso(linea) } });
   }
   if (n === "resumen") return resumenEn(s);
 
@@ -289,7 +289,7 @@ function avanzarChequeo(sesionId, s, texto) {
     if (/\bpersona\b/.test(n)) {
       s.chequeo = null;
       const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide contacto humano tras el chequeo", motivo: `PHQ-2=${suma(c.phq.slice(0, 2))} GAD-2=${suma(c.gad)}` });
-      return resultado(s, "Listo. Le avisé a una persona del equipo para que te escriba pronto. No estás sola.", { otros: { puntajes: puntajes(c), guardia: aviso(linea) } });
+      return resultado(s, "Listo. Dejé registrada tu solicitud para que el equipo la revise; en este piloto la respuesta puede tardar. Si necesitas hablar ya con alguien: *Línea 106*. No estás sola.", { otros: { puntajes: puntajes(c), guardia: aviso(linea) } });
     }
     if (c.ofrecePHQ9 && /^(si|sí|bueno|dale|ok|listo|claro)\b/.test(n)) {
       c.fase = "phq";
@@ -372,7 +372,7 @@ function cerrarPHQ9(sesionId, s, c) {
     const linea = avisarGuardia({ sesion: sesionId, tipo: "bienestar-alto", texto: "chequeo PHQ-9 con carga alta", motivo: `PHQ-9=${p.phq9}` });
     return resultado(
       s,
-      "Gracias por responder todo. Tus respuestas muestran que necesitas apoyo, y pedirlo está bien. Esto no es un diagnóstico.\nTe recomiendo pedir una cita con psicología en tu EPS. Si quieres que una persona del equipo te escriba, escribe *persona*.",
+      "Gracias por responder todo. Tus respuestas muestran que necesitas apoyo, y pedirlo está bien. Esto no es un diagnóstico.\nTe recomiendo pedir una cita con psicología en tu EPS. Si quieres dejar una solicitud para el equipo, escribe *persona*; y si necesitas hablar ya con alguien, la *Línea 106* atiende a cualquier hora.",
       { otros: { puntajes: p, guardia: aviso(linea) } },
     );
   }

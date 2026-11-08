@@ -15,7 +15,7 @@ import { proveedor, MODELO } from "./modelo.js";
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const PUBLICO = path.resolve(AQUI, "..", "public");
 const PUERTO = Number(process.env.PORT) || 3000;
-const TIPOS = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon" };
+const TIPOS = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".ico": "image/x-icon" };
 
 // Lee el cuerpo con tope (un poco más que el límite de la función, para que ella responda 413).
 function leerCuerpo(req) {

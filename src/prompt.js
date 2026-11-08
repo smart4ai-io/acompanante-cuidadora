@@ -64,7 +64,7 @@ export const RESPUESTA_CRISIS = `Gracias por contármelo. Lo que sientes importa
 *Ahora mismo* puedes hablar con alguien:
 • *Línea 106*: apoyo emocional, gratis, a cualquier hora.
 • *123*: si estás en peligro o es una emergencia.
-Ya le avisé a una persona del equipo para que te contacte.
+Dejé registrada una alerta para que el equipo la revise.
 ¿Estás en un lugar seguro en este momento?`;
 
 export const RECORDATORIO_CRISIS = `Recuerda: si lo necesitas, *Línea 106* o *123*, a cualquier hora.`;
@@ -72,13 +72,13 @@ export const RECORDATORIO_CRISIS = `Recuerda: si lo necesitas, *Línea 106* o *1
 export const RESPUESTA_MALTRATO = `Gracias por contármelo. La seguridad de la niña es lo primero.
 • Llama al *ICBF, línea 141* (gratis, a cualquier hora) para pedir protección.
 • Si la niña está en peligro ahora mismo, llama al *123*.
-Ya le avisé a una persona del equipo para que te acompañe en este paso. No estás sola.`;
+Dejé registrada una alerta para que el equipo la revise. No estás sola.`;
 
 export const RESPUESTA_DIAGNOSTICO_SEGURA = `Entiendo que quieras una respuesta clara. Yo no puedo decirte si tu hija tiene o no autismo: eso solo lo puede evaluar un especialista (pediatra, neuropediatra o psiquiatra infantil).
 Lo que sí puedo hacer es ayudarte a anotar lo que observas y armar un resumen para la consulta.
 Escribe «diario:» y lo que viste hoy, y cuando quieras, «resumen».`;
 
-export const RESPUESTA_RECHAZO = `No puedo con eso por aquí; te paso con una persona del equipo.
+export const RESPUESTA_RECHAZO = `No puedo ayudarte con eso por aquí; dejé registrada una alerta para que el equipo la revise.
 Si es urgente: *Línea 106* o *123*.`;
 
 export const RESPUESTA_ERROR = `Tuve un problema técnico y no pude responderte. Intenta de nuevo en un rato.

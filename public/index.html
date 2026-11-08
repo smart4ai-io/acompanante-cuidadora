@@ -2,178 +2,1077 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Acompañante de la cuidadora · piloto</title>
-<!-- Piloto web v2 (2026-11-02). Misma pantalla que entregables\_fuente\plantilla.html,
-     pero el agente corre en el servidor: cada acción es un POST a /api/chat con la
-     sesión que guarda este navegador (localStorage). Aquí no hay lógica del agente. -->
+<meta name="theme-color" content="#F7FAF4">
+<meta name="description" content="Una acompañante por chat para madres y abuelas de niñas autistas en Colombia. Gratis, en español, a cualquier hora. Orienta y remite; nunca diagnostica.">
+<title>Acompañante de la cuidadora · No tienes que cuidar sola</title>
+<!-- Propuesta integral v3 (2026-11-07). Landing tipo aplicación con el chat REAL incrustado.
+     La lógica del chat es la misma de index.html e index.v2.html (POST /api/chat con
+     {estado, mensaje, accion}; la sesión vive en localStorage). Aquí no hay lógica del agente.
+     Vistas: en escritorio el chat vive dentro de un marco de celular en la sección «Conversar»;
+     en celular, #chat lo abre a pantalla completa como una app (con «Volver»). #demo = modo demostración. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/img/hero-madre-vertical-800.jpg" media="(max-width: 899px)">
+<link rel="preload" as="image" href="/img/hero-madre.jpg" media="(min-width: 900px)">
 <style>
-  /* Tokens de color: tema claro por defecto y oscuro si el equipo lo pide. */
+  /* ================= Sistema visual =================
+     Kit Smart4AI claro + dos tokens cálidos (arena y crema) para armonizar con la luz dorada
+     de las fotos. Todo color y fuente vive aquí: para pasar al kit de Pulsomundo basta con
+     cambiar estas variables. */
   :root {
-    --fondo-pagina: #f0f2f5;
-    --fondo-chat: #efeae2;
-    --barra: #008069;
-    --texto-barra: #ffffff;
-    --burbuja-ella: #ffffff;
-    --burbuja-yo: #d9fdd3;
-    --burbuja-sistema: #fff5c4;
-    --texto: #111b21;
-    --texto-suave: #54656f;
-    --borde: #d1d7db;
-    --panel: #ffffff;
-    --acento: #008069;
-    --cita: #0b6b5a;
-    --alerta-fondo: #fde2e1;
-    --alerta-texto: #8a1c14;
-    --aviso-fondo: #fff3cd;
-    --aviso-texto: #664d03;
-    --chip: #ffffff;
-    --sombra: 0 1px 1px rgba(11, 20, 26, 0.13);
+    /* Kit Smart4AI claro */
+    --papel: #F7FAF4;
+    --tinta: #0D120E;
+    --lima: #B6F23D;            /* solo resaltes, nunca texto sobre claro */
+    --esmeralda: #0B6B41;       /* botones y enlaces */
+    --esmeralda-oscura: #08522F;
+    --lima-tinta: #547A10;
+    --panel: #F1F6EC;
+    --magenta-tinta: #C10E6C;   /* se usa una sola vez: «¿Estás en peligro?» */
+    /* Tokens cálidos propuestos (secciones con foto) */
+    --arena: #F3EADF;
+    --crema: #FBF7F0;
+    --madera: #7A4E31;          /* texto sobre arena: contraste 5,6:1 */
+    --terracota-suave: #F6DCCB;
+    --terracota-tinta: #9A4A26; /* rótulos «A futuro» y «Próximamente» */
+    /* Derivados */
+    --tinta-suave: #47524A;
+    --borde: #DCE5D3;
+    --borde-calido: #E6D8C6;
+    --blanco: #FFFFFF;
+    --fondo-chat: #ECF2E5;
+    --burbuja-ella: #FFFFFF;
+    --burbuja-yo: #E3F6C2;
+    --burbuja-sistema: #FFF6DA;
+    --alerta-fondo: #FCE9E1;
+    --alerta-texto: #8A2C14;
+    /* Vidrio y sombras */
+    --vidrio: rgba(255, 255, 255, 0.66);
+    --vidrio-borde: rgba(255, 255, 255, 0.82);
+    --sombra-vidrio: 0 14px 34px rgba(13, 18, 14, 0.14), 0 2px 6px rgba(13, 18, 14, 0.06);
+    --sombra-suave: 0 1px 2px rgba(13, 18, 14, 0.04), 0 12px 32px rgba(13, 18, 14, 0.07);
+    --sombra-foto: 0 30px 70px rgba(80, 50, 25, 0.22), 0 6px 18px rgba(80, 50, 25, 0.10);
+    /* Tipografía */
+    --fuente-titulo: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --fuente-texto: "Hanken Grotesk", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --fuente-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    /* Medidas */
+    --radio: 20px;
+    --radio-grande: 28px;
+    --alto-franja: 44px;
+    --alto-nav: 64px;
+    --ancho: 1280px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --fondo-pagina: #111b21;
-      --fondo-chat: #0b141a;
-      --barra: #202c33;
-      --texto-barra: #e9edef;
-      --burbuja-ella: #202c33;
-      --burbuja-yo: #005c4b;
-      --burbuja-sistema: #3b3418;
-      --texto: #e9edef;
-      --texto-suave: #8696a0;
-      --borde: #2a3942;
-      --panel: #1a252c;
-      --acento: #00a884;
-      --cita: #7fd8c4;
-      --alerta-fondo: #4a1a17;
-      --alerta-texto: #ffb4ab;
-      --aviso-fondo: #3d3311;
-      --aviso-texto: #ffe08a;
-      --chip: #202c33;
-      --sombra: 0 1px 1px rgba(0, 0, 0, 0.4);
-    }
-  }
+  @media (min-width: 1100px) { :root { --alto-nav: 76px; } }
+
   * { box-sizing: border-box; }
-  body { margin: 0; }
-  .app { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--texto); background: var(--fondo-pagina); padding: 8px; min-height: 100vh; margin: 0; }
-  .cabecera { margin: 0 auto 4px; max-width: 1100px; font-size: 12px; color: var(--texto-suave); text-align: center; line-height: 1.4; }
-  .aviso-piloto { margin: 0 auto 8px; max-width: 1100px; font-size: 12px; color: var(--aviso-texto); text-align: center; line-height: 1.4; }
-  .disposicion { display: flex; flex-direction: column; gap: 12px; max-width: 1100px; margin: 0 auto; }
-  @media (min-width: 900px) {
-    .disposicion { flex-direction: row; align-items: flex-start; justify-content: center; }
-    .telefono { flex: 0 0 420px; }
-    .lateral { flex: 1 1 auto; max-width: 620px; }
+  html { color-scheme: light; -webkit-text-size-adjust: 100%; overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: calc(var(--alto-franja) + var(--alto-nav) + 12px); }
+  body { margin: 0; padding-top: var(--alto-franja); background: var(--papel); color: var(--tinta); font-family: var(--fuente-texto); font-size: 18px; line-height: 1.55; overflow-x: clip; }
+  img { max-width: 100%; display: block; }
+  picture { display: block; }
+  a { color: var(--esmeralda); }
+  h1, h2, h3 { font-family: var(--fuente-titulo); line-height: 1.08; letter-spacing: -0.02em; margin: 0; }
+  p { margin: 0; }
+  button { font: inherit; }
+  .icono { width: 24px; height: 24px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  :focus-visible { outline: 3px solid var(--esmeralda); outline-offset: 3px; border-radius: 8px; }
+  .solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .saltar { position: absolute; left: 12px; top: -80px; z-index: 90; background: var(--tinta); color: var(--papel); padding: 10px 16px; border-radius: 10px; }
+  .saltar:focus { top: calc(var(--alto-franja) + 8px); }
+  .contenedor { max-width: var(--ancho); margin: 0 auto; padding: 0 20px; }
+  @media (min-width: 1000px) { .contenedor { padding: 0 40px; } }
+  .etiqueta-mono { display: inline-block; font-family: var(--fuente-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lima-tinta); }
+  .calido .etiqueta-mono { color: var(--madera); }
+  .rotulo { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fuente-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; line-height: 1.2; }
+  .rotulo.futuro { background: var(--terracota-suave); color: var(--terracota-tinta); }
+  .rotulo.listo { background: #E3F6C2; color: #3E5C0B; }
+  .rotulo.listo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--esmeralda); }
+
+  /* ================= Botones ================= */
+  .boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 26px; border-radius: 999px; border: 0; background: var(--esmeralda); color: var(--blanco); font-family: var(--fuente-texto); font-weight: 700; font-size: 18px; text-decoration: none; cursor: pointer; box-shadow: 0 10px 24px rgba(11, 107, 65, 0.26); transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+  .boton:hover { background: var(--esmeralda-oscura); transform: translateY(-1px); box-shadow: 0 14px 28px rgba(11, 107, 65, 0.3); }
+  .boton:active { transform: translateY(1px); }
+  .boton .icono { width: 22px; height: 22px; }
+  .boton.pequeno { min-height: 48px; padding: 0 20px; font-size: 16px; box-shadow: none; }
+  .boton.claro { background: rgba(255, 255, 255, 0.7); color: var(--esmeralda); border: 1.5px solid var(--esmeralda); box-shadow: none; }
+  .boton.claro:hover { background: var(--blanco); }
+
+  /* ================= Franja fija de ayuda ================= */
+  .franja-ayuda { position: fixed; top: 0; left: 0; right: 0; z-index: 80; height: var(--alto-franja); display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 12px; background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid var(--borde); font-size: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .franja-ayuda .pregunta { color: var(--magenta-tinta); font-weight: 600; white-space: nowrap; }
+  .franja-ayuda .numeros { display: flex; gap: 6px; }
+  .franja-ayuda a { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 2px 11px; border-radius: 999px; background: var(--panel); border: 1px solid var(--borde); color: var(--tinta); font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; }
+  .franja-ayuda a:hover { border-color: var(--esmeralda); }
+  .franja-ayuda .detalle { display: none; font-weight: 500; color: var(--tinta-suave); font-size: 13px; }
+  @media (min-width: 760px) { .franja-ayuda .detalle { display: inline; } }
+
+  /* ================= Cabecera y navegación ================= */
+  .cabecera { position: sticky; top: var(--alto-franja); z-index: 40; background: rgba(247, 250, 244, 0.84); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-bottom: 1px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+  .cabecera.con-sombra { border-bottom-color: var(--borde); box-shadow: 0 6px 24px rgba(13, 18, 14, 0.06); }
+  .cabecera .contenedor { display: flex; align-items: center; gap: 12px; height: var(--alto-nav); }
+  .marca { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--tinta); font-family: var(--fuente-titulo); font-weight: 600; font-size: 16px; line-height: 1.12; flex: 0 0 auto; }
+  .logo { width: 40px; height: 40px; border-radius: 13px; background: var(--esmeralda); color: var(--blanco); display: grid; place-items: center; flex: 0 0 auto; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12); }
+  .logo .icono { width: 22px; height: 22px; }
+  .menu-principal { display: none; }
+  .menu-principal a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 13px; border-radius: 999px; color: var(--tinta); font-weight: 600; font-size: 15.5px; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+  .menu-principal a:hover { background: var(--panel); color: var(--esmeralda); }
+  .menu-principal a[aria-current="true"] { background: var(--panel); color: var(--esmeralda); box-shadow: inset 0 0 0 1px var(--borde); }
+  .cta-nav { display: none !important; margin-left: auto; }
+  .boton-menu { margin-left: auto; width: 48px; height: 48px; border-radius: 14px; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); display: grid; place-items: center; cursor: pointer; flex: 0 0 auto; }
+  .boton-menu .icono-cerrar { display: none; }
+  .boton-menu[aria-expanded="true"] .icono-abrir { display: none; }
+  .boton-menu[aria-expanded="true"] .icono-cerrar { display: block; }
+  @media (min-width: 600px) { .cta-nav { display: inline-flex !important; } .boton-menu { margin-left: 0; } }
+  @media (min-width: 1100px) {
+    .menu-principal { display: flex; gap: 2px; margin-left: auto; }
+    .cta-nav { margin-left: 8px; }
+    .boton-menu { display: none; }
+    .marca { font-size: 17px; }
   }
-  .telefono { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; height: 82vh; min-height: 520px; max-height: 860px; border: 1px solid var(--borde); border-radius: 14px; overflow: hidden; background: var(--fondo-chat); }
-  .barra { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--barra); color: var(--texto-barra); }
-  .avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: grid; place-items: center; font-weight: 700; font-size: 14px; flex: 0 0 auto; }
-  .nombre { font-weight: 600; font-size: 15px; }
-  .estado { font-size: 12px; opacity: 0.85; }
-  .franja-guardia { background: var(--alerta-fondo); color: var(--alerta-texto); font-size: 13px; font-weight: 600; padding: 8px 12px; }
-  .mensajes { flex: 1 1 auto; overflow-y: auto; padding: 10px 10px 4px; display: flex; flex-direction: column; gap: 6px; }
-  .burbuja { max-width: 85%; padding: 6px 9px 4px; border-radius: 8px; box-shadow: var(--sombra); font-size: 14.5px; line-height: 1.38; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .burbuja .hora { display: block; text-align: right; font-size: 11px; color: var(--texto-suave); margin-top: 2px; }
-  .ella { align-self: flex-start; background: var(--burbuja-ella); border-top-left-radius: 2px; }
-  .yo { align-self: flex-end; background: var(--burbuja-yo); border-top-right-radius: 2px; }
-  .sistema { align-self: center; background: var(--burbuja-sistema); font-size: 13px; max-width: 95%; }
-  .cita { color: var(--cita); font-size: 12px; font-weight: 600; }
-  .escribiendo { font-style: italic; color: var(--texto-suave); }
-  .ejemplos { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 10px; }
-  .ejemplos[hidden] { display: none; }
-  .ejemplos-titulo { width: 100%; font-size: 12px; color: var(--texto-suave); }
-  .chip { border: 1px solid var(--borde); background: var(--chip); color: var(--texto); border-radius: 16px; padding: 6px 10px; font-size: 13px; cursor: pointer; text-align: left; }
-  .acciones { display: flex; gap: 6px; padding: 6px 10px 0; flex-wrap: wrap; }
-  .accion { flex: 1 1 auto; border: 1px solid var(--borde); background: var(--chip); color: var(--texto); border-radius: 8px; padding: 6px 4px; font-size: 13px; cursor: pointer; min-width: 70px; }
-  .accion.peligro { color: var(--alerta-texto); }
-  .redactar { display: flex; gap: 6px; padding: 8px 10px 10px; align-items: flex-end; }
-  .redactar textarea { flex: 1 1 auto; resize: none; border: 1px solid var(--borde); border-radius: 20px; padding: 9px 14px; font: inherit; font-size: 15px; background: var(--burbuja-ella); color: var(--texto); max-height: 120px; }
-  .enviar { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--acento); color: #fff; font-size: 18px; cursor: pointer; flex: 0 0 auto; }
-  button:disabled, textarea:disabled { opacity: 0.55; cursor: not-allowed; }
-  button:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
-  .lateral { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-  .caja { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 10px 12px; font-size: 13px; }
-  .caja summary { cursor: pointer; font-weight: 600; font-size: 14px; }
-  .caja h2 { margin: 0 0 6px; font-size: 14px; }
-  .meta { color: var(--texto-suave); font-size: 12px; margin: 6px 0; line-height: 1.4; }
+  /* Cajón del menú en celular */
+  .cajon { position: fixed; top: calc(var(--alto-franja) + var(--alto-nav)); left: 0; right: 0; bottom: 0; z-index: 39; background: var(--papel); padding: 12px 20px calc(24px + env(safe-area-inset-bottom)); overflow-y: auto; border-top: 1px solid var(--borde); }
+  .cajon[hidden] { display: none; }
+  .cajon nav a { display: flex; align-items: center; justify-content: space-between; min-height: 60px; border-bottom: 1px solid var(--borde); color: var(--tinta); font-family: var(--fuente-titulo); font-size: 22px; font-weight: 600; text-decoration: none; }
+  .cajon nav a .icono { color: var(--esmeralda); }
+  .cajon .boton { width: 100%; margin-top: 24px; }
+  .cajon .nota-cajon { margin-top: 18px; font-size: 15px; color: var(--tinta-suave); }
+  /* El scroll se bloquea en html (no en body): overflow en body lo vuelve contenedor de scroll y
+     corre la cabecera «sticky» hacia abajo el alto de su padding. */
+  html.menu-abierto { overflow: hidden; }
+
+  /* ================= Hero ================= */
+  .hero { padding: 24px 0 56px; position: relative; }
+  .hero::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 100%; background: radial-gradient(60% 60% at 85% 20%, rgba(243, 234, 223, 0.9), transparent 70%), radial-gradient(40% 50% at 0% 100%, rgba(182, 242, 61, 0.10), transparent 70%); pointer-events: none; z-index: -1; }
+  .hero-grid { display: grid; gap: 30px; }
+  .hero h1 { font-size: 44px; font-weight: 700; margin: 12px 0 16px; }
+  .hero h1 .resalte { background: linear-gradient(transparent 62%, var(--lima) 62%, var(--lima) 92%, transparent 92%); padding: 0 2px; }
+  .hero .subtitulo { font-size: 19px; color: var(--tinta-suave); max-width: 34em; margin-bottom: 26px; }
+  .acciones-hero { display: flex; flex-direction: column; gap: 12px; }
+  .acciones-hero .boton { width: 100%; }
+  .garantias { list-style: none; padding: 0; margin: 20px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .garantias li { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 9px; border-radius: 999px; background: var(--blanco); border: 1px solid var(--borde); font-size: 15px; font-weight: 600; color: var(--tinta); }
+  .garantias .icono { width: 18px; height: 18px; color: var(--esmeralda); }
+  .hero-visual { position: relative; }
+  .foto { position: relative; overflow: hidden; border-radius: var(--radio-grande); background: linear-gradient(140deg, #FBE8C8, #EDBD86 60%, #C2825A); box-shadow: var(--sombra-foto); isolation: isolate; }
+  .foto picture { width: 100%; height: 100%; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; }
+  .hero .foto img { height: auto; }
+  /* Etiquetas de vidrio flotantes */
+  .flota { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: var(--vidrio); border: 1px solid var(--vidrio-borde); box-shadow: var(--sombra-vidrio); backdrop-filter: blur(14px) saturate(150%); -webkit-backdrop-filter: blur(14px) saturate(150%); font-size: 14px; font-weight: 600; color: var(--tinta); white-space: nowrap; animation: flotar 8s ease-in-out infinite; }
+  .flota .icono { width: 18px; height: 18px; color: var(--esmeralda); }
+  .flota .vivo { width: 9px; height: 9px; border-radius: 50%; background: var(--lima); box-shadow: 0 0 0 4px rgba(182, 242, 61, 0.35); }
+  /* En celular, abajo a la izquierda (arriba están las etiquetas de la propia foto) */
+  .hero .flota.f1 { bottom: 64px; left: 12px; }
+  .hero .flota.f2 { bottom: 14px; left: 12px; animation-delay: -3s; animation-duration: 9s; }
+  @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @media (min-width: 600px) { .acciones-hero { flex-direction: row; flex-wrap: wrap; } .acciones-hero .boton { width: auto; } }
+  /* Pantallas anchas: la foto del hero llega «a sangre» hasta el borde derecho */
+  @media (min-width: 1280px) {
+    .hero-visual { margin-right: calc((1200px - 100vw) / 2); }
+    .hero .foto { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  }
+  @media (min-width: 900px) {
+    .hero { padding: 40px 0 88px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: center; gap: 56px; }
+    .hero h1 { font-size: clamp(50px, 4.7vw, 74px); }
+    .hero .subtitulo { font-size: 20.5px; }
+    .acciones-hero .boton.claro { background: transparent; border-color: transparent; padding: 0 14px; }
+    .acciones-hero .boton.claro:hover { background: var(--panel); transform: none; }
+    .garantias { gap: 6px; }
+    .garantias li { font-size: 14px; padding: 5px 10px 5px 8px; white-space: nowrap; }
+    .garantias .icono { width: 16px; height: 16px; }
+    .hero .flota { font-size: 15px; padding: 11px 16px; }
+    .hero .flota.f1 { top: -20px; bottom: auto; left: 28px; }
+    .hero .flota.f2 { bottom: -22px; left: -28px; }
+  }
+
+  /* ================= Secciones ================= */
+  .seccion { padding: 72px 0; position: relative; }
+  .seccion h2 { font-size: 36px; font-weight: 700; margin: 12px 0 14px; }
+  .seccion .intro { font-size: 19px; color: var(--tinta-suave); max-width: 38em; }
+  .calido { background: var(--arena); }
+  .calido .intro { color: #5A4A3D; }
+  .cabeza-seccion { margin-bottom: 36px; }
+  .cabeza-seccion.centro { text-align: center; }
+  .cabeza-seccion.centro .intro { margin: 0 auto; }
+  @media (min-width: 1000px) { .seccion { padding: 112px 0; } .seccion h2 { font-size: 52px; } .cabeza-seccion { margin-bottom: 52px; } }
+
+  /* ================= Conversar (la aplicación) ================= */
+  .conversar { background: linear-gradient(180deg, var(--papel), var(--panel)); }
+  .conversar-grid { display: grid; gap: 28px; align-items: center; }
+  .preguntas { display: grid; gap: 10px; margin-top: 26px; }
+  .preguntas-titulo { font-weight: 700; font-size: 16px; margin-top: 28px; color: var(--tinta); }
+  .pregunta-ejemplo { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 12px 18px; border-radius: 18px; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); font-size: 17px; text-align: left; cursor: pointer; box-shadow: var(--sombra-suave); transition: border-color 0.2s, transform 0.2s; }
+  .pregunta-ejemplo:hover { border-color: var(--esmeralda); transform: translateX(3px); }
+  .pregunta-ejemplo .icono { color: var(--esmeralda); }
+  .dentro-chat { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .dentro-chat span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--borde); font-size: 15px; font-weight: 600; }
+  .dentro-chat .icono { width: 18px; height: 18px; color: var(--esmeralda); }
+  .privacidad-corta { display: flex; gap: 10px; align-items: flex-start; margin-top: 22px; font-size: 15.5px; color: var(--tinta-suave); }
+  .privacidad-corta .icono { color: var(--esmeralda); width: 20px; height: 20px; margin-top: 2px; }
+  .abrir-chat-movil { margin-top: 26px; width: 100%; }
+  @media (min-width: 900px) {
+    .conversar-grid { grid-template-columns: minmax(0, 1fr) auto; gap: 64px; }
+    .abrir-chat-movil { display: none !important; }
+  }
+
+  /* ================= Chat (reutilizado de v2) ================= */
+  .app-chat { display: none; }
+  .telefono { width: 100%; display: flex; flex-direction: column; background: var(--fondo-chat); overflow: hidden; }
+  .barra { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--blanco); border-bottom: 1px solid var(--borde); flex: 0 0 auto; }
+  .volver { display: inline-flex; align-items: center; gap: 4px; min-height: 48px; padding: 0 10px 0 6px; border: 0; border-radius: 14px; background: transparent; color: var(--esmeralda); font-weight: 600; font-size: 16px; cursor: pointer; }
+  .volver:hover { background: var(--panel); }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--esmeralda); color: var(--blanco); display: grid; place-items: center; flex: 0 0 auto; position: relative; }
+  .avatar .icono { width: 22px; height: 22px; }
+  .avatar::after { content: ""; position: absolute; right: 0; bottom: 1px; width: 12px; height: 12px; border-radius: 50%; background: var(--lima); border: 2px solid var(--blanco); }
+  .quien-chat { min-width: 0; flex: 1 1 auto; }
+  .nombre { font-family: var(--fuente-titulo); font-weight: 600; font-size: 17px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .estado { font-size: 14px; color: var(--lima-tinta); line-height: 1.2; }
+  .btn-dentro { display: none; min-height: 40px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--borde); background: var(--panel); color: var(--tinta); font-family: var(--fuente-mono); font-size: 12px; cursor: pointer; }
+  body.modo-demo .btn-dentro { display: inline-flex; align-items: center; }
+  .btn-fuentes { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid var(--borde); background: var(--blanco); color: var(--esmeralda); font-weight: 600; font-size: 15px; cursor: pointer; flex: 0 0 auto; }
+  .btn-fuentes .icono { width: 20px; height: 20px; }
+  .btn-fuentes:hover { background: var(--panel); }
+  @media (max-width: 400px) { .btn-fuentes span { display: none; } }
+  @media (max-width: 480px) {
+    body.modo-demo .btn-fuentes span, body.modo-demo .volver .txt { display: none; }
+    body.modo-demo .btn-fuentes { padding: 0 10px; }
+  }
+  .franja-guardia { background: var(--alerta-fondo); color: var(--alerta-texto); font-size: 15px; font-weight: 600; padding: 10px 14px; border-bottom: 1px solid #F3CDBE; flex: 0 0 auto; }
+  .franja-guardia[hidden] { display: none; }
+  .mensajes { flex: 1 1 auto; overflow-y: auto; padding: 16px 12px 8px; display: flex; flex-direction: column; gap: 10px; background-color: var(--fondo-chat); background-image: radial-gradient(rgba(11, 107, 65, 0.06) 1px, transparent 1.4px); background-size: 22px 22px; overscroll-behavior: contain; }
+  .mensajes:empty { display: none; }
+  .burbuja { max-width: 86%; padding: 10px 14px 6px; border-radius: 18px; box-shadow: 0 1px 1.5px rgba(13, 18, 14, 0.12); font-size: 17px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--tinta); }
+  .burbuja .hora { display: block; text-align: right; font-size: 12px; color: var(--tinta-suave); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .ella { align-self: flex-start; background: var(--burbuja-ella); border-top-left-radius: 6px; }
+  .yo { align-self: flex-end; background: var(--burbuja-yo); border-top-right-radius: 6px; }
+  .sistema { align-self: center; background: var(--burbuja-sistema); font-size: 15px; max-width: 96%; border-radius: 14px; }
+  .cita { color: var(--lima-tinta); font-size: 13px; font-weight: 600; font-family: var(--fuente-mono); }
+  .escribiendo { font-style: italic; color: var(--tinta-suave); }
+  .escribiendo::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border-radius: 50%; background: var(--lima-tinta); vertical-align: middle; animation: latido 1.2s ease-in-out infinite; }
+  @keyframes latido { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+  .bienvenida { flex: 1 1 auto; overflow-y: auto; padding: 18px 14px 12px; display: flex; flex-direction: column; gap: 14px; background-color: var(--fondo-chat); background-image: radial-gradient(rgba(11, 107, 65, 0.06) 1px, transparent 1.4px); background-size: 22px 22px; }
+  .bienvenida[hidden] { display: none; }
+  .bienvenida .ella { max-width: 92%; }
+  .bienvenida .titulito { font-size: 15px; color: var(--tinta-suave); margin: 4px 2px -4px; font-weight: 600; }
+  .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opcion { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 10px; min-height: 96px; padding: 14px; border-radius: 18px; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); font-weight: 600; font-size: 16.5px; line-height: 1.25; text-align: left; cursor: pointer; box-shadow: 0 1px 1.5px rgba(13, 18, 14, 0.08); }
+  .opcion .icono { color: var(--esmeralda); width: 26px; height: 26px; }
+  .opcion:hover { border-color: var(--esmeralda); }
+  .chip { border: 1px dashed #B9C9AE; background: rgba(255, 255, 255, 0.7); color: var(--tinta); border-radius: 16px; padding: 10px 14px; font-size: 16px; cursor: pointer; text-align: left; min-height: 48px; }
+  .chip:hover { border-color: var(--esmeralda); background: var(--blanco); }
+  .ejemplos-lista { display: grid; gap: 8px; }
+  .rapidas { display: flex; gap: 8px; overflow-x: auto; padding: 10px 12px 8px; background: var(--fondo-chat); scrollbar-width: none; flex: 0 0 auto; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  .rapidas::-webkit-scrollbar { display: none; }
+  .rapidas[hidden] { display: none; }
+  .rapida { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--esmeralda); background: var(--blanco); color: var(--esmeralda); font-weight: 600; font-size: 16px; cursor: pointer; white-space: nowrap; }
+  .rapida .icono { width: 20px; height: 20px; }
+  .rapida:hover { background: var(--panel); }
+  .nota-chat { display: flex; align-items: center; gap: 6px; padding: 2px 12px 0; background: var(--blanco); border-top: 1px solid var(--borde); font-size: 14px; color: var(--tinta-suave); flex: 0 0 auto; }
+  .nota-chat .guardado { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; }
+  .nota-chat .guardado .icono { width: 16px; height: 16px; color: var(--esmeralda); }
+  .enlace-boton { min-height: 48px; padding: 0 8px; border: 0; background: none; color: var(--esmeralda); font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .enlace-boton.peligro { color: var(--alerta-texto); }
+  .redactar { display: flex; gap: 8px; padding: 6px 12px calc(12px + env(safe-area-inset-bottom)); align-items: flex-end; background: var(--blanco); flex: 0 0 auto; }
+  .redactar textarea { flex: 1 1 auto; resize: none; border: 1.5px solid var(--borde); border-radius: 26px; padding: 13px 18px; font: inherit; font-size: 17px; line-height: 1.4; background: var(--papel); color: var(--tinta); max-height: 140px; min-height: 52px; }
+  .redactar textarea:focus { border-color: var(--esmeralda); outline: none; box-shadow: 0 0 0 3px rgba(11, 107, 65, 0.15); }
+  .enviar { width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--esmeralda); color: var(--blanco); cursor: pointer; flex: 0 0 auto; display: grid; place-items: center; }
+  .enviar:hover { background: var(--esmeralda-oscura); }
+  button:disabled, textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* Panel del modo demostración */
+  .lateral { display: none; }
+  body.modo-demo .lateral { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+  .caja { background: var(--blanco); border: 1px solid var(--borde); border-radius: 16px; padding: 12px 14px; font-size: 14px; line-height: 1.45; }
+  .caja summary { cursor: pointer; font-weight: 700; font-size: 15px; font-family: var(--fuente-titulo); }
+  .caja h2 { margin: 0 0 6px; font-size: 15px; }
+  .aviso-demo { font-family: var(--fuente-mono); font-size: 12px; color: var(--lima-tinta); letter-spacing: 0.04em; text-transform: uppercase; }
+  .meta { color: var(--tinta-suave); font-size: 13px; margin: 6px 0; line-height: 1.4; }
   .entrada-dentro { border-top: 1px solid var(--borde); padding: 8px 0; }
   .entrada-dentro:first-child { border-top: 0; }
   .entrada-dentro dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 8px; margin: 4px 0 0; }
-  .entrada-dentro dt { color: var(--texto-suave); }
+  .entrada-dentro dt { color: var(--tinta-suave); }
   .entrada-dentro dd { margin: 0; overflow-wrap: anywhere; }
-  .etiqueta { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 600; background: var(--fondo-chat); }
+  .etiqueta { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 600; background: var(--panel); }
   .etiqueta.roja { background: var(--alerta-fondo); color: var(--alerta-texto); }
   .registro ol { margin: 0; padding-left: 18px; }
   .registro li { margin: 3px 0; overflow-wrap: anywhere; }
-  .vacio { color: var(--texto-suave); font-style: italic; }
+  .vacio { color: var(--tinta-suave); font-style: italic; }
+
+  /* Celular: el chat se abre a pantalla completa como una app (#chat) */
+  @media (max-width: 899px) {
+    html.en-chat { overflow: hidden; }
+    html.en-chat .franja-ayuda { background: var(--blanco); }
+    body.en-chat .app-chat { display: block; position: fixed; top: var(--alto-franja); left: 0; right: 0; bottom: 0; z-index: 70; background: var(--panel); overflow-y: auto; overscroll-behavior: contain; }
+    .app-chat .telefono { height: calc(100vh - var(--alto-franja)); height: calc(100dvh - var(--alto-franja)); }
+  }
+  /* Escritorio: el chat vive en la página, dentro de un marco de celular elegante */
+  @media (min-width: 900px) {
+    .app-chat { display: flex; gap: 24px; align-items: flex-start; }
+    .marco-celular { position: relative; width: 412px; padding: 11px; border-radius: 54px; background: linear-gradient(150deg, #39403A, #0D120E 45%, #222823); box-shadow: 0 50px 90px rgba(13, 18, 14, 0.28), 0 12px 24px rgba(13, 18, 14, 0.14), inset 0 0 0 1.5px rgba(255, 255, 255, 0.10); flex: 0 0 auto; }
+    .marco-celular::before { content: ""; position: absolute; top: 22px; left: 50%; width: 104px; height: 28px; margin-left: -52px; border-radius: 20px; background: #0D120E; z-index: 3; }
+    .marco-celular::after { content: ""; position: absolute; right: -3px; top: 150px; width: 3px; height: 70px; border-radius: 0 3px 3px 0; background: #2B312C; }
+    .marco-celular .telefono { height: clamp(600px, calc(100vh - 190px), 780px); border-radius: 43px; }
+    .marco-celular .barra { padding-top: 44px; }
+    .marco-celular .volver { display: none; }
+    .marco-celular .opcion { min-height: 84px; }
+    body.modo-demo .lateral { padding: 0; width: 360px; max-height: clamp(600px, calc(100vh - 168px), 802px); overflow-y: auto; }
+  }
+  @media (min-width: 900px) and (max-width: 1279px) {
+    body.modo-demo .conversar-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ================= Cómo funciona ================= */
+  .pasos { display: grid; gap: 18px; counter-reset: paso; }
+  .paso { position: relative; padding: 18px 18px 26px; border-radius: var(--radio-grande); background: var(--blanco); border: 1px solid var(--borde); box-shadow: var(--sombra-suave); }
+  .vineta { height: 190px; border-radius: 20px; background: linear-gradient(160deg, var(--crema), var(--arena)); border: 1px solid var(--borde-calido); padding: 18px; display: flex; flex-direction: column; justify-content: center; gap: 10px; overflow: hidden; margin-bottom: 22px; }
+  .mini { max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: 15px; line-height: 1.35; box-shadow: 0 2px 6px rgba(80, 50, 25, 0.08); }
+  .mini.yo { align-self: flex-end; background: var(--burbuja-yo); border-top-right-radius: 5px; }
+  .mini.ella { align-self: flex-start; background: var(--blanco); border-top-left-radius: 5px; }
+  .mini .fuente { display: inline-flex; margin-top: 6px; font-family: var(--fuente-mono); font-size: 11.5px; color: var(--lima-tinta); background: var(--panel); border-radius: 8px; padding: 2px 7px; }
+  .destinos { display: grid; gap: 8px; }
+  .destino { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: var(--blanco); font-size: 15px; font-weight: 600; box-shadow: 0 2px 6px rgba(80, 50, 25, 0.08); }
+  .destino .icono { width: 20px; height: 20px; color: var(--esmeralda); }
+  .paso .numero { font-family: var(--fuente-mono); font-size: 13px; color: var(--lima-tinta); letter-spacing: 0.08em; }
+  .paso h3 { font-size: 24px; font-weight: 600; margin: 6px 0 8px; }
+  .paso p { font-size: 17px; color: var(--tinta-suave); }
+  @media (min-width: 900px) { .pasos { grid-template-columns: repeat(3, 1fr); gap: 22px; } .vineta { height: 210px; } }
+  .franja-principio { background: var(--tinta); color: var(--papel); padding: 64px 0; position: relative; overflow: hidden; }
+  .franja-principio::after { content: ""; position: absolute; right: -120px; top: -120px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(182, 242, 61, 0.16), transparent 65%); }
+  .franja-principio p.grande { font-family: var(--fuente-titulo); font-size: 36px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+  .franja-principio .subraya { box-shadow: inset 0 -0.2em 0 var(--lima); color: var(--blanco); }
+  .franja-principio p.chico { margin-top: 16px; font-size: 18px; color: #C9D3C6; max-width: 40em; }
+  .franja-principio .etiqueta-mono { color: var(--lima); }
+  @media (min-width: 1000px) { .franja-principio { padding: 96px 0; } .franja-principio p.grande { font-size: 64px; } }
+
+  /* ================= Lo que hace (bento) ================= */
+  .bento { display: grid; gap: 16px; }
+  .tarjeta { display: flex; flex-direction: column; gap: 14px; padding: 26px; background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio-grande); box-shadow: var(--sombra-suave); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+  .tarjeta:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(13, 18, 14, 0.09); }
+  .tarjeta h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .tarjeta p { font-size: 17px; color: var(--tinta-suave); }
+  .chapa { width: 54px; height: 54px; border-radius: 17px; display: grid; place-items: center; background: var(--panel); color: var(--esmeralda); border: 1px solid var(--borde); flex: 0 0 auto; }
+  .chapa .icono { width: 26px; height: 26px; }
+  .tarjeta-foto { padding: 0; overflow: hidden; background: var(--crema); border-color: var(--borde-calido); }
+  .tarjeta-foto .foto { border-radius: 0; box-shadow: none; aspect-ratio: 3 / 2; }
+  .tarjeta-foto .texto { padding: 26px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  @media (min-width: 760px) { .bento { grid-template-columns: repeat(2, 1fr); } .tarjeta-foto { grid-column: 1 / -1; } }
+  @media (min-width: 1100px) {
+    .bento { grid-template-columns: repeat(6, 1fr); gap: 20px; }
+    .bento > .tarjeta { grid-column: span 2; }
+    .bento > .tarjeta-foto { grid-column: span 4; display: grid; grid-template-columns: 1.15fr 1fr; }
+    .tarjeta-foto .foto { aspect-ratio: auto; height: 100%; min-height: 300px; }
+    .tarjeta-foto .texto { padding: 32px; }
+  }
+
+  /* ================= Para quién ================= */
+  .publicos { display: grid; gap: 18px; }
+  .publico { display: flex; flex-direction: column; border-radius: var(--radio-grande); overflow: hidden; background: var(--blanco); border: 1px solid var(--borde-calido); box-shadow: var(--sombra-suave); }
+  .publico .foto { border-radius: 0; box-shadow: none; aspect-ratio: 4 / 4.2; }
+  @media (max-width: 899px) { .publico.futuro .ilustra { aspect-ratio: 16 / 8; } .publico.futuro .ilustra .circulo { width: 34%; } }
+  .publico .texto { padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; }
+  .publico h3 { font-size: 26px; font-weight: 700; }
+  .publico p { font-size: 17px; color: var(--tinta-suave); }
+  .publico .lista-check { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 8px; }
+  .lista-check li { display: flex; gap: 10px; align-items: flex-start; font-size: 17px; }
+  .lista-check .icono { color: var(--esmeralda); width: 22px; height: 22px; margin-top: 2px; }
+  .publico.futuro { background: linear-gradient(165deg, var(--crema), var(--terracota-suave)); }
+  .publico.futuro .ilustra { aspect-ratio: 4 / 4.2; display: grid; place-items: center; position: relative; }
+  .publico.futuro .ilustra .circulo { width: 62%; aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); display: grid; place-items: center; box-shadow: var(--sombra-vidrio); }
+  .publico.futuro .ilustra .icono { width: 34%; height: 34%; color: var(--terracota-tinta); stroke-width: 1.4; }
+  .enlace-flecha { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; font-weight: 700; text-decoration: none; margin-top: auto; }
+  .enlace-flecha .icono { width: 20px; height: 20px; transition: transform 0.2s; }
+  .enlace-flecha:hover .icono { transform: translateX(4px); }
+  @media (min-width: 900px) { .publicos { grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+
+  /* ================= Recursos ================= */
+  .recursos-cabeza { display: grid; gap: 28px; align-items: center; margin-bottom: 36px; }
+  .recursos-cabeza .foto { aspect-ratio: 3 / 2; }
+  @media (min-width: 1000px) { .recursos-cabeza { grid-template-columns: 1fr 1.05fr; gap: 64px; margin-bottom: 52px; } }
+  .pestanas { display: inline-flex; gap: 4px; padding: 5px; border-radius: 999px; background: var(--blanco); border: 1px solid var(--borde); box-shadow: var(--sombra-suave); margin-bottom: 24px; max-width: 100%; }
+  .pestana { min-height: 48px; padding: 0 22px; border-radius: 999px; border: 0; background: transparent; color: var(--tinta-suave); font-weight: 700; font-size: 16.5px; cursor: pointer; white-space: nowrap; transition: background 0.2s, color 0.2s; }
+  .pestana[aria-selected="true"] { background: var(--esmeralda); color: var(--blanco); }
+  .rejilla-recursos { display: grid; gap: 16px; }
+  .rejilla-recursos[hidden] { display: none; }
+  @media (min-width: 640px) { .rejilla-recursos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .rejilla-recursos { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+  .recurso { display: flex; flex-direction: column; gap: 12px; padding: 22px; border-radius: 24px; background: var(--blanco); border: 1px solid var(--borde); box-shadow: var(--sombra-suave); }
+  .recurso .arriba { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .recurso h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .recurso p { font-size: 16px; color: var(--tinta-suave); flex: 1 1 auto; }
+  .recurso .boton { width: 100%; }
+  .avisame { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; padding: 0 16px; border-radius: 999px; border: 1.5px dashed #C9B8A3; background: var(--crema); color: var(--madera); font-weight: 700; font-size: 15.5px; cursor: pointer; }
+  .avisame:hover { border-style: solid; }
+  .avisame .icono { width: 20px; height: 20px; }
+  .avisame[aria-pressed="true"] { border-style: solid; border-color: var(--esmeralda); background: var(--panel); color: var(--esmeralda); }
+  .nota-recursos { margin-top: 22px; font-size: 15px; color: var(--tinta-suave); display: flex; gap: 8px; align-items: flex-start; }
+  .nota-recursos .icono { width: 18px; height: 18px; color: var(--esmeralda); margin-top: 3px; }
+
+  /* ================= Educación (a futuro) ================= */
+  .educacion-tarjeta { position: relative; }
+  .educacion-tarjeta .foto { aspect-ratio: 16 / 9; }
+  .educacion-texto { margin-top: 20px; }
+  .educacion-texto h2 { margin-top: 14px; }
+  @media (min-width: 1000px) {
+    .educacion-texto { position: absolute; left: 32px; bottom: 32px; max-width: 520px; margin: 0; padding: 30px 32px; border-radius: 26px; background: rgba(251, 247, 240, 0.86); border: 1px solid var(--vidrio-borde); box-shadow: var(--sombra-vidrio); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); }
+    .educacion-texto h2 { font-size: 40px !important; }
+  }
+
+  /* ================= Seguridad y ética ================= */
+  .seguridad { background: var(--panel); }
+  .seguridad-grid { display: grid; gap: 18px; }
+  .crisis { padding: 30px; border-radius: var(--radio-grande); background: var(--tinta); color: var(--papel); display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden; }
+  .crisis::after { content: ""; position: absolute; left: -80px; bottom: -120px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(182, 242, 61, 0.14), transparent 65%); }
+  .crisis h3 { font-size: 28px; font-weight: 700; }
+  .crisis p { color: #C9D3C6; font-size: 17px; }
+  .crisis .etiqueta-mono { color: var(--lima); }
+  .numeros-grandes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 6px; position: relative; z-index: 1; }
+  .numeros-grandes a { display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; min-width: 0; min-height: 84px; overflow-wrap: anywhere; border-radius: 18px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); color: var(--blanco); text-decoration: none; }
+  .numeros-grandes a:hover { background: rgba(255, 255, 255, 0.14); }
+  .numeros-grandes strong { font-family: var(--fuente-titulo); font-size: 28px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .numeros-grandes span { font-size: 14px; color: #C9D3C6; }
+  /* Celular angosto: cada número en su fila (número + para qué), sin partir palabras */
+  @media (max-width: 520px) {
+    .numeros-grandes { grid-template-columns: 1fr; }
+    .numeros-grandes a { flex-direction: row; align-items: center; gap: 14px; min-height: 60px; padding: 10px 16px; overflow-wrap: normal; }
+    .numeros-grandes strong { min-width: 58px; }
+    .numeros-grandes span { font-size: 16px; }
+  }
+  .garantias-eticas { display: grid; gap: 14px; }
+  .etica { padding: 22px; border-radius: var(--radio); background: var(--blanco); border: 1px solid var(--borde); }
+  .etica .cabeza { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .etica .escudo { width: 44px; height: 44px; border-radius: 14px; background: var(--esmeralda); color: var(--blanco); display: grid; place-items: center; flex: 0 0 auto; }
+  .etica h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .etica p { font-size: 16.5px; color: var(--tinta-suave); }
+  @media (min-width: 760px) { .garantias-eticas { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .seguridad-grid { grid-template-columns: 0.85fr 1.15fr; gap: 22px; align-items: stretch; } .crisis { padding: 40px; justify-content: space-between; } }
+
+  /* ================= Quiénes somos y cierre ================= */
+  .equipo { display: grid; gap: 16px; }
+  .persona-org { display: flex; gap: 16px; align-items: flex-start; padding: 26px; border-radius: var(--radio-grande); background: var(--blanco); border: 1px solid var(--borde-calido); box-shadow: var(--sombra-suave); }
+  .monograma { width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; font-family: var(--fuente-titulo); font-weight: 700; font-size: 19px; flex: 0 0 auto; }
+  .monograma.pm { background: var(--terracota-suave); color: #6B3B17; }
+  .monograma.s4 { background: var(--tinta); color: var(--lima); }
+  .persona-org h3 { font-size: 22px; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.01em; }
+  .persona-org .org { font-family: var(--fuente-mono); font-size: 12.5px; color: var(--madera); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .persona-org p { font-size: 17px; color: var(--tinta-suave); }
+  .sellos { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; align-items: center; }
+  .sello { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 999px; background: var(--blanco); border: 1px solid var(--borde-calido); font-size: 15.5px; font-weight: 600; color: var(--tinta); }
+  .sello .punto-vivo { width: 10px; height: 10px; border-radius: 50%; background: var(--lima); box-shadow: 0 0 0 4px rgba(182, 242, 61, 0.3); flex: 0 0 auto; }
+  .hoy { margin-top: 18px; font-size: 16px; color: #5A4A3D; max-width: 46em; }
+  @media (min-width: 760px) { .equipo { grid-template-columns: 1fr 1fr; gap: 20px; } }
+  /* Celular: foto arriba y texto en una franja de madera oscura debajo (no encima de las caras) */
+  .cierre { margin-top: 64px; position: relative; border-radius: var(--radio-grande); overflow: hidden; box-shadow: var(--sombra-foto); background: #2A1D14; }
+  .cierre .foto { aspect-ratio: 4 / 3; border-radius: 0; box-shadow: none; }
+  .cierre .foto::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(180deg, transparent, #2A1D14); }
+  .cierre-texto { position: relative; z-index: 2; padding: 4px 24px 28px; color: var(--blanco); }
+  .cierre-texto h2 { color: var(--blanco); font-size: 34px; margin: 0 0 10px; }
+  .cierre-texto p { font-size: 18px; color: #F3EADF; margin-bottom: 20px; max-width: 30em; }
+  .cierre-texto .boton { width: 100%; }
+  @media (min-width: 760px) { .cierre-texto .boton { width: auto; } }
+  @media (min-width: 1000px) {
+    .cierre { margin-top: 88px; }
+    .cierre .foto { aspect-ratio: 16 / 9; }
+    .cierre .foto::after { inset: 0; height: auto; background: linear-gradient(90deg, transparent 38%, rgba(26, 16, 8, 0.66) 74%); }
+    .cierre-texto { position: absolute; left: auto; right: 0; top: 0; bottom: 0; width: 44%; display: flex; flex-direction: column; justify-content: center; padding: 48px; }
+    .cierre-texto h2 { font-size: 54px !important; }
+  }
+
+  /* ================= Pie ================= */
+  .pie { background: var(--tinta); color: #D6DED3; padding: 64px 0 calc(32px + env(safe-area-inset-bottom)); font-size: 16px; }
+  .pie-grid { display: grid; gap: 32px; }
+  .pie h2 { font-family: var(--fuente-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lima); margin-bottom: 12px; }
+  .pie a { color: var(--blanco); }
+  .pie ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .pie .num { display: inline-block; min-width: 46px; font-weight: 700; color: var(--blanco); font-variant-numeric: tabular-nums; }
+  .pie .marca { color: var(--blanco); }
+  .pie .legal { margin-top: 40px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.12); font-size: 14px; color: #A9B4A6; display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  .interruptor { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0; background: none; border: 0; color: #D6DED3; cursor: pointer; font-size: 15px; }
+  .interruptor .riel { width: 44px; height: 26px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); position: relative; flex: 0 0 auto; transition: background 0.2s; }
+  .interruptor .riel::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--blanco); transition: transform 0.2s; }
+  .interruptor[aria-checked="true"] .riel { background: var(--esmeralda); }
+  .interruptor[aria-checked="true"] .riel::after { transform: translateX(18px); }
+  @media (min-width: 900px) { .pie-grid { grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; } }
+
+  /* ================= Movimiento ================= */
+  /* Entrada al hacer scroll: solo si el navegador lo permite y nadie pidió «reducir movimiento». */
+  html.anima .revelar { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  html.anima .revelar.visible { opacity: 1; transform: none; }
+  html.anima .revelar.d1 { transition-delay: 0.08s; }
+  html.anima .revelar.d2 { transition-delay: 0.16s; }
+  html.anima .revelar.d3 { transition-delay: 0.24s; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .flota, .escribiendo::after { animation: none !important; }
+    .boton, .tarjeta, .pregunta-ejemplo, .enlace-flecha .icono { transition: none !important; }
+    .tarjeta:hover, .boton:hover, .pregunta-ejemplo:hover { transform: none; }
+    html.anima .revelar { opacity: 1; transform: none; transition: none; }
+  }
 </style>
 </head>
 <body>
-<div class="app">
-  <p class="cabecera">Piloto v2 · orienta y remite, nunca diagnostica · no escribas nombres ni documentos</p>
-  <p class="aviso-piloto">Esto es un piloto: las conversaciones pueden revisarse para mejorar el servicio. Si estás en peligro, llama a la <strong>Línea 106</strong> o al <strong>123</strong>.</p>
-  <div class="disposicion">
-    <section class="telefono" aria-label="Chat con la Acompañante de la cuidadora">
-      <header class="barra">
-        <div class="avatar" aria-hidden="true">AC</div>
-        <div>
-          <div class="nombre">Acompañante de la cuidadora</div>
-          <div class="estado" id="estado">en línea</div>
-        </div>
-      </header>
-      <div class="franja-guardia" id="franjaGuardia" role="status" hidden></div>
-      <div class="mensajes" id="mensajes" aria-live="polite"></div>
-      <div class="ejemplos" id="ejemplos">
-        <span class="ejemplos-titulo">Toca un ejemplo para empezar:</span>
-        <button type="button" class="chip" data-ejemplo="mi hija no me mira a los ojos, ¿será autista?">mi hija no me mira a los ojos, ¿será autista?</button>
-        <button type="button" class="chip" data-ejemplo="la EPS me negó la cita con neuropediatra">la EPS me negó la cita con neuropediatra</button>
-        <button type="button" class="chip" data-ejemplo="ya no puedo más">ya no puedo más</button>
-      </div>
-      <div class="acciones">
-        <button type="button" class="accion" id="btnChequeo">Chequeo</button>
-        <button type="button" class="accion" id="btnResumen">Resumen</button>
-        <button type="button" class="accion" id="btnFuentes">Fuentes</button>
-        <button type="button" class="accion peligro" id="btnReiniciar">Reiniciar</button>
-      </div>
-      <form class="redactar" id="formulario" autocomplete="off">
-        <textarea id="entrada" rows="1" maxlength="2000" placeholder="Escribe un mensaje" aria-label="Mensaje"></textarea>
-        <button type="submit" class="enviar" id="btnEnviar" aria-label="Enviar">&#10148;</button>
-      </form>
-    </section>
+<!-- Íconos (SVG inline; trazos propios, sin librerías) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-logo" viewBox="0 0 24 24"><path d="M4 11.5C4 7.4 7.6 4 12 4s8 3.4 8 7.5S16.4 19 12 19c-1 0-2-.2-2.9-.5L5 20l1.2-3.6C4.8 15.1 4 13.4 4 11.5Z"/><path d="M12 14.6s-3-1.8-3-3.8c0-1 .8-1.8 1.7-1.8.6 0 1 .3 1.3.8.3-.5.7-.8 1.3-.8.9 0 1.7.8 1.7 1.8 0 2-3 3.8-3 3.8Z"/></symbol>
+  <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-atras" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-abajo" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+  <symbol id="i-corazon" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10Z"/></symbol>
+  <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-camino" viewBox="0 0 24 24"><path d="M12 21v-9M12 12 7 7M7 7H4V4h3M7 7V4"/><path d="M12 12l5-5M17 7h3V4h-3M17 7V4"/><circle cx="12" cy="12" r="1.3"/></symbol>
+  <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.3 2.6 2.6 5-5.2"/></symbol>
+  <symbol id="i-candado" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+  <symbol id="i-telefono" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.4 4-2 1.4a11 11 0 0 0 6.5 6.5l1.4-2 4 1.4v2.6a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-pulso" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></symbol>
+  <symbol id="i-libreta" viewBox="0 0 24 24"><path d="M6 3.5h11a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5H6z"/><path d="M6 3.5v17M9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"/></symbol>
+  <symbol id="i-documento" viewBox="0 0 24 24"><path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V5a1.5 1.5 0 0 1 1-1.5Z"/><path d="M14 3.5V8h4M9 12.5h6M9 16h6"/></symbol>
+  <symbol id="i-persona" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.6 7-5.6s6.2 2 7 5.6"/></symbol>
+  <symbol id="i-enviar" viewBox="0 0 24 24"><path d="M4.5 12 20 4.5l-3.6 15.2-4.6-5.3L4.5 12Z"/><path d="m11.8 14.4 4.4-6.2"/></symbol>
+  <symbol id="i-codigo" viewBox="0 0 24 24"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13.5 5l-3 14"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-campana" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-tarjeta" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M7 10h6M7 14h4"/><path d="M17 9.5v3M17 14.5v.1"/></symbol>
+  <symbol id="i-cuadricula" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-libro" viewBox="0 0 24 24"><path d="M3.5 5.5c2.5-1 5.5-1 8.5.5 3-1.5 6-1.5 8.5-.5V19c-2.5-1-5.5-1-8.5.5-3-1.5-6-1.5-8.5-.5Z"/><path d="M12 6v13.5"/></symbol>
+  <symbol id="i-termometro" viewBox="0 0 24 24"><path d="M10 4.5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0Z"/><path d="M12 9v7.5"/></symbol>
+  <symbol id="i-audifonos" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.6"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.6"/></symbol>
+  <symbol id="i-birrete" viewBox="0 0 24 24"><path d="M2.5 9 12 5l9.5 4L12 13Z"/><path d="M6.5 11v4.5c1.5 1.4 3.5 2 5.5 2s4-.6 5.5-2V11"/><path d="M21.5 9v5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.2"/></symbol>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-letra" viewBox="0 0 24 24"><path d="M3.5 19 8.5 5l5 14M5.4 14h6.2"/><path d="M18 8v6M15 11h6"/></symbol>
+  <symbol id="i-conversa" viewBox="0 0 24 24"><path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 16h-8l-4.5 3.5V16H5a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 5 5Z"/></symbol>
+  <symbol id="i-hospital" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></symbol>
+</svg>
 
-    <aside class="lateral">
-      <details class="caja" id="porDentro">
-        <summary>Por dentro</summary>
-        <p class="meta" id="metaBiblioteca"></p>
-        <div id="porDentroLista"><p class="vacio">Aquí verás, en cada respuesta, el candado que saltó, los fragmentos que encontró la biblioteca y las citas verificadas.</p></div>
-      </details>
-      <section class="caja registro">
-        <h2>Avisos a la guardia en esta conversación</h2>
-        <p class="meta">Cuando salta un candado, el servidor deja el aviso para la persona de guardia (solo la hora, el tipo y los primeros 80 caracteres). Aquí ves la hora y el tipo.</p>
-        <ol id="registroGuardia"></ol>
-        <p class="vacio" id="registroVacio">Sin avisos.</p>
-      </section>
-    </aside>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<!-- Franja fija de ayuda: siempre visible, en la página y en el chat -->
+<aside class="franja-ayuda" aria-label="Líneas de ayuda">
+  <span class="pregunta">¿Estás en peligro?</span>
+  <span class="numeros">
+    <a href="tel:106" aria-label="Llamar a la Línea 106, apoyo emocional">106<span class="detalle">apoyo emocional</span></a>
+    <a href="tel:123" aria-label="Llamar al 123, emergencias">123<span class="detalle">emergencias</span></a>
+    <a href="tel:141" aria-label="Llamar al 141, ICBF">141<span class="detalle">ICBF</span></a>
+  </span>
+</aside>
+
+<!-- ======================= CABECERA ======================= -->
+<header class="cabecera" id="cabecera">
+  <div class="contenedor">
+    <a class="marca" href="#inicio" aria-label="Acompañante de la cuidadora, inicio">
+      <span class="logo"><svg class="icono"><use href="#i-logo"/></svg></span>
+      <span>Acompañante<br>de la cuidadora</span>
+    </a>
+    <nav class="menu-principal" aria-label="Secciones">
+      <a href="#inicio" data-spy="inicio">Inicio</a>
+      <a href="#como-funciona" data-spy="como-funciona">Cómo funciona</a>
+      <a href="#para-quien" data-spy="para-quien">Para quién</a>
+      <a href="#recursos" data-spy="recursos">Recursos</a>
+      <a href="#seguridad" data-spy="seguridad">Seguridad</a>
+      <a href="#quienes" data-spy="quienes">Quiénes somos</a>
+    </nav>
+    <button type="button" class="boton pequeno cta-nav" data-abrir-chat><span class="texto-cta">Conversar ahora</span></button>
+    <button type="button" class="boton-menu" id="botonMenu" aria-expanded="false" aria-controls="cajon" aria-label="Abrir el menú">
+      <svg class="icono icono-abrir"><use href="#i-menu"/></svg><svg class="icono icono-cerrar"><use href="#i-cerrar"/></svg>
+    </button>
   </div>
+</header>
+<div class="cajon" id="cajon" hidden>
+  <nav aria-label="Secciones (menú)">
+    <a href="#inicio">Inicio<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="#como-funciona">Cómo funciona<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="#para-quien">Para quién<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="#recursos">Recursos<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="#seguridad">Seguridad<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="#quienes">Quiénes somos<svg class="icono"><use href="#i-flecha"/></svg></a>
+  </nav>
+  <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
+  <p class="nota-cajon">Gratis, sin registrarte. Orienta y remite; nunca diagnostica.</p>
 </div>
+
+<main id="contenido">
+  <!-- 1 · Hero -->
+  <section class="hero" id="inicio" aria-labelledby="titular">
+    <div class="contenedor hero-grid">
+      <div class="hero-texto revelar">
+        <span class="etiqueta-mono">Para madres y abuelas · Colombia</span>
+        <h1 id="titular">No tienes que cuidar <span class="resalte">sola</span></h1>
+        <p class="subtitulo">Una acompañante por chat para madres y abuelas de niñas autistas en Colombia. Gratis, en español, a cualquier hora.</p>
+        <div class="acciones-hero">
+          <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
+          <a class="boton claro" href="#como-funciona">Ver cómo funciona<svg class="icono"><use href="#i-abajo"/></svg></a>
+        </div>
+        <ul class="garantias">
+          <li><svg class="icono"><use href="#i-check"/></svg>Sin registrarte</li>
+          <li><svg class="icono"><use href="#i-check"/></svg>No pide tu nombre</li>
+          <li><svg class="icono"><use href="#i-check"/></svg>Nunca diagnostica</li>
+        </ul>
+      </div>
+      <div class="hero-visual revelar d1">
+        <div class="foto">
+          <picture>
+            <source media="(max-width: 899px)" srcset="/img/hero-madre-vertical-800.jpg 800w, /img/hero-madre-vertical.jpg 1152w" sizes="100vw" width="1152" height="1536">
+            <img src="/img/hero-madre.jpg" srcset="/img/hero-madre-800.jpg 800w, /img/hero-madre.jpg 1536w" sizes="(min-width: 900px) 60vw, 100vw" width="1536" height="864" fetchpriority="high" alt="Una madre colombiana de pie en su sala, con un café en la mano, mira con alivio un celular gigante que muestra el chat de la Acompañante; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS y Nunca diagnostica.">
+          </picture>
+        </div>
+        <span class="flota f1" aria-hidden="true"><span class="vivo"></span>En línea · a cualquier hora</span>
+        <span class="flota f2" aria-hidden="true"><svg class="icono"><use href="#i-candado"/></svg>Se guarda solo en tu celular</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · Conversar (la aplicación) -->
+  <section class="seccion conversar" id="conversar" aria-labelledby="t-conversar">
+    <div class="contenedor conversar-grid">
+      <div class="conversar-texto revelar">
+        <span class="etiqueta-mono">La aplicación · pruébala aquí</span>
+        <h2 id="t-conversar">Conversa con ella ahora mismo</h2>
+        <p class="intro">Escríbele como le escribirías a una amiga que sabe de autismo infantil. Te escucha, te explica con calma y te dice a dónde ir.</p>
+        <p class="preguntas-titulo">Toca una pregunta y mira cómo responde:</p>
+        <div class="preguntas">
+          <button type="button" class="pregunta-ejemplo" data-pregunta="mi hija no me mira a los ojos, ¿será autista?">«Mi hija no me mira a los ojos, ¿será autista?»<svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="pregunta-ejemplo" data-pregunta="la EPS me negó la cita con neuropediatra">«La EPS me negó la cita con neuropediatra»<svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="pregunta-ejemplo" data-pregunta="estoy agotada y no tengo con quién hablar">«Estoy agotada y no tengo con quién hablar»<svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="pregunta-ejemplo" data-pregunta="¿cómo preparo la cita con el pediatra?">«¿Cómo preparo la cita con el pediatra?»<svg class="icono"><use href="#i-flecha"/></svg></button>
+        </div>
+        <div class="dentro-chat" aria-label="Lo que encuentras dentro del chat">
+          <span><svg class="icono"><use href="#i-pulso"/></svg>Chequeo de bienestar</span>
+          <span><svg class="icono"><use href="#i-libreta"/></svg>Tu diario</span>
+          <span><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</span>
+          <span><svg class="icono"><use href="#i-libro"/></svg>Fuentes</span>
+        </div>
+        <p class="privacidad-corta"><svg class="icono"><use href="#i-candado"/></svg><span>Tu conversación se guarda solo en tu celular. No escribas el nombre ni los datos de la niña: para acompañarte no los necesita.</span></p>
+        <button type="button" class="boton abrir-chat-movil" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
+      </div>
+
+      <!-- La interfaz de chat REAL (misma de v2). Escritorio: dentro del marco. Celular: pantalla completa con #chat. -->
+      <div class="app-chat" id="vistaChat">
+        <div class="marco-celular">
+          <section class="telefono" aria-label="Chat con la Acompañante de la cuidadora">
+            <header class="barra">
+              <button type="button" class="volver" id="btnInicio" aria-label="Volver a la página"><svg class="icono"><use href="#i-atras"/></svg><span class="txt">Volver</span></button>
+              <div class="avatar" aria-hidden="true"><svg class="icono"><use href="#i-logo"/></svg></div>
+              <div class="quien-chat">
+                <div class="nombre">Acompañante</div>
+                <div class="estado" id="estado">en línea</div>
+              </div>
+              <button type="button" class="btn-fuentes" id="btnFuentes" aria-label="Ver las fuentes de la Acompañante"><svg class="icono"><use href="#i-libreta"/></svg><span>Fuentes</span></button>
+              <button type="button" class="btn-dentro" id="btnVerDentro">Por dentro</button>
+            </header>
+            <div class="franja-guardia" id="franjaGuardia" role="status" hidden></div>
+
+            <div class="bienvenida" id="ejemplos">
+              <div class="burbuja ella">Hola, aquí estoy para escucharte.
+Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir con tus palabras o tocar una opción.<span class="hora">Acompañante</span></div>
+              <p class="titulito">¿Qué quieres hacer?</p>
+              <div class="opciones">
+                <button type="button" class="opcion" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Hacer el chequeo</button>
+                <button type="button" class="opcion" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Mi diario</button>
+                <button type="button" class="opcion" data-accion="resumen"><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</button>
+                <button type="button" class="opcion" data-accion="persona"><svg class="icono"><use href="#i-persona"/></svg>Hablar con una persona</button>
+              </div>
+              <p class="titulito">O empieza con un ejemplo:</p>
+              <div class="ejemplos-lista">
+                <button type="button" class="chip" data-ejemplo="mi hija no me mira a los ojos, ¿será autista?">«mi hija no me mira a los ojos, ¿será autista?»</button>
+                <button type="button" class="chip" data-ejemplo="la EPS me negó la cita con neuropediatra">«la EPS me negó la cita con neuropediatra»</button>
+              </div>
+            </div>
+
+            <div class="mensajes" id="mensajes" aria-live="polite"></div>
+
+            <div class="rapidas" id="rapidas" hidden>
+              <button type="button" class="rapida" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Hacer el chequeo</button>
+              <button type="button" class="rapida" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Mi diario</button>
+              <button type="button" class="rapida" data-accion="resumen"><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</button>
+              <button type="button" class="rapida" data-accion="persona"><svg class="icono"><use href="#i-persona"/></svg>Hablar con una persona</button>
+            </div>
+            <div class="nota-chat">
+              <span class="guardado" id="notaGuardado"><svg class="icono"><use href="#i-candado"/></svg><span id="notaTexto">Solo en tu celular</span></span>
+              <button type="button" class="enlace-boton peligro" id="btnReiniciar">Borrar conversación</button>
+            </div>
+            <form class="redactar" id="formulario" autocomplete="off">
+              <label for="entrada" class="solo-lector">Mensaje</label>
+              <textarea id="entrada" rows="1" maxlength="2000" placeholder="Escribe un mensaje"></textarea>
+              <button type="submit" class="enviar" id="btnEnviar" aria-label="Enviar"><svg class="icono"><use href="#i-enviar"/></svg></button>
+            </form>
+          </section>
+        </div>
+
+        <!-- Panel del modo demostración (oculto para las cuidadoras) -->
+        <aside class="lateral" id="lateral" aria-label="Modo demostración">
+          <p class="aviso-demo">Modo demostración · lo ven Natalia, UNICEF y patrocinadores</p>
+          <details class="caja" id="porDentro">
+            <summary>Por dentro</summary>
+            <p class="meta" id="metaBiblioteca"></p>
+            <div id="porDentroLista"><p class="vacio">Aquí verás, en cada respuesta, el candado que saltó, los fragmentos que encontró la biblioteca y las citas verificadas.</p></div>
+          </details>
+          <section class="caja registro">
+            <h2>Alertas registradas en esta conversación</h2>
+            <p class="meta">Cuando salta un candado, el servidor registra una alerta para que el equipo la revise (solo la hora, el tipo y los primeros 80 caracteres). Aquí ves la hora y el tipo.</p>
+            <ol id="registroGuardia"></ol>
+            <p class="vacio" id="registroVacio">Sin alertas.</p>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Cómo funciona -->
+  <section class="seccion" id="como-funciona" aria-labelledby="t-como">
+    <div class="contenedor">
+      <div class="cabeza-seccion centro revelar">
+        <span class="etiqueta-mono">Cómo funciona</span>
+        <h2 id="t-como">Tres pasos, a tu ritmo</h2>
+        <p class="intro">Sin formularios ni citas. Abres, escribes y ella te acompaña.</p>
+      </div>
+      <div class="pasos">
+        <article class="paso revelar">
+          <div class="vineta" aria-hidden="true">
+            <div class="mini yo">Mi hija se tapa los oídos cuando hay ruido. ¿Es normal?</div>
+            <div class="mini yo" style="max-width:60%">Estoy preocupada.</div>
+          </div>
+          <span class="numero">01</span>
+          <h3>Cuéntale</h3>
+          <p>Con tus palabras, cuando quieras: lo que ves en tu hija o nieta, o cómo te sientes tú.</p>
+        </article>
+        <article class="paso revelar d1">
+          <div class="vineta" aria-hidden="true">
+            <div class="mini ella">Gracias por contarme. Algunas niñas sienten los sonidos más fuertes. Te explico qué observar.<br><span class="fuente">fuente citada · biblioteca</span></div>
+          </div>
+          <span class="numero">02</span>
+          <h3>Te orienta con fuentes confiables</h3>
+          <p>Responde con calma y, cuando usa un documento de su biblioteca curada, te dice cuál es.</p>
+        </article>
+        <article class="paso revelar d2">
+          <div class="vineta" aria-hidden="true">
+            <div class="destinos">
+              <div class="destino"><svg class="icono"><use href="#i-hospital"/></svg>Pediatra · con tu resumen</div>
+              <div class="destino"><svg class="icono"><use href="#i-camino"/></svg>EPS · qué pedir</div>
+              <div class="destino"><svg class="icono"><use href="#i-telefono"/></svg>Línea 106 · si lo necesitas</div>
+            </div>
+          </div>
+          <span class="numero">03</span>
+          <h3>Te remite a quien puede ayudar</h3>
+          <p>Pediatra, EPS o líneas de ayuda: te dice a dónde ir y cómo llegar mejor preparada.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="franja-principio" aria-label="Principio de la Acompañante">
+    <div class="contenedor revelar">
+      <span class="etiqueta-mono">Nuestro principio</span>
+      <p class="grande">Orienta y remite; <span class="subraya">nunca diagnostica.</span></p>
+      <p class="chico">Solo un especialista puede evaluar a una niña. La Acompañante te ayuda a llegar a esa consulta mejor preparada y más tranquila.</p>
+    </div>
+  </section>
+
+  <!-- 4 · Lo que hace -->
+  <section class="seccion" id="lo-que-hace" aria-labelledby="t-hace">
+    <div class="contenedor">
+      <div class="cabeza-seccion revelar">
+        <span class="etiqueta-mono">Lo que hace</span>
+        <h2 id="t-hace">Cinco formas de acompañarte</h2>
+        <p class="intro">Conversa contigo como una persona que sabe de autismo infantil, con foco en niñas, y del cuidado de quien cuida.</p>
+      </div>
+      <div class="bento">
+        <article class="tarjeta revelar">
+          <span class="chapa"><svg class="icono"><use href="#i-corazon"/></svg></span>
+          <h3>Te escucha y te cuida</h3>
+          <p>Un lugar para desahogarte a cualquier hora, sin juicios. Te escucha con calma y te dice dónde pedir apoyo.</p>
+        </article>
+        <article class="tarjeta revelar d1">
+          <span class="chapa"><svg class="icono"><use href="#i-ojo"/></svg></span>
+          <h3>Señales a tiempo para hablar con el pediatra</h3>
+          <p>Te explica señales del desarrollo para que las conversen en la consulta. Nunca dice si una niña tiene o no autismo.</p>
+        </article>
+        <article class="tarjeta revelar d2">
+          <span class="chapa"><svg class="icono"><use href="#i-libreta"/></svg></span>
+          <h3>Tu diario y el resumen para la consulta</h3>
+          <p>Anota lo que ves día a día. Antes de la cita, te arma un resumen para llevarle al médico.</p>
+        </article>
+        <article class="tarjeta revelar">
+          <span class="chapa"><svg class="icono"><use href="#i-camino"/></svg></span>
+          <h3>Te guía ante la EPS</h3>
+          <p>Qué pedir, cómo pedirlo y cuándo procede una tutela, con la fuente de cada dato para que puedas revisarlo.</p>
+        </article>
+        <article class="tarjeta tarjeta-foto revelar d1">
+          <div class="foto">
+            <picture>
+              <source media="(max-width: 700px)" srcset="/img/cuidarte-800.jpg">
+              <img src="/img/cuidarte.jpg" width="1536" height="1024" loading="lazy" alt="Manos de una mujer abrazan una taza de café junto a la ventana; sobre la mesa, el celular muestra «Chequeo de bienestar, 2 minutos» con el botón Empezar.">
+            </picture>
+          </div>
+          <div class="texto">
+            <span class="chapa"><svg class="icono"><use href="#i-pulso"/></svg></span>
+            <h3>Chequeo de bienestar</h3>
+            <p>Dos minutos y cuatro preguntas cortas sobre cómo te has sentido. Si hace falta, te dice con cariño dónde pedir apoyo. Porque cuidarte también es cuidarla.</p>
+            <button type="button" class="boton pequeno claro" data-recurso-accion="chequeo" style="align-self:flex-start">Hacer el chequeo<svg class="icono"><use href="#i-flecha"/></svg></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Para quién -->
+  <section class="seccion calido" id="para-quien" aria-labelledby="t-quien">
+    <div class="contenedor">
+      <div class="cabeza-seccion centro revelar">
+        <span class="etiqueta-mono">Para quién</span>
+        <h2 id="t-quien">Para quienes cuidan</h2>
+        <p class="intro">Hecha con y para las mujeres que sostienen el cuidado de una niña autista en Colombia.</p>
+      </div>
+      <div class="publicos">
+        <article class="publico revelar">
+          <div class="foto">
+            <picture>
+              <!-- Recorte de la foto horizontal (ella y sus etiquetas); en celular también la grande, porque el recorte es estrecho -->
+              <img class="recorte" src="/img/hero-madre.jpg" width="1536" height="864" loading="lazy" style="object-position: 97% 50%" alt="La madre, de pie en su sala con un café, sonríe; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS, Tu diario y Nunca diagnostica.">
+            </picture>
+          </div>
+          <div class="texto">
+            <h3>Para ti, mamá</h3>
+            <p>Para las noches con preguntas, las salidas de la EPS sin respuestas y los días en que solo necesitas que alguien te escuche.</p>
+          </div>
+        </article>
+        <article class="publico revelar d1">
+          <div class="foto">
+            <picture>
+              <source media="(max-width: 700px)" srcset="/img/abuela-800.jpg">
+              <img src="/img/abuela.jpg" width="1152" height="1536" loading="lazy" style="object-position: 50% 12%" alt="Una abuela antioqueña con gafas de lectura y ruana, en el corredor de una casa de pueblo con geranios y montañas al fondo, lee su celular junto a un celular gigante con letra grande.">
+            </picture>
+          </div>
+          <div class="texto">
+            <h3>Pensada para ti, abuela</h3>
+            <ul class="lista-check">
+              <li><svg class="icono"><use href="#i-letra"/></svg><span>Letra grande y botones grandes.</span></li>
+              <li><svg class="icono"><use href="#i-conversa"/></svg><span>Sin palabras difíciles: si algo no se entiende, te lo explica otra vez.</span></li>
+              <li><svg class="icono"><use href="#i-reloj"/></svg><span>A cualquier hora, sin contraseñas.</span></li>
+            </ul>
+          </div>
+        </article>
+        <article class="publico futuro revelar d2">
+          <div class="ilustra" aria-hidden="true"><span class="circulo"><svg class="icono"><use href="#i-birrete"/></svg></span></div>
+          <div class="texto">
+            <span class="rotulo futuro" style="align-self:flex-start">A futuro</span>
+            <h3>Docentes y cuidadores</h3>
+            <p>Profesores, padres y otras personas que acompañan a niñas autistas en la escuela y en la casa.</p>
+            <a class="enlace-flecha" href="#educacion">Ver la propuesta de educación<svg class="icono"><use href="#i-flecha"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Recursos (próximamente) -->
+  <section class="seccion" id="recursos" aria-labelledby="t-recursos">
+    <div class="contenedor">
+      <div class="recursos-cabeza">
+        <div class="revelar">
+          <span class="etiqueta-mono">Recursos</span>
+          <h2 id="t-recursos">Una biblioteca de herramientas que crece</h2>
+          <p class="intro">Herramientas sencillas para ti y para la niña. Algunas ya están dentro del chat; las demás vienen en camino.</p>
+        </div>
+        <div class="foto revelar d1">
+          <picture>
+            <source media="(max-width: 700px)" srcset="/img/recursos-nina-800.jpg">
+            <img src="/img/recursos-nina.jpg" width="1536" height="1024" loading="lazy" alt="Mesa de madera vista desde arriba con tarjetas de rutina visual con pictogramas (Lavar manos, Comer, Dormir), el cuento social «Mi día en la escuela», crayones, audífonos infantiles contra el ruido y un reloj de arena.">
+          </picture>
+        </div>
+      </div>
+      <div class="pestanas" role="tablist" aria-label="Tipo de recurso">
+        <button type="button" class="pestana" role="tab" id="tab-ti" aria-controls="panel-ti" aria-selected="true" tabindex="0">Para ti</button>
+        <button type="button" class="pestana" role="tab" id="tab-nina" aria-controls="panel-nina" aria-selected="false" tabindex="-1">Para la niña</button>
+      </div>
+      <div class="rejilla-recursos" id="panel-ti" role="tabpanel" aria-labelledby="tab-ti"></div>
+      <div class="rejilla-recursos" id="panel-nina" role="tabpanel" aria-labelledby="tab-nina" hidden></div>
+      <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>«Avísame cuando esté» no envía nada: tu lista queda anotada solo en este celular.</span></p>
+    </div>
+  </section>
+
+  <!-- 7 · Educación (a futuro) -->
+  <section class="seccion calido" id="educacion" aria-labelledby="t-educacion">
+    <div class="contenedor">
+      <div class="educacion-tarjeta revelar">
+        <div class="foto">
+          <picture>
+            <source media="(max-width: 700px)" srcset="/img/educacion-800.jpg">
+            <img src="/img/educacion.jpg" width="1536" height="864" loading="lazy" alt="Una docente colombiana en un aula luminosa presenta en una pantalla el curso «Acompañar a niñas autistas en el aula» a una madre, un padre, una abuela y una docente que toman notas.">
+          </picture>
+        </div>
+        <div class="educacion-texto">
+          <span class="rotulo futuro">A futuro · educación</span>
+          <h2 id="t-educacion">Aprender juntas, también en el aula</h2>
+          <p class="intro">Proponemos cursos virtuales para madres, padres, cuidadores y profesores, empezando por instituciones educativas de Medellín y Antioquia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Seguridad y ética -->
+  <section class="seccion seguridad" id="seguridad" aria-labelledby="t-seguridad">
+    <div class="contenedor">
+      <div class="cabeza-seccion revelar">
+        <span class="etiqueta-mono">Seguridad y ética</span>
+        <h2 id="t-seguridad">Aquí estás a salvo</h2>
+        <p class="intro">Estas reglas la Acompañante las cumple siempre. Las más importantes no dependen de la inteligencia artificial.</p>
+      </div>
+      <div class="seguridad-grid">
+        <article class="crisis revelar">
+          <div>
+            <span class="etiqueta-mono">Ante una crisis o un maltrato</span>
+            <h3 style="margin-top:10px">Reglas fijas, no la inteligencia artificial</h3>
+          </div>
+          <p>Si escribes algo que suena a riesgo para tu vida o a maltrato a una niña, unas reglas fijas te dan de inmediato las líneas de ayuda y registran una alerta para que el equipo la revise.</p>
+          <div class="numeros-grandes">
+            <a href="tel:106" aria-label="Llamar a la Línea 106, apoyo emocional"><strong>106</strong><span>Apoyo emocional</span></a>
+            <a href="tel:123" aria-label="Llamar al 123, emergencias"><strong>123</strong><span>Emergencias</span></a>
+            <a href="tel:141" aria-label="Llamar al 141, ICBF"><strong>141</strong><span>ICBF</span></a>
+          </div>
+        </article>
+        <div class="garantias-eticas">
+          <article class="etica revelar">
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-escudo"/></svg></span><h3>Nunca diagnostica</h3></div>
+            <p>Un filtro revisa cada respuesta para que nunca diga si una niña tiene o no autismo. Eso lo evalúa un especialista.</p>
+          </article>
+          <article class="etica revelar d1">
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-candado"/></svg></span><h3>Tu privacidad, sin letra pequeña</h3></div>
+            <p>Tu conversación se guarda solo en tu celular; el servidor no la guarda. Si hay una alerta de crisis, queda registrada la hora y un fragmento corto para que el equipo pueda revisar.</p>
+          </article>
+          <article class="etica revelar">
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-persona"/></svg></span><h3>No pide datos de la niña</h3></div>
+            <p>Ni nombre, ni documento, ni EPS. Mejor no los escribas: para acompañarte no los necesita.</p>
+          </article>
+          <article class="etica revelar d1">
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-codigo"/></svg></span><h3>Código abierto</h3></div>
+            <p>Cualquiera puede revisar cómo funciona. <a href="https://github.com/smart4ai-io/acompanante-cuidadora" target="_blank" rel="noopener">Ver el código en GitHub</a>.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Quiénes somos + cierre -->
+  <section class="seccion calido" id="quienes" aria-labelledby="t-quienes">
+    <div class="contenedor">
+      <div class="cabeza-seccion revelar">
+        <span class="etiqueta-mono">Quiénes somos</span>
+        <h2 id="t-quienes">Dos equipos de Colombia, un mismo propósito</h2>
+      </div>
+      <div class="equipo">
+        <article class="persona-org revelar">
+          <span class="monograma pm" aria-hidden="true">PM</span>
+          <div>
+            <h3>Natalia Orozco</h3>
+            <span class="org">Pulsomundo S.A.S.</span>
+            <!-- pendiente visto bueno de Natalia -->
+            <p>Periodista y documentalista de derechos humanos, ha liderado programas que forman a familias para acompañar a hijos neurodivergentes.</p>
+          </div>
+        </article>
+        <article class="persona-org revelar d1">
+          <span class="monograma s4" aria-hidden="true">S4</span>
+          <div>
+            <h3>Santiago Vélez</h3>
+            <span class="org">Smart4AI · Medellín</span>
+            <!-- texto literal del one pager (2026-11-02); confirmar «14.500» frente a «más de 14.500» -->
+            <p>Formación e implementación de inteligencia artificial: 14.500 inscritos y 3.328 certificados en IA con Ruta N en 2026; más de 1.000 profesionales.</p>
+          </div>
+        </article>
+      </div>
+      <div class="sellos revelar">
+        <p class="sello"><span class="punto-vivo" aria-hidden="true"></span>Prototipo en prueba · Postulados a UNICEF Femtech Ventures 2026</p>
+      </div>
+      <p class="hoy revelar">Hoy es un prototipo web probado en laboratorio, con código abierto. Falta el aval clínico, el de ética y el piloto con cuidadoras.</p>
+
+      <div class="cierre revelar">
+        <div class="foto">
+          <picture>
+            <source media="(max-width: 759px)" srcset="/img/comunidad-800.jpg">
+            <img src="/img/comunidad.jpg" width="1536" height="864" loading="lazy" style="object-position: 30% 50%" alt="Tres mujeres, una madre joven, una abuela con ruana y una docente, conversan con café en una terraza de Medellín al atardecer; la madre les muestra el celular.">
+          </picture>
+        </div>
+        <div class="cierre-texto">
+          <h2>No tienes que cuidar sola</h2>
+          <p>Escríbele ahora. Es gratis, en español y a cualquier hora.</p>
+          <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Pie -->
+<footer class="pie">
+  <div class="contenedor">
+    <div class="pie-grid">
+      <div>
+        <a class="marca" href="#inicio"><span class="logo"><svg class="icono"><use href="#i-logo"/></svg></span><span>Acompañante<br>de la cuidadora</span></a>
+        <p style="margin-top:14px; max-width: 30em;">Orienta y remite; nunca diagnostica. No reemplaza la atención de tu médico ni de tu EPS.</p>
+      </div>
+      <div>
+        <h2>Líneas de ayuda</h2>
+        <ul>
+          <li><a href="tel:106"><span class="num">106</span></a> Apoyo emocional, gratis</li>
+          <li><a href="tel:123"><span class="num">123</span></a> Emergencias</li>
+          <li><a href="tel:141"><span class="num">141</span></a> ICBF: protección de niñas y niños</li>
+        </ul>
+      </div>
+      <div>
+        <h2>El proyecto</h2>
+        <ul>
+          <li><a href="https://github.com/smart4ai-io/acompanante-cuidadora" target="_blank" rel="noopener">Código abierto en GitHub</a></li>
+          <li><button type="button" class="interruptor" id="interruptorDemo" role="switch" aria-checked="false"><span class="riel" aria-hidden="true"></span>Modo demostración</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Pulsomundo S.A.S. y Smart4AI · Prototipo en prueba</span>
+      <span>Hecho en Medellín, Colombia</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 "use strict";
 (function () {
   const $ = (id) => document.getElementById(id);
-  const CLAVE_GUARDADO = "acompanante-cuidadora-web-v2";
+  const CLAVE_GUARDADO = "acompanante-cuidadora-web-v2"; // la misma de index.html y v2: la conversación sigue al cambiar de página
+  const CLAVE_DEMO = "acompanante-cuidadora-demo";
+  const CLAVE_AVISOS = "acompanante-cuidadora-avisos"; // recursos que la persona pidió que le avisemos (solo en este navegador)
   const ESPERA_MAXIMA_MS = 100000;
   // Mismo texto que RESPUESTA_ERROR de src\prompt.js (se usa si no hay conexión).
   const RESPUESTA_ERROR = "Tuve un problema técnico y no pude responderte. Intenta de nuevo en un rato.\nSi es urgente: *Línea 106* o *123*.";
+  const TEXTO_BORRAR = "Borrar conversación";
+  const NOTA_NORMAL = "Solo en tu celular";
+  const NOTA_DIARIO = "Escribe lo que viste hoy y toca enviar";
+  const ESCRITORIO = "(min-width: 900px)"; // mismo corte que el CSS: arriba, chat incrustado; abajo, pantalla completa
+
+  // ---------------- Recursos: para agregar uno nuevo basta con sumar un objeto aquí ----------------
+  // grupo: "ti" | "nina" · estado: "disponible" | "pronto" · accion (solo disponibles): "chequeo" | "diario"
+  const RECURSOS = [
+    { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan.", estado: "pronto" },
+    { id: "diario", grupo: "ti", icono: "i-libreta", titulo: "Tu diario para la consulta", texto: "Anota lo que ves y llévale un resumen al pediatra. Hoy vive dentro del chat; la versión para imprimir viene en camino.", estado: "disponible", accion: "diario" },
+    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Una tarjeta para tener a mano con las líneas de ayuda y qué hacer en un momento difícil.", estado: "pronto" },
+    { id: "chequeo", grupo: "ti", icono: "i-pulso", titulo: "Chequeo de bienestar", texto: "Dos minutos para notar cómo estás tú. Si hace falta, te dice dónde pedir apoyo.", estado: "disponible", accion: "chequeo" },
+    { id: "rutinas", grupo: "nina", icono: "i-cuadricula", titulo: "Rutinas visuales con pictogramas", texto: "Tarjetas para anticipar el día: lavar manos, comer, dormir, salir de casa.", estado: "pronto" },
+    { id: "cuentos", grupo: "nina", icono: "i-libro", titulo: "Cuentos sociales", texto: "Historias cortas que explican situaciones nuevas, como ir al médico o a la escuela.", estado: "pronto" },
+    { id: "termometro", grupo: "nina", icono: "i-termometro", titulo: "Termómetro de emociones", texto: "Una forma visual de nombrar cómo se siente y qué la ayuda a calmarse.", estado: "pronto" },
+    { id: "kit-sensorial", grupo: "nina", icono: "i-audifonos", titulo: "Kit sensorial", texto: "Ideas sencillas para los ruidos, las luces y las texturas que la abruman.", estado: "pronto" },
+  ];
 
   let estadoServidor = null; // la sesión del agente: la guarda este navegador y viaja en cada POST
   let conversacion = []; // [{rol: "yo"|"ella"|"sistema", texto, hora}]
   let porDentro = []; // entradas del panel, la más nueva primero
-  let registro = []; // avisos a la guardia
+  let registro = []; // alertas registradas
   let proveedor = null; // "gateway", "anthropic" o "manual", según responde el servidor
   let ocupado = false;
+  let demo = false; // modo demostración: muestra el panel «Por dentro»
 
-  // ---------------- servidor ----------------
+  // ---------------- servidor (igual que index.html) ----------------
   async function llamar(cuerpo) {
     const control = new AbortController();
     const reloj = setTimeout(() => control.abort(), ESPERA_MAXIMA_MS);
@@ -221,10 +1120,15 @@
       .replace(/\[fuente:([^\]]+)\]/gi, '<span class="cita">[fuente:$1]</span>');
   }
 
+  // Franja del chat cuando salta un candado. Texto honesto: se registra una alerta (aún no hay
+  // persona de guardia asignada). En modo demostración se ve el tipo técnico.
   function mostrarFranja(aviso) {
     const franja = $("franjaGuardia");
-    franja.textContent = `⚠ Aviso a la guardia: ${aviso.tipo} · ${horaCorta(aviso.hora)}`;
+    franja.textContent = demo
+      ? `⚠ Alerta registrada: ${aviso.tipo} · ${horaCorta(aviso.hora)}`
+      : `Registramos una alerta para el equipo (${horaCorta(aviso.hora)}). Si es urgente: 106 o 123.`;
     franja.hidden = false;
+    $("mensajes").scrollTop = $("mensajes").scrollHeight; // la franja achica el chat: vuelve al último mensaje
   }
 
   function pintarRegistro() {
@@ -250,11 +1154,18 @@
     return div;
   }
 
+  // Con conversación vacía se ve la bienvenida; con conversación, las respuestas rápidas.
+  function pintarVacio() {
+    const vacia = conversacion.length === 0;
+    $("ejemplos").hidden = !vacia;
+    $("rapidas").hidden = vacia;
+  }
+
   function pintarConversacion() {
     const caja = $("mensajes");
     caja.innerHTML = "";
     for (const m of conversacion) caja.appendChild(burbuja(m));
-    $("ejemplos").hidden = conversacion.length > 0;
+    pintarVacio();
     caja.scrollTop = caja.scrollHeight;
   }
 
@@ -264,7 +1175,7 @@
     if (conversacion.length > 400) conversacion.splice(0, conversacion.length - 400);
     const caja = $("mensajes");
     caja.appendChild(burbuja(m));
-    $("ejemplos").hidden = true;
+    pintarVacio();
     caja.scrollTop = caja.scrollHeight;
   }
 
@@ -291,7 +1202,7 @@
       if (e.tokens) filas.push(["Tokens", escaparHtml(e.tokens)]);
       if (e.origen) filas.push(["Resumen hecho por", escaparHtml(e.origen === "literal" ? "red de seguridad (notas tal cual)" : e.origen)]);
       if (e.puntajes) filas.push(["Puntajes (no se le muestran)", escaparHtml(Object.entries(e.puntajes).map(([k, v]) => `${k.toUpperCase()}=${v}`).join(" · "))]);
-      if (e.guardia) filas.push(["Aviso a la guardia", escaparHtml(e.guardia)]);
+      if (e.guardia) filas.push(["Alerta registrada", escaparHtml(e.guardia)]);
       if (e.error) filas.push(["Error", escaparHtml(e.error)]);
       div.innerHTML = `<strong>${escaparHtml(horaCorta(e.hora))} · ${escaparHtml(e.que)}</strong><dl>${filas.map(([k, v]) => `<dt>${escaparHtml(k)}</dt><dd>${v}</dd>`).join("")}</dl>`;
       cont.appendChild(div);
@@ -322,22 +1233,25 @@
 
   function ponerOcupado(si) {
     ocupado = si;
-    for (const id of ["btnEnviar", "btnChequeo", "btnResumen", "btnFuentes", "btnReiniciar", "entrada"]) $(id).disabled = si;
-    for (const b of document.querySelectorAll(".chip")) b.disabled = si;
+    for (const id of ["btnEnviar", "btnFuentes", "btnReiniciar", "entrada"]) $(id).disabled = si;
+    for (const b of document.querySelectorAll(".chip, [data-accion]")) b.disabled = si;
     $("estado").textContent = si ? "escribiendo…" : "en línea";
     const previo = document.getElementById("escribiendo");
     if (previo) previo.remove();
     if (si) {
+      $("ejemplos").hidden = true; // la bienvenida se va apenas empieza la conversación
       const div = document.createElement("div");
       div.id = "escribiendo";
       div.className = "burbuja ella escribiendo";
       div.textContent = "escribiendo…";
       $("mensajes").appendChild(div);
       $("mensajes").scrollTop = $("mensajes").scrollHeight;
+    } else {
+      pintarVacio();
     }
   }
 
-  // Corre una acción en el servidor y muestra el resultado.
+  // Corre una acción en el servidor y muestra el resultado (igual que index.html).
   async function ejecutar(que, cuerpo) {
     if (ocupado) return;
     ponerOcupado(true);
@@ -356,8 +1270,9 @@
     }
     if (que !== "fuentes" || r.error) anotarPorDentro(que, r);
     pintarMeta();
+    pintarCta();
     guardar();
-    $("entrada").focus();
+    enfocarEntrada();
   }
 
   function enviar(texto) {
@@ -366,7 +1281,40 @@
     agregar("yo", t);
     $("entrada").value = "";
     ajustarAltura();
+    $("notaTexto").textContent = NOTA_NORMAL;
     ejecutar("mensaje", { accion: "mensaje", mensaje: t });
+  }
+
+  // El foco va a la caja de texto sin mover la página (en escritorio el chat está dentro de la página).
+  function enfocarEntrada() {
+    try {
+      $("entrada").focus({ preventScroll: true });
+    } catch (e) {
+      $("entrada").focus();
+    }
+  }
+
+  // «Mi diario»: el diario del agente se escribe con mensajes que empiezan por «diario:»
+  // (src\agente.js). El botón deja ese comienzo listo en la caja de texto.
+  function prepararDiario() {
+    const ta = $("entrada");
+    if (!/^diario/i.test(ta.value.trim())) ta.value = "diario: ";
+    $("notaTexto").textContent = NOTA_DIARIO;
+    ajustarAltura();
+    enfocarEntrada();
+    try {
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    } catch (e) {
+      /* algunos navegadores no lo permiten: no pasa nada */
+    }
+  }
+
+  // Respuestas rápidas: disparan las acciones que ya existían.
+  function accionRapida(accion) {
+    if (accion === "chequeo") ejecutar("chequeo", { accion: "chequeo" });
+    else if (accion === "resumen") ejecutar("resumen", { accion: "resumen" });
+    else if (accion === "diario") prepararDiario();
+    else if (accion === "persona") enviar("quiero hablar con una persona"); // src\agente.js lo atiende sin modelo y registra la alerta
   }
 
   let reinicioPendiente = null;
@@ -377,18 +1325,19 @@
       btn.textContent = "¿Seguro? Toca otra vez";
       reinicioPendiente = setTimeout(() => {
         reinicioPendiente = null;
-        btn.textContent = "Reiniciar";
+        btn.textContent = TEXTO_BORRAR;
       }, 4000);
       return;
     }
     clearTimeout(reinicioPendiente);
     reinicioPendiente = null;
-    btn.textContent = "Reiniciar";
+    btn.textContent = TEXTO_BORRAR;
     estadoServidor = null;
     conversacion = [];
     porDentro = [];
     registro = [];
     $("franjaGuardia").hidden = true;
+    $("notaTexto").textContent = NOTA_NORMAL;
     try {
       localStorage.removeItem(CLAVE_GUARDADO);
     } catch (e) {
@@ -397,6 +1346,7 @@
     pintarConversacion();
     pintarPorDentro();
     pintarRegistro();
+    pintarCta();
   }
 
   // ---------------- guardado local (la sesión vive en este navegador) ----------------
@@ -425,7 +1375,185 @@
   function ajustarAltura() {
     const ta = $("entrada");
     ta.style.height = "auto";
-    ta.style.height = `${Math.min(ta.scrollHeight, 120)}px`;
+    ta.style.height = `${Math.min(ta.scrollHeight, 140)}px`;
+  }
+
+  // ---------------- vistas: página y chat (#chat) ----------------
+  // Celular: #chat abre el chat a pantalla completa (vista de app) encima de la página; «Volver» la cierra
+  // y la página queda donde estaba. Escritorio: #chat lleva a la sección «Conversar» (el chat ya está ahí).
+  function esEscritorio() {
+    try {
+      return window.matchMedia(ESCRITORIO).matches;
+    } catch (e) {
+      return false;
+    }
+  }
+  function enChat() {
+    return location.hash === "#chat";
+  }
+  function pintarCta() {
+    const texto = conversacion.length ? "Seguir conversando" : "Conversar ahora";
+    for (const s of document.querySelectorAll(".texto-cta")) s.textContent = texto;
+  }
+  function aplicarVista() {
+    const chat = enChat();
+    document.body.classList.toggle("en-chat", chat);
+    document.documentElement.classList.toggle("en-chat", chat); // bloquea el scroll de la página detrás del chat (solo en celular, por CSS)
+    if (chat) {
+      cerrarMenu();
+      if (esEscritorio()) {
+        // Lleva el marco del celular justo debajo de la cabecera, para que se vea completo.
+        const marco = document.querySelector(".marco-celular");
+        const tope = $("cabecera").getBoundingClientRect().bottom + 12;
+        window.scrollTo({ top: Math.max(0, window.scrollY + marco.getBoundingClientRect().top - tope), behavior: "instant" });
+      }
+      const caja = $("mensajes");
+      caja.scrollTop = caja.scrollHeight;
+    } else {
+      pintarCta();
+    }
+  }
+  function abrirChat() {
+    if (enChat()) aplicarVista(); // ya estaba en #chat: no habrá hashchange
+    else location.hash = "chat"; // dispara hashchange → aplicarVista; el botón «atrás» del celular vuelve a la página
+  }
+  function volverInicio() {
+    // Dirección limpia, sin «#»; pushState no dispara hashchange, por eso se pinta a mano.
+    history.pushState(null, "", location.pathname + location.search);
+    aplicarVista();
+  }
+
+  // ---------------- modo demostración (#demo o interruptor del pie) ----------------
+  function ponerDemo(si) {
+    demo = Boolean(si);
+    document.body.classList.toggle("modo-demo", demo);
+    $("interruptorDemo").setAttribute("aria-checked", String(demo));
+    try {
+      if (demo) localStorage.setItem(CLAVE_DEMO, "1");
+      else localStorage.removeItem(CLAVE_DEMO);
+    } catch (e) {
+      /* sin almacenamiento: dura mientras la página esté abierta */
+    }
+    if (registro.length) mostrarFranja(registro[registro.length - 1]);
+  }
+  function demoGuardado() {
+    try {
+      return localStorage.getItem(CLAVE_DEMO) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ---------------- menú del celular ----------------
+  function cerrarMenu() {
+    $("cajon").hidden = true;
+    $("botonMenu").setAttribute("aria-expanded", "false");
+    $("botonMenu").setAttribute("aria-label", "Abrir el menú");
+    document.documentElement.classList.remove("menu-abierto");
+  }
+  function alternarMenu() {
+    const abrir = $("cajon").hidden;
+    $("cajon").hidden = !abrir;
+    $("botonMenu").setAttribute("aria-expanded", String(abrir));
+    $("botonMenu").setAttribute("aria-label", abrir ? "Cerrar el menú" : "Abrir el menú");
+    document.documentElement.classList.toggle("menu-abierto", abrir);
+  }
+
+  // ---------------- recursos: tarjetas desde el arreglo RECURSOS ----------------
+  function leerAvisos() {
+    try {
+      const l = JSON.parse(localStorage.getItem(CLAVE_AVISOS) || "[]");
+      return Array.isArray(l) ? l : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function guardarAvisos(l) {
+    try {
+      localStorage.setItem(CLAVE_AVISOS, JSON.stringify(l));
+    } catch (e) {
+      /* sin almacenamiento: queda marcado mientras la página esté abierta */
+    }
+  }
+  function pintarBotonAviso(b, anotado) {
+    b.setAttribute("aria-pressed", String(anotado));
+    b.innerHTML = anotado
+      ? '<svg class="icono" aria-hidden="true"><use href="#i-check"/></svg>Anotado en tu celular'
+      : '<svg class="icono" aria-hidden="true"><use href="#i-campana"/></svg>Avísame cuando esté';
+  }
+  function tarjetaRecurso(r, avisos) {
+    const art = document.createElement("article");
+    art.className = "recurso";
+    art.dataset.id = r.id;
+    const disponible = r.estado === "disponible";
+    art.innerHTML =
+      `<div class="arriba"><span class="chapa"><svg class="icono" aria-hidden="true"><use href="#${escaparHtml(r.icono)}"/></svg></span>` +
+      `<span class="rotulo ${disponible ? "listo" : "futuro"}">${disponible ? "Ya disponible" : "Próximamente"}</span></div>` +
+      `<h3>${escaparHtml(r.titulo)}</h3><p>${escaparHtml(r.texto)}</p>`;
+    const b = document.createElement("button");
+    b.type = "button";
+    if (disponible) {
+      b.className = "boton pequeno claro";
+      b.dataset.recursoAccion = r.accion;
+      b.innerHTML = 'Usar en el chat<svg class="icono" aria-hidden="true"><use href="#i-flecha"/></svg>';
+    } else {
+      b.className = "avisame";
+      pintarBotonAviso(b, avisos.includes(r.id));
+      b.addEventListener("click", () => {
+        const l = leerAvisos();
+        const anotado = !l.includes(r.id);
+        const nueva = anotado ? l.concat(r.id) : l.filter((x) => x !== r.id);
+        guardarAvisos(nueva);
+        pintarBotonAviso(b, anotado);
+      });
+    }
+    art.appendChild(b);
+    return art;
+  }
+  function pintarRecursos() {
+    const avisos = leerAvisos();
+    for (const grupo of ["ti", "nina"]) {
+      const panel = $(`panel-${grupo}`);
+      panel.innerHTML = "";
+      for (const r of RECURSOS.filter((x) => x.grupo === grupo)) panel.appendChild(tarjetaRecurso(r, avisos));
+    }
+  }
+  function elegirPestana(tab, conFoco) {
+    for (const t of document.querySelectorAll(".pestana")) {
+      const si = t === tab;
+      t.setAttribute("aria-selected", String(si));
+      t.tabIndex = si ? 0 : -1;
+      $(t.getAttribute("aria-controls")).hidden = !si;
+    }
+    if (conFoco) tab.focus();
+  }
+
+  // ---------------- movimiento: entrada al hacer scroll y sección activa en el menú ----------------
+  function prepararMovimiento() {
+    const reducir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reducir && "IntersectionObserver" in window) {
+      document.documentElement.classList.add("anima");
+      const obs = new IntersectionObserver((entradas) => {
+        for (const e of entradas) if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+      for (const el of document.querySelectorAll(".revelar")) obs.observe(el);
+    }
+    if ("IntersectionObserver" in window) {
+      const enlaces = [...document.querySelectorAll(".menu-principal a[data-spy]")];
+      const espia = new IntersectionObserver((entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting) continue;
+          for (const a of enlaces) a.setAttribute("aria-current", String(a.dataset.spy === e.target.id));
+        }
+      }, { rootMargin: "-45% 0px -50% 0px" });
+      for (const a of enlaces) { const s = $(a.dataset.spy); if (s) espia.observe(s); }
+      // Secciones sin enlace propio: al pasar por ellas no queda marcado ningún enlace.
+      for (const id of ["conversar", "lo-que-hace", "educacion"]) espia.observe($(id));
+    }
+    const cab = $("cabecera");
+    const sombra = () => cab.classList.toggle("con-sombra", window.scrollY > 8);
+    window.addEventListener("scroll", sombra, { passive: true });
+    sombra();
   }
 
   // ---------------- arranque ----------------
@@ -441,21 +1569,64 @@
   });
   $("entrada").addEventListener("input", ajustarAltura);
   for (const b of document.querySelectorAll(".chip")) b.addEventListener("click", () => enviar(b.dataset.ejemplo));
-  $("btnChequeo").addEventListener("click", () => ejecutar("chequeo", { accion: "chequeo" }));
-  $("btnResumen").addEventListener("click", () => ejecutar("resumen", { accion: "resumen" }));
+  for (const b of document.querySelectorAll("[data-accion]")) b.addEventListener("click", () => accionRapida(b.dataset.accion));
   $("btnFuentes").addEventListener("click", () => ejecutar("fuentes", { accion: "fuentes" }));
   $("btnReiniciar").addEventListener("click", reiniciar);
+  for (const b of document.querySelectorAll("[data-abrir-chat]")) b.addEventListener("click", abrirChat);
+  // Preguntas de ejemplo fuera del chat: abren el chat y la envían.
+  for (const b of document.querySelectorAll(".pregunta-ejemplo")) b.addEventListener("click", () => { abrirChat(); enviar(b.dataset.pregunta); });
+  $("btnInicio").addEventListener("click", volverInicio);
+  $("btnVerDentro").addEventListener("click", () => {
+    $("porDentro").open = true;
+    $("lateral").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("interruptorDemo").addEventListener("click", () => {
+    ponerDemo(!demo);
+    if (!demo && location.hash === "#demo") history.replaceState(null, "", location.pathname + location.search);
+  });
+  $("botonMenu").addEventListener("click", alternarMenu);
+  for (const a of document.querySelectorAll("#cajon a")) a.addEventListener("click", cerrarMenu);
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && !$("cajon").hidden) { cerrarMenu(); $("botonMenu").focus(); }
+  });
+  // Recursos: pestañas (con flechas del teclado) y botones «Usar en el chat».
+  pintarRecursos();
+  const pestanas = [...document.querySelectorAll(".pestana")];
+  for (const t of pestanas) {
+    t.addEventListener("click", () => elegirPestana(t, false));
+    t.addEventListener("keydown", (ev) => {
+      if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+      ev.preventDefault();
+      const i = pestanas.indexOf(t);
+      elegirPestana(pestanas[(i + (ev.key === "ArrowRight" ? 1 : pestanas.length - 1)) % pestanas.length], true);
+    });
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest && ev.target.closest("[data-recurso-accion]");
+    if (!b) return;
+    abrirChat();
+    accionRapida(b.dataset.recursoAccion);
+  });
+  window.addEventListener("hashchange", () => {
+    if (location.hash === "#demo") ponerDemo(true);
+    aplicarVista();
+  });
+  window.addEventListener("popstate", aplicarVista); // botón «atrás» entre entradas sin cambio de «#»
   try {
-    if (window.matchMedia && window.matchMedia("(min-width: 900px)").matches) $("porDentro").open = true;
+    if (window.matchMedia && window.matchMedia("(min-width: 1280px)").matches) $("porDentro").open = true;
   } catch (e) {
     /* sin matchMedia: el panel queda cerrado */
   }
 
   cargarGuardado();
+  ponerDemo(location.hash === "#demo" || demoGuardado());
   pintarConversacion();
   pintarPorDentro();
   pintarRegistro();
   pintarMeta();
+  pintarCta();
+  prepararMovimiento();
+  aplicarVista();
 })();
 </script>
 </body>
