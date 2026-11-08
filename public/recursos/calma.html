@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="es-CO" data-tema="claro" data-suave="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Mi rincón de calma: respirar despacio y mostrar lo que necesita. Para el adulto, ideas sencillas para ruidos, luces, texturas, olores y mucha gente. Prototipo de Contigo.">
+<title>Mi rincón de calma · Contigo</title>
+<!-- Pieza de la Ola 2 de «Recursos» de Contigo (2026-11-08). En el sitio: «Kit sensorial».
+     Página autocontenida: CSS, JS y dibujos aquí mismo. La única carga externa es la fuente Poppins (con respaldo
+     de sistema). La política de seguridad de arriba (connect-src 'none') impide cualquier llamada de red.
+     Vista niña: la cueva de calma (o «la nube», piel para adolescentes): respiración lenta que empieza solo con un toque,
+     sin sonido, y quieta en «Modo suave» o con «reducir movimiento»; 3 o 4 cosas grandes para mostrar lo que necesita.
+     No guarda nada de lo que toca.
+     Vista adulto (puerta de 3 s): «Kit sensorial», ideas de casa sin costo; las que sirven van a una lista para compartir
+     (enlace #k1.…). Lee contigo.perfil («Así soy yo») solo para destacar lo que la familia ya contó. Guarda en contigo.calma.
+     Dibujos: propios de Contigo, licencia CC BY 4.0. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común de las piezas de «Recursos». Se copia IDÉNTICO a cada pieza (ver CAPARAZON.md).
+   Trae: tokens de color del manual de Somos Extraordinarios, tema claro/oscuro, modo sensorial bajo
+   (en pantalla se llama «Modo suave»: sin degradados, sin movimiento, colores apagados), cabecera con sello,
+   barra fija «Pausa · Calma · Necesito ayuda · Salir» y sus capas. Letra mínima 17 px, botones mínimo 44 px. */
+:root {
+  /* Pasteles del manual: fondos, pétalos y chips. Encima siempre va texto oscuro (--sobre-pastel). */
+  --menta: #CCEADE; --lavanda: #BDCDFF; --rosa: #EDD5DF; --arena: #F7D4AA;
+  --menta-claro: #EAF6F1; --lavanda-claro: #F4F6FF; --rosa-claro: #FBF1F5; --arena-claro: #FDF6EC;
+  --sobre-pastel: #1E1E2A;          /* sobre cualquier pastel: más de 11:1 */
+  /* Superficies y texto · tema claro */
+  --fondo: #FBFAFD; --superficie: #FFFFFF; --superficie-2: #F4F6FF;
+  --texto: #1E1E2A;                 /* sobre blanco 16,5:1 */
+  --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
+  --borde: #DCDFEE;
+  /* Tonos profundos AA para botones, enlaces y acentos */
+  --principal: #1F7A55;             /* blanco encima 5,29:1 */
+  --principal-hondo: #176446;
+  --sobre-principal: #FFFFFF;
+  --hover-suave: #EAF6F1;
+  --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
+  --sobre-acento: #FFFFFF;
+  --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
+  --rotulo-fondo: #F7D4AA; --rotulo-texto: #8A3F14;   /* sello · 5,34:1 */
+  --foco: #3355D6;
+  /* Decoración (nunca para texto) */
+  --fondo-pagina: linear-gradient(165deg, #EAF6F1 0%, #F4F6FF 45%, #FBF1F5 100%);
+  --orbe: radial-gradient(circle at 30% 25%, #FFFFFF 0%, rgba(255,255,255,0) 45%), linear-gradient(150deg, #BDCDFF, #EDD5DF 55%, #F7D4AA);
+  --sombra: 0 1px 2px rgba(42,33,64,.05), 0 12px 32px rgba(42,33,64,.08);
+  --circulo-a: rgba(189,205,255,.55); --circulo-b: rgba(237,213,223,.65);
+  --radio: 24px;
+  --fuente: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --alto-barra: 88px;
+  color-scheme: light;
+}
+:root[data-tema="oscuro"] {
+  --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
+  --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
+  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
+  --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
+  --sombra: 0 12px 32px rgba(0,0,0,.35);
+  --circulo-a: rgba(87,128,255,.16); --circulo-b: rgba(230,29,115,.12);
+  color-scheme: dark;
+}
+/* Modo sensorial bajo («Modo suave»): colores apagados, sin degradados, sin sombras, sin movimiento */
+:root[data-suave="si"] {
+  --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
+  --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
+  --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
+  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
+}
+:root[data-suave="si"][data-tema="oscuro"] {
+  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
+}
+:root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; background: var(--fondo); color: var(--texto); font-family: var(--fuente); font-size: 18px; line-height: 1.55; padding-bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px) + 24px); overflow-x: hidden; }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.015em; }
+p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+.c-solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.c-saltar { position: absolute; left: 12px; top: -90px; z-index: 200; background: var(--texto); color: var(--fondo); padding: 12px 18px; border-radius: 12px; font-size: 17px; }
+.c-saltar:focus { top: 10px; }
+.c-fondo { position: fixed; inset: 0; z-index: -1; background: var(--fondo-pagina); overflow: hidden; pointer-events: none; }
+.c-fondo span { position: absolute; border-radius: 50%; }
+.c-fondo span:first-child { width: 420px; height: 420px; right: -170px; top: -130px; background: var(--circulo-a); }
+.c-fondo span:last-child { width: 340px; height: 340px; right: -30px; top: 70px; background: var(--circulo-b); mix-blend-mode: multiply; }
+:root[data-tema="oscuro"] .c-fondo span:last-child { mix-blend-mode: screen; }
+:root[data-suave="si"] .c-fondo span { display: none; }
+.c-icono { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.c-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; padding: 10px 14px 4px; }
+.c-marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; white-space: nowrap; }
+.c-marca-sub { font-weight: 400; color: var(--texto-suave); }
+@media (max-width: 379px) { .c-marca-sub { display: none; } }
+.c-orbe { width: 30px; height: 30px; border-radius: 50%; background: var(--orbe); position: relative; flex: none; }
+.c-orbe::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--menta); mix-blend-mode: multiply; opacity: .9; }
+.c-ajustes { display: flex; gap: 6px; }
+.c-boton-icono { min-height: 48px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 500; cursor: pointer; }
+.c-boton-icono span { white-space: nowrap; }
+@media (max-width: 399px) { .c-cabecera { padding: 10px 10px 4px; } #c-suave .c-icono { display: none; } }
+.c-boton-icono[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+:root[data-tema="oscuro"] .c-icono-luna, :root[data-tema="claro"] .c-icono-sol { display: none; }
+.c-sello { max-width: 640px; margin: 4px auto 0; padding: 0 14px; }
+.c-sello span { display: inline-flex; align-items: center; gap: 8px; background: var(--rotulo-fondo); color: var(--rotulo-texto); font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 999px; }
+.c-boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 24px; border-radius: 999px; border: 2px solid transparent; background: var(--principal); color: var(--sobre-principal); font-size: 18px; font-weight: 600; line-height: 1.25; text-align: center; cursor: pointer; text-decoration: none; transition: background .2s, transform .2s; }
+.c-boton:hover { background: var(--principal-hondo); }
+.c-boton:active { transform: translateY(1px); }
+.c-boton[disabled] { opacity: .45; cursor: not-allowed; }
+.c-boton.secundario { background: var(--superficie); color: var(--principal); border-color: var(--principal); }
+.c-boton.secundario:hover { background: var(--hover-suave); }
+.c-boton.texto { background: transparent; color: var(--principal); min-height: 48px; padding: 6px 12px; text-decoration: underline; text-underline-offset: 4px; }
+.c-boton.texto:hover { background: var(--hover-suave); }
+.c-boton.c-armado { background: var(--acento); color: var(--sobre-acento); text-decoration: none; }
+.c-puerta { position: relative; overflow: hidden; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.c-puerta::before { content: ""; position: absolute; inset: 0; transform-origin: left center; transform: scaleX(var(--progreso, 0)); background: rgba(255,255,255,.32); pointer-events: none; }
+:root[data-tema="oscuro"] .c-puerta::before { background: rgba(13,40,27,.28); }
+.c-puerta > * { position: relative; }
+.c-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 120; background: var(--superficie); border-top: 1px solid var(--borde); box-shadow: 0 -8px 24px rgba(42,33,64,.06); padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.c-barra ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; max-width: 640px; margin: 0 auto; padding: 0; list-style: none; }
+.c-barra button { width: 100%; min-height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 16px; background: transparent; color: var(--texto); font-size: 17px; font-weight: 500; line-height: 1.1; cursor: pointer; padding: 4px 1px; }
+.c-barra button:hover, .c-barra button[aria-expanded="true"] { background: var(--superficie-2); }
+.c-barra .c-boton-ayuda { color: var(--acento); font-weight: 600; }
+.c-capa { position: fixed; left: 0; right: 0; top: 0; bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px)); z-index: 110; background: var(--fondo); overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 20px; text-align: center; }
+.c-capa h2 { font-size: 30px; }
+.c-capa h2:focus { outline: none; }
+.c-capa p { font-size: 20px; max-width: 32ch; color: var(--texto-suave); }
+.c-respira { width: 190px; height: 190px; border-radius: 50%; background: var(--menta); box-shadow: 0 0 0 18px var(--menta-claro), 0 0 0 36px var(--lavanda-claro); transform: scale(.8); }
+.c-respira.activo { animation: c-respirar 10s ease-in-out infinite; }
+@keyframes c-respirar { 0%, 100% { transform: scale(.62); } 40%, 50% { transform: scale(1); } }
+.c-respira-texto { font-size: 26px !important; font-weight: 600; color: var(--texto) !important; min-height: 1.4em; }
+.c-tarjeta-ayuda { background: var(--superficie); border: 4px solid var(--acento); border-radius: 28px; padding: 26px 20px; width: min(100%, 520px); }
+.c-tarjeta-ayuda .c-grande { font-size: 44px; font-weight: 700; color: var(--texto); line-height: 1.1; }
+.c-tarjeta-ayuda .c-pide { font-size: 24px; color: var(--texto); margin: 12px auto 0; }
+.c-numeros { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; text-align: left; }
+.c-numeros li { background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 10px 14px; font-size: 18px; }
+.c-numeros strong { font-size: 26px; margin-right: 8px; }
+.c-nota-ayuda { font-size: 17px !important; margin-top: 14px !important; }
+/* === FIN CARAPAZON CONTIGO v1 === */
+
+/* ===== Pieza «Mi rincón de calma» ===== */
+main { max-width: 640px; margin: 0 auto; padding: 8px 14px 0; }
+main:focus { outline: none; }
+.vista h1:focus, .vista h2:focus { outline: none; }
+.pista { font-size: 17px; color: var(--texto-suave); }
+.centro { text-align: center; }
+.paso { font-size: 17px; font-weight: 600; color: var(--azul-hondo); margin-bottom: 6px; }
+.bajada { color: var(--texto-suave); margin-top: 10px; }
+.t-menta { --color-tarjeta: var(--menta); --color-claro: var(--menta-claro); }
+.t-lavanda { --color-tarjeta: var(--lavanda); --color-claro: var(--lavanda-claro); }
+.t-rosa { --color-tarjeta: var(--rosa); --color-claro: var(--rosa-claro); }
+.t-arena { --color-tarjeta: var(--arena); --color-claro: var(--arena-claro); }
+@media (max-width: 359px) { main { padding: 8px 10px 0; } }
+
+/* El rincón: una cueva oscura y quieta (o una nube gris lavanda para las grandes) */
+.rincon { margin-top: 8px; border-radius: 28px; padding: 16px 14px 18px; background: #2E2846; color: #F3F1F8; text-align: center; }
+:root[data-suave="si"] .rincon { background: #34313D; }
+#vista-nina[data-piel="nube"] .rincon { background: #ECEAF2; color: #1E1E2A; }
+:root[data-tema="oscuro"] #vista-nina[data-piel="nube"] .rincon { background: #2A2639; color: #F3F1F8; }
+.titulo-nina { font-size: 26px; font-weight: 700; }
+.frase { font-size: 19px; margin-top: 6px; }
+.escena-caja { position: relative; margin: 12px auto 0; max-width: 360px; }
+.escena { display: block; width: 100%; height: auto; }
+.esc-roca { fill: #4A3F66; } .esc-hueco { fill: #1C1830; } .esc-piedra { fill: #5B5078; } .esc-luz { fill: #F7D4AA; }
+.esc-cielo { fill: #DCD9E6; } .esc-nube-forma { fill: #FFFFFF; stroke: #CFCBDD; stroke-width: 2; }
+:root[data-tema="oscuro"] .esc-cielo { fill: #221F2E; }
+:root[data-tema="oscuro"] .esc-nube-forma { fill: #3D3852; stroke: #57506E; }
+:root[data-suave="si"] .esc-roca { fill: #4D4A57; }
+:root[data-suave="si"] .esc-piedra { fill: #57535F; }
+:root[data-suave="si"] .esc-luz { fill: #8C8799; }
+#vista-nina[data-piel="nube"] .esc-cueva, #vista-nina[data-piel="cueva"] .esc-nube { display: none; }
+.orbe-respira { position: absolute; left: 50%; top: 62%; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFFFFF 0%, #CCEADE 45%, #BDCDFF 100%); box-shadow: 0 0 0 10px rgba(204,234,222,.18), 0 0 0 22px rgba(189,205,255,.12); transform: scale(.72); }
+/* Respiración lenta: 5 s tomar aire, 7 s soltarlo. Solo corre si ella toca «Respirar conmigo»; quieta en Modo suave. */
+.orbe-respira.activo { animation: respirar-lento 12s ease-in-out infinite; }
+@keyframes respirar-lento { 0%, 100% { transform: scale(.72); } 41.6% { transform: scale(1.12); } }
+:root[data-suave="si"] .orbe-respira { background: #DCE6E1; box-shadow: none; }
+#vista-nina[data-piel="nube"] .orbe-respira { background: #FFFFFF; border: 2px solid #CFCBDD; box-shadow: 0 0 0 10px rgba(255,255,255,.45); }
+.respira-texto { font-size: 22px; font-weight: 600; min-height: 1.4em; margin-top: 10px; }
+.boton-grande { width: 100%; min-height: 64px; font-size: 22px; margin-top: 12px; }
+.titulo-necesito { font-size: 22px; font-weight: 700; margin-top: 20px; }
+.opciones-nina { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.opciones-nina li { display: flex; min-width: 0; }
+.opcion-nina { flex: 1; min-width: 0; min-height: 132px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px 6px; border-radius: 24px; border: 2px solid var(--color-tarjeta); background: var(--color-claro); color: var(--sobre-pastel); font-size: 20px; font-weight: 600; line-height: 1.15; text-align: center; cursor: pointer; overflow-wrap: break-word; hyphens: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.opcion-nina:hover { border-color: var(--principal); }
+.opcion-nina .dib { width: 64px; height: 64px; flex: none; }
+#vista-nina[data-piel="nube"] .opcion-nina { min-height: 96px; background: #F2F1F6; border-color: #CFCBDD; color: #1E1E2A; }
+#vista-nina[data-piel="nube"] .opcion-nina .dib { display: none; }
+.puerta-zona { margin: 20px 0 0; display: grid; gap: 6px; justify-items: center; text-align: center; }
+.puerta-nina { min-height: 64px; }
+.puerta-nina::before { background: rgba(31,122,85,.22); }
+:root[data-tema="oscuro"] .puerta-nina::before { background: rgba(127,216,174,.25); }
+
+/* Modo mostrar: lo que necesita, a pantalla completa y en alto contraste, para enseñárselo a un adulto */
+.mostrar { position: fixed; inset: 0; z-index: 130; background: var(--fondo); display: flex; flex-direction: column; gap: 12px; padding: 14px 14px calc(14px + env(safe-area-inset-bottom, 0px)); }
+.mostrar-carta { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: #FFFFFF; color: #111111; border: 6px solid #111111; border-radius: 32px; padding: 16px; text-align: center; overflow: hidden; }
+:root[data-tema="oscuro"] .mostrar-carta { background: #000000; color: #FFFFFF; border-color: #FFFFFF; }
+.mostrar-dibujo { width: min(72vw, 42vh, 360px); height: min(72vw, 42vh, 360px); flex: none; }
+#mostrar[data-piel="nube"] .mostrar-dibujo { display: none; }
+.mostrar-palabra { font-size: 44px; font-weight: 700; line-height: 1.1; overflow-wrap: break-word; hyphens: auto; max-width: 100%; }
+@media (min-width: 420px) and (min-height: 600px) { .mostrar-palabra { font-size: 60px; } }
+.mostrar-acciones { display: grid; gap: 10px; }
+
+/* Vistas de adulto */
+.hoja { background: var(--superficie); border-radius: 28px; box-shadow: var(--sombra); padding: 20px 16px; border: 1px solid var(--borde); }
+.vista h2 { font-size: 27px; font-weight: 700; }
+.partida { margin: 12px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--lavanda-claro); color: var(--sobre-pastel); font-size: 17px; }
+.aviso-calma { margin: 14px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--arena-claro); color: var(--sobre-pastel); border-left: 8px solid #8A3F14; font-weight: 600; }
+.bloque { margin-top: 22px; }
+.bloque h3 { font-size: 20px; margin-bottom: 8px; }
+.grupo-botones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.opcion { min-height: 52px; border-radius: 16px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 600; line-height: 1.2; cursor: pointer; padding: 8px 10px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.opcion:hover { border-color: var(--principal); }
+.opcion[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+.opcion .marca { display: none; }
+.opcion[aria-pressed="true"] .marca { display: inline-block; stroke-width: 3; }
+.pestanas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+.pestanas .opcion { padding: 6px 4px; }
+.grupo { margin-top: 18px; border-radius: 20px; border: 1px solid var(--borde); border-left: 8px solid var(--color-tarjeta); padding: 12px 12px 14px; background: var(--superficie); }
+.grupo.destacado { border: 2px solid var(--principal); border-left: 8px solid var(--color-tarjeta); }
+.grupo h3 { display: flex; align-items: center; gap: 10px; font-size: 20px; }
+.grupo h3 .dib { width: 44px; height: 44px; flex: none; }
+.ideas { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.idea { display: grid; gap: 8px; padding: 10px 12px; border-radius: 16px; background: var(--superficie-2); }
+.idea.destacada { outline: 2px solid var(--principal); outline-offset: -2px; }
+.idea .opcion { justify-self: start; min-width: 140px; }
+.sello-perfil { font-size: 17px; font-weight: 600; color: var(--principal); }
+.filas { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.fila { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: center; padding: 10px 8px; border-radius: 18px; border: 1px solid var(--borde); border-left: 8px solid var(--color-tarjeta); background: var(--superficie); }
+.fila .dib { width: 44px; height: 44px; }
+.fila .opcion { grid-column: 1 / -1; }
+.fila-texto { font-weight: 600; }
+.aviso-campo { color: var(--acento); font-weight: 500; font-size: 17px; margin-top: 8px; }
+.aviso-campo:empty { display: none; }
+.lista-mia h3 { font-size: 19px; margin-top: 14px; }
+.lista-mia ul { margin: 6px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+.advertencia { margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: var(--arena-claro); color: var(--sobre-pastel); border-left: 8px solid #8A3F14; font-size: 17px; }
+.check { display: flex; gap: 12px; align-items: center; min-height: 56px; padding: 12px 14px; border: 2px solid var(--borde); border-radius: 16px; cursor: pointer; font-weight: 600; margin-top: 16px; }
+.check input { width: 28px; height: 28px; accent-color: var(--principal); flex: none; margin: 0; }
+.copia-manual textarea { width: 100%; margin-top: 8px; border: 2px solid var(--borde); border-radius: 14px; padding: 10px; background: var(--superficie); font-size: 17px; }
+.estado-guardado { min-height: 1.5em; font-size: 17px; color: var(--principal); font-weight: 600; margin-top: 12px; }
+.acciones { display: grid; gap: 12px; margin-top: 18px; }
+.zona-borrar { margin: 20px 0 0; text-align: center; }
+</style>
+<script>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común (JS). Se copia IDÉNTICO a cada pieza. Solo define funciones: nada corre solo,
+   salvo aplicar el tema guardado al cargar (para que no parpadee). Todo lo que toca el navegador
+   va en try/catch: si algo falla, la pieza sigue funcionando (sin guardar o sin voz). */
+var Contigo = (function () {
+  'use strict';
+  var PREFIJO = 'contigo.';
+
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* 1 · Baúl local: localStorage con claves contigo.* (nunca sale del celular) */
+  var baul = {
+    leer: function (clave) {
+      try { var t = window.localStorage.getItem(PREFIJO + clave); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+    },
+    guardar: function (clave, valor) {
+      try { window.localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); return true; } catch (e) { return false; }
+    },
+    quitar: function (clave) {
+      try { window.localStorage.removeItem(PREFIJO + clave); return true; } catch (e) { return false; }
+    },
+    claves: function () {
+      try {
+        var ls = window.localStorage, r = [];
+        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && k.indexOf(PREFIJO) === 0) r.push(k); }
+        return r;
+      } catch (e) { return []; }
+    },
+    borrarTodo: function () {
+      var lista = baul.claves();
+      try { lista.forEach(function (k) { window.localStorage.removeItem(k); }); return lista.length; } catch (e) { return -1; }
+    }
+  };
+
+  /* 2 · Bytes y base64url: el estado viaja comprimido después del # del enlace (el # no llega al servidor) */
+  function utf8(texto) { return Array.from(new TextEncoder().encode(String(texto == null ? '' : texto))); }
+  function deUtf8(arr) { return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(arr)); }
+  function recortarUtf8(texto, maxBytes) {
+    var r = [], letras = Array.from(String(texto == null ? '' : texto));
+    for (var i = 0; i < letras.length; i++) { var b = utf8(letras[i]); if (r.length + b.length > maxBytes) break; r = r.concat(b); }
+    return r;
+  }
+  function aBase64url(arr) {
+    var s = '';
+    for (var i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 255);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function deBase64url(txt) {
+    if (typeof txt !== 'string' || !/^[A-Za-z0-9_-]*$/.test(txt) || txt.length % 4 === 1) return null;
+    var b = txt.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    try { var s = atob(b), r = []; for (var i = 0; i < s.length; i++) r.push(s.charCodeAt(i)); return r; } catch (e) { return null; }
+  }
+  function Escritor() { this.b = []; }
+  Escritor.prototype.byte = function (n) { this.b.push(n & 255); return this; };
+  Escritor.prototype.texto = function (t, maxBytes) {
+    var u = recortarUtf8(t, Math.min(255, maxBytes || 255));
+    this.byte(u.length); for (var i = 0; i < u.length; i++) this.b.push(u[i]);
+    return this;
+  };
+  Escritor.prototype.bytes = function () { return this.b.slice(); };
+  function Lector(arr) { this.b = arr; this.i = 0; }
+  Lector.prototype.byte = function () { if (this.i >= this.b.length) throw new Error('corto'); return this.b[this.i++]; };
+  Lector.prototype.texto = function () {
+    var n = this.byte();
+    if (this.i + n > this.b.length) throw new Error('corto');
+    var t = deUtf8(this.b.slice(this.i, this.i + n)); this.i += n; return t;
+  };
+  Lector.prototype.fin = function () { return this.i === this.b.length; };
+  var bytes = { utf8: utf8, deUtf8: deUtf8, recortarUtf8: recortarUtf8, aBase64url: aBase64url, deBase64url: deBase64url, Escritor: Escritor, Lector: Lector };
+
+  /* Formato del #: <pieza>.<base64url>. Ej.: #a1.AARMdW5h... (a1 = «Así soy yo», versión 1) */
+  var enlace = {
+    empaquetar: function (pieza, arr) { return pieza + '.' + aBase64url(arr); },
+    desempaquetar: function (pieza, fragmento) {
+      var f = String(fragmento == null ? '' : fragmento);
+      if (f.charAt(0) === '#') f = f.slice(1);
+      if (f.indexOf(pieza + '.') !== 0) return null;
+      var datos = f.slice(pieza.length + 1).match(/^[A-Za-z0-9_-]*/)[0]; // ignora basura pegada al final (un punto, un paréntesis)
+      if (!datos) return null;
+      return deBase64url(datos);
+    }
+  };
+
+  /* 3 · Código QR propio (modo byte, corrección M o L, versiones 1 a 40). Sin librerías ni red.
+     Sigue la norma ISO/IEC 18004; el algoritmo es el de referencia (Reed-Solomon sobre GF(256)). */
+  var qr = (function () {
+    var ECC = {
+      L: [7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+      M: [10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28]
+    };
+    var BLOQUES = {
+      L: [1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8,8,9,9,10,12,12,12,13,14,15,16,17,18,19,19,20,21,22,24,25],
+      M: [1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49]
+    };
+    var FORMATO = { L: 1, M: 0 };
+    function modulosCrudos(v) {
+      var r = (16 * v + 128) * v + 64;
+      if (v >= 2) { var n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; }
+      return r;
+    }
+    function palabrasDatos(v, n) { return Math.floor(modulosCrudos(v) / 8) - ECC[n][v - 1] * BLOQUES[n][v - 1]; }
+    function mul(x, y) {
+      var z = 0;
+      for (var i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; }
+      return z;
+    }
+    function divisor(grado) {
+      var r = [], raiz = 1, i, j;
+      for (i = 0; i < grado - 1; i++) r.push(0);
+      r.push(1);
+      for (i = 0; i < grado; i++) {
+        for (j = 0; j < r.length; j++) { r[j] = mul(r[j], raiz); if (j + 1 < r.length) r[j] ^= r[j + 1]; }
+        raiz = mul(raiz, 0x02);
+      }
+      return r;
+    }
+    function resto(datos, div) {
+      var r = div.map(function () { return 0; });
+      datos.forEach(function (b) {
+        var f = b ^ r.shift(); r.push(0);
+        div.forEach(function (c, i) { r[i] ^= mul(c, f); });
+      });
+      return r;
+    }
+    function alineacion(v, t) {
+      if (v === 1) return [];
+      var n = Math.floor(v / 7) + 2, paso = Math.floor((v * 8 + n * 3 + 5) / (n * 4 - 4)) * 2, r = [6];
+      for (var p = t - 7; r.length < n; p -= paso) r.splice(1, 0, p);
+      return r;
+    }
+    function matriz(texto) {
+      var datos = utf8(texto), nivel = null, v = 0, cc = 8, niveles = ['M', 'L'];
+      for (var a = 0; a < niveles.length && !nivel; a++) {
+        for (v = 1; v <= 40; v++) {
+          cc = v <= 9 ? 8 : 16;
+          if (datos.length < Math.pow(2, cc) && 4 + cc + datos.length * 8 <= palabrasDatos(v, niveles[a]) * 8) { nivel = niveles[a]; break; }
+        }
+      }
+      if (!nivel) return null;
+      // Bits de datos: modo byte (0100) + largo + bytes + terminador + relleno
+      var bb = [];
+      function poner(val, largo) { for (var i = largo - 1; i >= 0; i--) bb.push((val >>> i) & 1); }
+      poner(4, 4); poner(datos.length, cc);
+      datos.forEach(function (b) { poner(b, 8); });
+      var cap = palabrasDatos(v, nivel) * 8;
+      poner(0, Math.min(4, cap - bb.length));
+      poner(0, (8 - bb.length % 8) % 8);
+      for (var pad = 0xEC; bb.length < cap; pad ^= 0xEC ^ 0x11) poner(pad, 8);
+      var cw = [];
+      for (var i = 0; i < bb.length; i += 8) { var x = 0; for (var k = 0; k < 8; k++) x = (x << 1) | bb[i + k]; cw.push(x); }
+      // Bloques con corrección de errores, intercalados
+      var nb = BLOQUES[nivel][v - 1], ecl = ECC[nivel][v - 1], crudas = Math.floor(modulosCrudos(v) / 8);
+      var cortos = nb - crudas % nb, largoCorto = Math.floor(crudas / nb), div = divisor(ecl), bloques = [], pos = 0;
+      for (i = 0; i < nb; i++) {
+        var d = cw.slice(pos, pos + largoCorto - ecl + (i < cortos ? 0 : 1));
+        pos += d.length;
+        var e = resto(d, div);
+        if (i < cortos) d.push(0);
+        bloques.push(d.concat(e));
+      }
+      var final = [];
+      for (i = 0; i < bloques[0].length; i++) {
+        for (var j = 0; j < bloques.length; j++) { if (i !== largoCorto - ecl || j >= cortos) final.push(bloques[j][i]); }
+      }
+      // Matriz: patrones fijos
+      var t = v * 4 + 17, m = [], f = [];
+      for (i = 0; i < t; i++) { m.push(new Array(t).fill(false)); f.push(new Array(t).fill(false)); }
+      function fijo(x, y, osc) { m[y][x] = osc; f[y][x] = true; }
+      for (i = 0; i < t; i++) { fijo(6, i, i % 2 === 0); fijo(i, 6, i % 2 === 0); }
+      [[3, 3], [t - 4, 3], [3, t - 4]].forEach(function (p) {
+        for (var dy = -4; dy <= 4; dy++) for (var dx = -4; dx <= 4; dx++) {
+          var dist = Math.max(Math.abs(dx), Math.abs(dy)), xx = p[0] + dx, yy = p[1] + dy;
+          if (xx >= 0 && xx < t && yy >= 0 && yy < t) fijo(xx, yy, dist !== 2 && dist !== 4);
+        }
+      });
+      var al = alineacion(v, t);
+      for (i = 0; i < al.length; i++) for (j = 0; j < al.length; j++) {
+        if ((i === 0 && j === 0) || (i === 0 && j === al.length - 1) || (i === al.length - 1 && j === 0)) continue;
+        for (var dy2 = -2; dy2 <= 2; dy2++) for (var dx2 = -2; dx2 <= 2; dx2++) fijo(al[i] + dx2, al[j] + dy2, Math.max(Math.abs(dx2), Math.abs(dy2)) !== 1);
+      }
+      function formato(mk) {
+        var dat = (FORMATO[nivel] << 3) | mk, r = dat, q;
+        for (q = 0; q < 10; q++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+        var b = ((dat << 10) | r) ^ 0x5412;
+        function bit(n) { return ((b >>> n) & 1) !== 0; }
+        for (q = 0; q <= 5; q++) fijo(8, q, bit(q));
+        fijo(8, 7, bit(6)); fijo(8, 8, bit(7)); fijo(7, 8, bit(8));
+        for (q = 9; q < 15; q++) fijo(14 - q, 8, bit(q));
+        for (q = 0; q < 8; q++) fijo(t - 1 - q, 8, bit(q));
+        for (q = 8; q < 15; q++) fijo(8, t - 15 + q, bit(q));
+        fijo(8, t - 8, true);
+      }
+      formato(0);
+      if (v >= 7) {
+        var rv = v;
+        for (i = 0; i < 12; i++) rv = (rv << 1) ^ ((rv >>> 11) * 0x1F25);
+        var vb = (v << 12) | rv;
+        for (i = 0; i < 18; i++) { var bt = ((vb >>> i) & 1) !== 0, aa = t - 11 + i % 3, bb2 = Math.floor(i / 3); fijo(aa, bb2, bt); fijo(bb2, aa, bt); }
+      }
+      // Datos en zigzag
+      var idx = 0;
+      for (var der = t - 1; der >= 1; der -= 2) {
+        if (der === 6) der = 5;
+        for (var vert = 0; vert < t; vert++) for (j = 0; j < 2; j++) {
+          var xx2 = der - j, arriba = ((der + 1) & 2) === 0, yy2 = arriba ? t - 1 - vert : vert;
+          if (!f[yy2][xx2] && idx < final.length * 8) { m[yy2][xx2] = ((final[idx >>> 3] >>> (7 - (idx & 7))) & 1) !== 0; idx++; }
+        }
+      }
+      function mascara(mk) {
+        for (var y = 0; y < t; y++) for (var x = 0; x < t; x++) {
+          var inv;
+          switch (mk) {
+            case 0: inv = (x + y) % 2 === 0; break;
+            case 1: inv = y % 2 === 0; break;
+            case 2: inv = x % 3 === 0; break;
+            case 3: inv = (x + y) % 3 === 0; break;
+            case 4: inv = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0; break;
+            case 5: inv = x * y % 2 + x * y % 3 === 0; break;
+            case 6: inv = (x * y % 2 + x * y % 3) % 2 === 0; break;
+            default: inv = ((x + y) % 2 + x * y % 3) % 2 === 0;
+          }
+          if (!f[y][x] && inv) m[y][x] = !m[y][x];
+        }
+      }
+      function celda(dir, a1, b1) { if (b1 < 0 || b1 >= t) return false; return dir ? m[b1][a1] : m[a1][b1]; }
+      function penalidad() {
+        var p = 0, a1, b1, dir, run, q, patron = [1, 0, 1, 1, 1, 0, 1];
+        for (dir = 0; dir < 2; dir++) for (a1 = 0; a1 < t; a1++) {
+          run = 1;
+          for (b1 = 1; b1 < t; b1++) {
+            if (celda(dir, a1, b1) === celda(dir, a1, b1 - 1)) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1;
+          }
+          for (b1 = 0; b1 <= t - 7; b1++) {
+            var ok = true;
+            for (q = 0; q < 7; q++) if (celda(dir, a1, b1 + q) !== (patron[q] === 1)) { ok = false; break; }
+            if (!ok) continue;
+            var antes = true, despues = true;
+            for (q = 1; q <= 4; q++) { if (celda(dir, a1, b1 - q)) antes = false; if (celda(dir, a1, b1 + 6 + q)) despues = false; }
+            if (antes || despues) p += 40;
+          }
+        }
+        for (var y = 0; y < t - 1; y++) for (var x = 0; x < t - 1; x++) {
+          var c = m[y][x]; if (c === m[y][x + 1] && c === m[y + 1][x] && c === m[y + 1][x + 1]) p += 3;
+        }
+        var osc = 0; m.forEach(function (fila) { fila.forEach(function (cc2) { if (cc2) osc++; }); });
+        var total = t * t; p += (Math.ceil(Math.abs(osc * 20 - total * 10) / total) - 1) * 10;
+        return p;
+      }
+      var mejor = 0, menor = Infinity;
+      for (var mk = 0; mk < 8; mk++) {
+        mascara(mk); formato(mk);
+        var pen = penalidad();
+        if (pen < menor) { menor = pen; mejor = mk; }
+        mascara(mk);
+      }
+      mascara(mejor); formato(mejor);
+      return { version: v, nivel: nivel, tamano: t, modulos: m, mascara: mejor };
+    }
+    function svg(texto, etiqueta) {
+      var q = matriz(texto);
+      if (!q) return '';
+      var borde = 4, n = q.tamano + borde * 2, d = '';
+      q.modulos.forEach(function (fila, y) {
+        var x = 0;
+        while (x < fila.length) {
+          if (!fila[x]) { x++; continue; }
+          var ini = x; while (x < fila.length && fila[x]) x++;
+          d += 'M' + (ini + borde) + ' ' + (y + borde) + 'h' + (x - ini) + 'v1h-' + (x - ini) + 'z';
+        }
+      });
+      return '<svg viewBox="0 0 ' + n + ' ' + n + '" role="img" aria-label="' + esc(etiqueta || 'Código QR') + '" shape-rendering="crispEdges"><rect width="' + n + '" height="' + n + '" fill="#FFFFFF"/><path fill="#1E1E2A" d="' + d + '"/></svg>';
+    }
+    return { matriz: matriz, svg: svg };
+  })();
+
+  /* 4 · Voz opcional («Escuchar»): solo con un toque; si no hay voz en español, el botón se esconde */
+  var voz = {
+    elegida: null,
+    buscar: function () {
+      try {
+        if (!('speechSynthesis' in window)) return null;
+        var vs = window.speechSynthesis.getVoices() || [];
+        var es = vs.filter(function (x) { return /^es([-_]|$)/i.test(x.lang || ''); });
+        if (!es.length) return null;
+        var orden = ['es-co', 'es-419', 'es-us', 'es-mx', 'es-es'];
+        for (var i = 0; i < orden.length; i++) {
+          var hit = es.filter(function (x) { return (x.lang || '').toLowerCase().replace('_', '-') === orden[i]; })[0];
+          if (hit) return hit;
+        }
+        return es[0];
+      } catch (e) { return null; }
+    },
+    actualizar: function () {
+      voz.elegida = voz.buscar();
+      var hay = !!voz.elegida;
+      try { document.querySelectorAll('[data-voz]').forEach(function (el) { el.hidden = !hay; }); } catch (e) {}
+    },
+    iniciar: function () {
+      voz.actualizar();
+      try { if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = voz.actualizar; } catch (e) {}
+    },
+    decir: function (texto) {
+      try {
+        var s = window.speechSynthesis;
+        if (s.speaking) { s.cancel(); return; } // segundo toque = parar
+        if (!voz.elegida || !texto) return;
+        var u = new SpeechSynthesisUtterance(texto);
+        u.voice = voz.elegida; u.lang = voz.elegida.lang; u.rate = 0.9;
+        s.speak(u);
+      } catch (e) {}
+    },
+    callar: function () { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  };
+
+  /* 5 · Ajustes: tema claro/oscuro y modo sensorial bajo («Modo suave»), recordados en contigo.ajustes */
+  function leerAjustes() { var a = baul.leer('ajustes'); return (a && typeof a === 'object') ? a : {}; }
+  function aplicarAjustes() {
+    try {
+      var a = leerAjustes(), raiz = document.documentElement, oscuroSistema = false;
+      try { oscuroSistema = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
+      var tema = (a.tema === 'oscuro' || a.tema === 'claro') ? a.tema : (oscuroSistema ? 'oscuro' : 'claro');
+      raiz.setAttribute('data-tema', tema);
+      raiz.setAttribute('data-suave', a.suave ? 'si' : 'no');
+      var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+      if (bs) bs.setAttribute('aria-pressed', a.suave ? 'true' : 'false');
+      if (bt) bt.setAttribute('aria-pressed', tema === 'oscuro' ? 'true' : 'false');
+    } catch (e) {}
+  }
+  function cambiarAjuste(clave, valor) { var a = leerAjustes(); a[clave] = valor; baul.guardar('ajustes', a); aplicarAjustes(); }
+  function suave() {
+    try { return document.documentElement.getAttribute('data-suave') === 'si' || window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* 6 · Anuncios para lector de pantalla */
+  function anunciar(msg) {
+    var el = document.getElementById('c-anuncio');
+    if (!el) return;
+    el.textContent = '';
+    setTimeout(function () { el.textContent = msg; }, 60);
+  }
+
+  /* 7 · Capas de la barra: Pausa, Calma (respiración), Necesito ayuda (tarjeta para mostrar), Salir */
+  var capaAbierta = null, focoPrevio = null, relojRespira = 0;
+  function marcarInerte(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.inert = si;
+      if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+  }
+  function empezarRespiracion() {
+    var txt = document.getElementById('c-respira-texto'), circulo = document.getElementById('c-respira');
+    var frases = ['Toma aire despacio…', 'Suéltalo despacio…'], tiempos = [4000, 6000], fase = 0;
+    if (circulo) { circulo.classList.remove('activo'); void circulo.offsetWidth; circulo.classList.add('activo'); }
+    (function ciclo() {
+      if (txt) txt.textContent = frases[fase];
+      relojRespira = setTimeout(function () { fase = 1 - fase; ciclo(); }, tiempos[fase]);
+    })();
+  }
+  function pararRespiracion() {
+    clearTimeout(relojRespira);
+    var c = document.getElementById('c-respira'); if (c) c.classList.remove('activo');
+  }
+  function botonesBarra(abierta) {
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', b.getAttribute('data-c-capa') === abierta ? 'true' : 'false');
+    });
+  }
+  function cerrarCapa(sinFoco) {
+    if (!capaAbierta) return;
+    capaAbierta.hidden = true;
+    if (capaAbierta.id === 'c-capa-calma') pararRespiracion();
+    capaAbierta = null;
+    marcarInerte(false); botonesBarra(null);
+    if (!sinFoco && focoPrevio && focoPrevio.focus) { try { focoPrevio.focus(); } catch (e) {} }
+  }
+  function abrirCapa(id) {
+    var yaEstaba = capaAbierta && capaAbierta.id === id;
+    if (capaAbierta) { var previo = focoPrevio; cerrarCapa(true); focoPrevio = previo; } else { focoPrevio = document.activeElement; }
+    if (yaEstaba) { if (focoPrevio && focoPrevio.focus) focoPrevio.focus(); return; } // segundo toque en el mismo botón = cerrar
+    var capa = document.getElementById(id);
+    if (!capa) return;
+    voz.callar();
+    capa.hidden = false; capaAbierta = capa;
+    marcarInerte(true); botonesBarra(id);
+    if (id === 'c-capa-calma') empezarRespiracion();
+    var destino = capa.querySelector('[data-foco]') || capa.querySelector('button');
+    if (destino) destino.focus();
+  }
+  function salir() {
+    voz.callar();
+    var enSitio = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
+    if (enSitio) location.assign('/'); else abrirCapa('c-capa-salir');
+  }
+
+  /* 8 · Puerta de adulto: mantener presionado 3 segundos (sin sumas, para que la abuela pueda) */
+  function puertaAdulto(boton, alAbrir, ms, alSoltar) {
+    ms = ms || 3000;
+    var t0 = 0, raf = 0, activo = false, abiertaHace = 0;
+    function paso() {
+      var p = Math.min(1, (performance.now() - t0) / ms);
+      boton.style.setProperty('--progreso', String(p));
+      if (p >= 1) { terminar(true); return; }
+      raf = requestAnimationFrame(paso);
+    }
+    function empezar(e) {
+      if (activo) return;
+      if (e && e.cancelable) e.preventDefault();
+      activo = true; t0 = performance.now();
+      boton.classList.add('c-presionando');
+      raf = requestAnimationFrame(paso);
+    }
+    function terminar(ok) {
+      if (!activo) return;
+      cancelAnimationFrame(raf); activo = false;
+      boton.classList.remove('c-presionando');
+      boton.style.setProperty('--progreso', '0');
+      if (ok) { abiertaHace = Date.now(); alAbrir(); } else if (alSoltar) alSoltar();
+    }
+    boton.addEventListener('pointerdown', function (e) { if (e.button === 0 || e.pointerType !== 'mouse') empezar(e); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { boton.addEventListener(ev, function () { terminar(false); }); });
+    boton.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) empezar(e); else if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+    boton.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') terminar(false); });
+    boton.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    boton.addEventListener('click', function (e) { e.preventDefault(); if (!activo && Date.now() - abiertaHace > 800 && alSoltar) alSoltar(); });
+  }
+
+  /* 9 · Doble toque para lo que no tiene reversa (p. ej., «Borrar todo lo de este celular») */
+  function dobleToque(boton, op) {
+    var armado = false, desde = 0, reloj = 0, original = boton.innerHTML;
+    function desarmar() { armado = false; boton.innerHTML = original; boton.classList.remove('c-armado'); }
+    boton.addEventListener('click', function () {
+      if (!armado) {
+        armado = true; desde = Date.now();
+        boton.textContent = op.confirmar; boton.classList.add('c-armado');
+        anunciar(op.confirmar);
+        reloj = setTimeout(desarmar, 6000);
+        return;
+      }
+      if (Date.now() - desde < 350) return; // un doble clic accidental no borra
+      clearTimeout(reloj); desarmar(); op.alConfirmar();
+    });
+  }
+
+  /* 10 · Copiar al portapapeles (con plan B si el navegador no deja) */
+  function copiar(texto) {
+    return new Promise(function (listo) {
+      function planB() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = texto; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand('copy'); ta.remove(); listo(!!ok);
+        } catch (e) { listo(false); }
+      }
+      try {
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(function () { listo(true); }, planB);
+        else planB();
+      } catch (e) { planB(); }
+    });
+  }
+
+  /* 11 · Arranque: lo llama cada pieza cuando la página cargó */
+  function iniciar(op) {
+    op = op || {};
+    aplicarAjustes();
+    var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+    if (bs) bs.addEventListener('click', function () { cambiarAjuste('suave', !leerAjustes().suave); anunciar(leerAjustes().suave ? 'Modo suave activado' : 'Modo suave apagado'); if (op.alCambiarAjustes) op.alCambiarAjustes(); });
+    if (bt) bt.addEventListener('click', function () { cambiarAjuste('tema', document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro'); });
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var acc = b.getAttribute('data-c-accion');
+        if (acc === 'salir') salir(); else abrirCapa(b.getAttribute('data-c-capa'));
+      });
+    });
+    document.querySelectorAll('[data-c-cerrar]').forEach(function (b) { b.addEventListener('click', function () { cerrarCapa(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && capaAbierta) cerrarCapa(false); });
+    var adulto = document.getElementById('c-ayuda-adulto');
+    if (adulto) adulto.hidden = op.vistaAdulto === false;
+    voz.iniciar();
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.c-escuchar') : null;
+      if (b) voz.decir(op.textoEscuchar ? op.textoEscuchar() : '');
+    });
+    try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', aplicarAjustes); } catch (e) {}
+  }
+
+  return {
+    version: 1, PREFIJO: PREFIJO, esc: esc, baul: baul, bytes: bytes, enlace: enlace, qr: qr, voz: voz,
+    aplicarAjustes: aplicarAjustes, cambiarAjuste: cambiarAjuste, suave: suave, anunciar: anunciar,
+    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar
+  };
+})();
+if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado antes de pintar
+/* === FIN CARAPAZON CONTIGO v1 === */
+</script>
+</head>
+<body>
+<!-- === CARAPAZON CONTIGO v1 · HTML (fondo, cabecera, sello) === -->
+<a class="c-saltar" href="#principal">Saltar al contenido</a>
+<div class="c-fondo" aria-hidden="true"><span></span><span></span></div>
+<header class="c-cabecera" id="c-cabecera">
+  <div class="c-marca"><span class="c-orbe" aria-hidden="true"></span><span>Contigo<span class="c-marca-sub"> · Recursos</span></span></div>
+  <div class="c-ajustes">
+    <button type="button" class="c-boton-icono" id="c-suave" aria-pressed="false" aria-describedby="c-suave-desc"><svg class="c-icono" aria-hidden="true"><use href="#i-suave"/></svg><span>Modo suave</span></button>
+    <button type="button" class="c-boton-icono" id="c-tema" aria-pressed="false" aria-label="Pantalla oscura"><svg class="c-icono c-icono-luna" aria-hidden="true"><use href="#i-luna"/></svg><svg class="c-icono c-icono-sol" aria-hidden="true"><use href="#i-sol"/></svg></button>
+  </div>
+  <span id="c-suave-desc" class="c-solo-lector">Sin movimiento y con colores más quietos. Se recuerda en este celular.</span>
+</header>
+<p class="c-sello" id="c-sello"><span>Prototipo · datos de ejemplo</span></p>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (arriba) === -->
+
+<!-- Dibujos propios de Contigo (CC BY 4.0). Planos, redondeados, con los pasteles del manual. -->
+<svg id="dibujos" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">
+<!-- Iconos de la interfaz (copiados del caparazón; trazo del color del texto) -->
+<symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+<symbol id="i-calma" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></symbol>
+<symbol id="i-ayuda" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></symbol>
+<symbol id="i-salir" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+<symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4zM15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<symbol id="i-suave" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l6.5-6.5"/></symbol>
+<symbol id="i-luna" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+<symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+<symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-compartir" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+<symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="m-hecho" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<!-- Lo que ella puede pedir (64 × 64). La niña de pelo café es la misma de las otras piezas. -->
+<symbol id="c-luces" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M28 13a12 12 0 0 0-7 21.7V40h14v-5.3A12 12 0 0 0 28 13z" fill="#FFFFFF"/><rect x="22" y="40" width="12" height="8" rx="2" fill="#DCDFEE"/><path d="M22 44h12M26 52h4"/><path d="M48 14a7 7 0 1 0 6 10.5a6 6 0 0 1-6-10.5z" fill="#2A2140"/></g></symbol>
+<symbol id="c-audifonos" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><circle cx="32" cy="37" r="11" fill="#F7D4AA"/><path d="M21 37a11 11 0 0 1 22 0c-3-4.5-7-6-11-6s-8 1.5-11 6z" fill="#8A5A44"/><path d="M27 39.5q1.5 1.2 3 0M34 39.5q1.5 1.2 3 0M29.5 44q2.5 1.8 5 0"/><path d="M17 37v-3a15 15 0 0 1 30 0v3"/><rect x="12" y="32" width="8" height="14" rx="4" fill="#BDCDFF"/><rect x="44" y="32" width="8" height="14" rx="4" fill="#BDCDFF"/></g></symbol>
+<symbol id="c-abrazo" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><path d="M15 58c0-11 7.5-17 17-17s17 6 17 17z" fill="#BDCDFF"/><circle cx="32" cy="27" r="10" fill="#F7D4AA"/><path d="M22 27a10 10 0 0 1 20 0c-3-4-6-5.5-10-5.5s-7 1.5-10 5.5z" fill="#8A5A44"/><path d="M27.5 29q1.5 1.2 3 0M33.5 29q1.5 1.2 3 0M29.5 32.5q2.5 1.8 5 0"/><path d="M14 44q9 12 18 4q9 8 18-4" fill="#F7D4AA"/><path d="M50 19s-5-3-5-6.5a2.7 2.7 0 0 1 5-1.3 2.7 2.7 0 0 1 5 1.3c0 3.5-5 6.5-5 6.5z" fill="#B8125C"/></g></symbol>
+<symbol id="c-sola" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#F7D4AA" stroke="none"/><circle cx="32" cy="33" r="22" fill="#FDF6EC" stroke="#8A3F14" stroke-dasharray="3.5 5"/><path d="M20 49q0-12 12-12t12 12z" fill="#BDCDFF"/><circle cx="32" cy="26" r="10" fill="#F7D4AA"/><path d="M22 26a10 10 0 0 1 20 0c-3-4-6-5-10-5s-7 1-10 5z" fill="#8A5A44"/><path d="M26.5 28.5q1.8 1.4 3.6 0M33.9 28.5q1.8 1.4 3.6 0M30.5 33h3"/></g></symbol>
+<symbol id="c-silencio" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><circle cx="32" cy="33" r="15" fill="#F7D4AA"/><path d="M17 33a15 15 0 0 1 30 0c-4-6.5-9.5-8.5-15-8.5s-11 2-15 8.5z" fill="#8A5A44"/><circle cx="26" cy="34" r="1.8" fill="#2A2140" stroke="none"/><circle cx="38" cy="34" r="1.8" fill="#2A2140" stroke="none"/><path d="M27 42h10"/><rect x="29.8" y="36" width="4.4" height="17" rx="2.2" fill="#F7D4AA"/></g></symbol>
+<symbol id="c-agua" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><path d="M19 15h26l-4.6 33.5a3.5 3.5 0 0 1-3.5 3h-9.8a3.5 3.5 0 0 1-3.5-3z" fill="#F4F6FF" stroke="none"/><path d="M21.3 28h21.4l-2.7 20.2a3 3 0 0 1-3 2.6h-10a3 3 0 0 1-3-2.6z" fill="#8FA9FF" stroke="none"/><path d="M19 15h26l-4.6 33.5a3.5 3.5 0 0 1-3.5 3h-9.8a3.5 3.5 0 0 1-3.5-3zM21.3 28h21.4"/></g></symbol>
+<symbol id="c-objeto" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#F7D4AA" stroke="none"/><circle cx="21" cy="18" r="6" fill="#FFFFFF"/><circle cx="43" cy="18" r="6" fill="#FFFFFF"/><ellipse cx="32" cy="47" rx="13" ry="10" fill="#FFFFFF"/><circle cx="32" cy="28" r="12" fill="#FFFFFF"/><circle cx="27.5" cy="26" r="1.7" fill="#2A2140" stroke="none"/><circle cx="36.5" cy="26" r="1.7" fill="#2A2140" stroke="none"/><ellipse cx="32" cy="32" rx="4.5" ry="3.5" fill="#EDD5DF"/><path d="M32 31.5v2"/></g></symbol>
+<symbol id="c-mecerse" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><path d="M10 10h44M22 10v31M42 10v31"/><path d="M24 40q8-9 16 0" fill="#BDCDFF"/><circle cx="32" cy="27" r="7" fill="#F7D4AA"/><path d="M25 27a7 7 0 0 1 14 0c-2-3-4.5-4-7-4s-5 1-7 4z" fill="#8A5A44"/><rect x="18" y="40" width="28" height="5" rx="2.5" fill="#F7D4AA"/></g></symbol>
+<!-- Los cinco grupos del kit (64 × 64) -->
+<symbol id="k-ruido" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#EDD5DF" stroke="none"/><path d="M13 26h8l10-8v30l-10-8h-8z" fill="#FFFFFF"/><path d="M38 25q5 8 0 16M44 20q9 13 0 26" stroke="#B8125C"/></g></symbol>
+<symbol id="k-luz" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#F7D4AA" stroke="none"/><circle cx="32" cy="33" r="10" fill="#FFFFFF"/><path d="M32 13v5M32 48v5M12 33h5M47 33h5M18 19l3.5 3.5M42.5 43.5L46 47M18 47l3.5-3.5M42.5 22.5L46 19"/></g></symbol>
+<symbol id="k-textura" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M24 12l-12 7 4 9 5-2v26h22V26l5 2 4-9-12-7c-1 4-4 6-8 6s-7-2-8-6z" fill="#FFFFFF"/><rect x="29" y="19" width="6" height="8" rx="1" fill="#EDD5DF"/><path d="M26 38q3-3 6 0t6 0"/></g></symbol>
+<symbol id="k-olor" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#CCEADE" stroke="none"/><path d="M24 28q-3-4 0-8t0-8M32 28q-3-4 0-8t0-8M40 28q-3-4 0-8t0-8"/><path d="M14 33h36v10a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z" fill="#FFFFFF"/><path d="M9 36h5M50 36h5"/></g></symbol>
+<symbol id="k-gente" viewBox="0 0 64 64"><g fill="none" stroke="#2A2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="33" r="27" fill="#BDCDFF" stroke="none"/><path d="M8 50q0-11 11-11t11 11z" fill="#EDD5DF"/><path d="M34 50q0-11 11-11t11 11z" fill="#CCEADE"/><circle cx="19" cy="31" r="6" fill="#F7D4AA"/><circle cx="45" cy="31" r="6" fill="#F7D4AA"/><path d="M21 52q0-12 11-12t11 12z" fill="#FFFFFF"/><circle cx="32" cy="29" r="7" fill="#F7D4AA"/></g></symbol>
+</svg>
+
+<main id="principal" tabindex="-1">
+  <!-- Vista de la niña (por defecto). No guarda nada de lo que toca. -->
+  <section class="vista" id="vista-nina" data-piel="cueva" aria-labelledby="t-nina">
+    <div class="rincon">
+      <h1 id="t-nina" class="titulo-nina" tabindex="-1">Mi cueva de calma</h1>
+      <p class="frase" id="frase-nina">Aquí puedes descansar el tiempo que quieras.</p>
+      <div class="escena-caja" aria-hidden="true">
+        <svg class="escena esc-cueva" viewBox="0 0 320 180" focusable="false"><path class="esc-roca" d="M0 180V72Q22 10 160 8Q298 10 320 72V180z"/><path class="esc-hueco" d="M38 180Q40 54 160 46Q280 54 282 180z"/><ellipse class="esc-piedra" cx="70" cy="174" rx="34" ry="9"/><ellipse class="esc-piedra" cx="252" cy="175" rx="38" ry="9"/><circle class="esc-luz" cx="92" cy="86" r="2.6"/><circle class="esc-luz" cx="228" cy="74" r="2.2"/><circle class="esc-luz" cx="206" cy="120" r="2.6"/><circle class="esc-luz" cx="110" cy="132" r="2"/></svg>
+        <svg class="escena esc-nube" viewBox="0 0 320 180" focusable="false"><rect class="esc-cielo" width="320" height="180" rx="24"/><path class="esc-nube-forma" d="M44 66a18 18 0 0 1 30-14a24 24 0 0 1 44 6a15 15 0 0 1 4 30H52a16 16 0 0 1-8-22z"/><path class="esc-nube-forma" d="M196 132a16 16 0 0 1 26-12a22 22 0 0 1 40 6a13 13 0 0 1 2 26h-62a14 14 0 0 1-6-20z"/></svg>
+        <div class="orbe-respira" id="orbe"></div>
+      </div>
+      <p class="respira-texto" id="respira-texto" aria-live="off">Toca «Respirar conmigo» cuando quieras.</p>
+      <button type="button" class="c-boton boton-grande" id="b-respirar" aria-pressed="false"><span>Respirar conmigo</span></button>
+    </div>
+    <h2 class="titulo-necesito" id="t-necesito">Lo que necesito</h2>
+    <p class="pista" id="pista-nina">Toca lo que necesitas para mostrarlo.</p>
+    <ul class="opciones-nina" id="opciones-nina" aria-labelledby="t-necesito"></ul>
+    <div class="puerta-zona">
+      <button type="button" class="c-boton secundario c-puerta puerta-nina" id="b-puerta" aria-describedby="pista-puerta"><span>Para adultos</span></button>
+      <p class="pista" id="pista-puerta">Mantén presionado 3 segundos.</p>
+    </div>
+  </section>
+
+  <!-- Vista adulto (detrás de la puerta de 3 segundos): «Kit sensorial». Aquí, y solo aquí, se guarda. -->
+  <section class="vista" id="vista-adulto" aria-labelledby="t-adulto" hidden>
+    <div class="hoja">
+      <p class="paso">Para el adulto</p>
+      <h2 id="t-adulto" tabindex="-1">Kit sensorial</h2>
+      <p class="bajada">Ideas sencillas y sin costo para los ruidos, las luces, las texturas, los olores y la mucha gente. Quédate con las que le sirvan a tu casa.</p>
+      <p class="partida" id="partida" hidden></p>
+      <div class="pestanas" role="group" aria-label="Partes del kit">
+        <button type="button" class="opcion" data-panel="ideas" aria-pressed="true">Ideas</button>
+        <button type="button" class="opcion" data-panel="rincon" aria-pressed="false">Su rincón</button>
+        <button type="button" class="opcion" data-panel="lista" aria-pressed="false" id="b-panel-lista">Mi lista</button>
+      </div>
+
+      <div id="panel-ideas">
+        <div id="grupos"></div>
+      </div>
+
+      <div id="panel-rincon" hidden>
+        <p class="aviso-calma" role="note">Esto no es una terapia; es un lugar para descansar.</p>
+        <div class="bloque">
+          <h3 id="t-piel">Cómo se ve</h3>
+          <div class="grupo-botones" role="group" aria-labelledby="t-piel">
+            <button type="button" class="opcion" data-piel="cueva" aria-pressed="true">Cueva (para las más pequeñas)</button>
+            <button type="button" class="opcion" data-piel="nube" aria-pressed="false">Nube (para adolescentes)</button>
+          </div>
+        </div>
+        <div class="bloque">
+          <h3>Lo que puede pedir (3 o 4)</h3>
+          <p class="pista">Cada una se queda siempre en su lugar. Lo que ella toque no se guarda.</p>
+          <p class="aviso-campo" id="aviso-opc" aria-live="polite"></p>
+          <ul class="filas" id="filas-opc"></ul>
+        </div>
+      </div>
+
+      <div id="panel-lista" hidden>
+        <p class="bajada" id="lista-vacia">Todavía no hay ideas en tu lista. En «Ideas», toca «Me sirve» en las que te funcionen.</p>
+        <div id="lista-llena" hidden>
+          <div class="lista-mia" id="lista-mia"></div>
+          <p class="advertencia" role="note"><strong>Revisa:</strong> la lista sale de tu celular solo si tú la copias. Lleva las ideas y un enlace a ellas; no lleva nada de tu hija.</p>
+          <label class="check" for="revise"><input type="checkbox" id="revise"><span>Lo revisé y lo comparto yo</span></label>
+          <div class="acciones">
+            <button type="button" class="c-boton" id="b-copiar-lista" disabled><svg class="c-icono" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar para WhatsApp</button>
+            <button type="button" class="c-boton texto" id="b-ver-lista" disabled><svg class="c-icono" aria-hidden="true"><use href="#i-ojo"/></svg>Ver cómo la ve quien la recibe</button>
+          </div>
+          <p class="estado-guardado" id="estado-copia" aria-live="polite"></p>
+          <p class="advertencia" id="aviso-local" hidden>Esta página no está publicada en el sitio de Contigo, así que el enlace solo abre aquí. Publicada en el sitio, abre en cualquier celular.</p>
+          <div class="copia-manual" id="copia-manual" hidden>
+            <label for="texto-manual" class="pista">No se pudo copiar solo. Mantén presionado este texto y elige «Copiar»:</label>
+            <textarea id="texto-manual" readonly rows="6"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <p class="estado-guardado" id="estado-guardado" role="status"></p>
+      <div class="acciones">
+        <button type="button" class="c-boton" id="b-listo">Listo, volver a su rincón</button>
+      </div>
+      <div class="zona-borrar">
+        <button type="button" class="c-boton texto" id="b-borrar">Borrar todo lo de Contigo en este celular</button>
+        <p class="pista">Borra también lo de las otras páginas de Contigo. Toca dos veces. No se puede deshacer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lista recibida por enlace (#k1.…): solo se lee, no se guarda -->
+  <section class="vista" id="vista-lista" aria-labelledby="t-lista" hidden>
+    <div class="hoja">
+      <p class="paso">Te la compartieron</p>
+      <h2 id="t-lista" tabindex="-1">Ideas que sirven en su casa</h2>
+      <p class="bajada">Son ideas sencillas para los ruidos, las luces, las texturas, los olores y la mucha gente. No se guardan en este celular.</p>
+      <div class="lista-mia" id="lista-recibida"></div>
+      <div class="acciones"><button type="button" class="c-boton secundario" id="b-lista-volver">Ver el rincón de calma</button></div>
+    </div>
+  </section>
+
+  <!-- Enlace dañado: nunca revienta -->
+  <section class="vista" id="vista-roto" aria-labelledby="t-roto" hidden>
+    <div class="hoja centro">
+      <h2 id="t-roto" tabindex="-1">Este enlace llegó incompleto</h2>
+      <p class="bajada">Pide que te lo envíen otra vez, completo.</p>
+      <div class="acciones"><button type="button" class="c-boton" id="b-roto-volver">Ver el rincón de calma</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- Modo mostrar (pantalla completa). Volver en un toque o con Escape. -->
+<div class="mostrar" id="mostrar" role="dialog" aria-modal="true" aria-labelledby="mostrar-palabra" hidden>
+  <div class="mostrar-carta" id="mostrar-carta">
+    <svg class="mostrar-dibujo" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use id="mostrar-use" href="#c-luces"/></svg>
+    <h2 class="mostrar-palabra" id="mostrar-palabra" tabindex="-1"></h2>
+  </div>
+  <div class="mostrar-acciones">
+    <button type="button" class="c-boton boton-grande" id="b-volver">Volver</button>
+  </div>
+</div>
+
+<!-- === CARAPAZON CONTIGO v1 · HTML (barra fija y capas) === -->
+<nav class="c-barra" aria-label="Ayuda rápida">
+  <ul>
+    <li><button type="button" data-c-accion="pausa" data-c-capa="c-capa-pausa" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-pausa"/></svg>Pausa</button></li>
+    <li><button type="button" data-c-accion="calma" data-c-capa="c-capa-calma" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-calma"/></svg>Calma</button></li>
+    <li><button type="button" class="c-boton-ayuda" data-c-accion="ayuda" data-c-capa="c-capa-ayuda" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-ayuda"/></svg>Necesito ayuda</button></li>
+    <li><button type="button" data-c-accion="salir"><svg class="c-icono" aria-hidden="true"><use href="#i-salir"/></svg>Salir</button></li>
+  </ul>
+</nav>
+<div class="c-capa" id="c-capa-pausa" role="dialog" aria-modal="true" aria-labelledby="c-t-pausa" hidden>
+  <h2 id="c-t-pausa" tabindex="-1" data-foco>En pausa</h2>
+  <p>Tómate el tiempo que necesites. Cuando quieras, sigues donde ibas.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Seguir</button>
+</div>
+<div class="c-capa" id="c-capa-calma" role="dialog" aria-modal="true" aria-labelledby="c-t-calma" hidden>
+  <h2 id="c-t-calma" tabindex="-1" data-foco>Respira conmigo</h2>
+  <div class="c-respira" id="c-respira" aria-hidden="true"></div>
+  <p class="c-respira-texto" id="c-respira-texto" aria-hidden="true">Toma aire despacio…</p>
+  <p>Toma aire en 4 segundos y suéltalo en 6. Las veces que necesites.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Ya estoy mejor</button>
+</div>
+<div class="c-capa" id="c-capa-ayuda" role="dialog" aria-modal="true" aria-labelledby="c-t-ayuda" hidden>
+  <div class="c-tarjeta-ayuda">
+    <h2 id="c-t-ayuda" class="c-grande" tabindex="-1" data-foco>Necesito ayuda</h2>
+    <p class="c-pide">Por favor, quédate cerca y háblame despacio.</p>
+    <div id="c-ayuda-adulto">
+      <ul class="c-numeros">
+        <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
+        <li><strong>106</strong> Línea 106, para hablar con alguien</li>
+        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+      </ul>
+      <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
+    </div>
+  </div>
+  <button type="button" class="c-boton" data-c-cerrar>Cerrar</button>
+</div>
+<div class="c-capa" id="c-capa-salir" role="dialog" aria-modal="true" aria-labelledby="c-t-salir" hidden>
+  <h2 id="c-t-salir" tabindex="-1" data-foco>Listo</h2>
+  <p>Ya puedes cerrar esta pestaña. Lo que guardaste sigue en este celular.</p>
+  <button type="button" class="c-boton secundario" data-c-cerrar>Volver</button>
+</div>
+<div id="c-anuncio" class="c-solo-lector" aria-live="polite"></div>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (abajo) === -->
+
+<script>
+/* === CALMA · DATOS Y CODEC === */
+/* Parte pura (sin pantalla): lo que ella puede pedir, las ideas del kit, lo que se destaca desde «Así soy yo»
+   y el enlace #k1. de la lista. Se prueba con node.
+   OJO: el orden de las ideas (grupo por grupo) ES el formato del enlace: no se reordena; si cambia, pasa a k2. */
+var Calma = (function (C) {
+  'use strict';
+  var PIEZA = 'k1', CLAVE = 'calma', MIN_OPC = 3, MAX_OPC = 4;
+  // El orden es la posición fija de cada una en la pantalla de la niña
+  var OPCIONES = [
+    { id: 'luces', palabra: 'Apagar las luces', nube: 'Menos luz', color: 'lavanda', perfil: ['luz'] },
+    { id: 'audifonos', palabra: 'Mis audífonos', nube: 'Audífonos', color: 'menta', perfil: ['musica'] },
+    { id: 'abrazo', palabra: 'Abrazo apretado', nube: 'Un abrazo fuerte', color: 'rosa', perfil: ['abrazo'] },
+    { id: 'sola', palabra: 'Estar sola un rato', nube: 'Tiempo a solas', color: 'arena', perfil: [] },
+    { id: 'silencio', palabra: 'Silencio, por favor', nube: 'Silencio', color: 'lavanda', perfil: ['silencio'] },
+    { id: 'agua', palabra: 'Un vaso de agua', nube: 'Agua', color: 'menta', perfil: [] },
+    { id: 'objeto', palabra: 'Mi objeto favorito', nube: 'Mi objeto', color: 'arena', perfil: ['objeto'] },
+    { id: 'mecerse', palabra: 'Mecerme', nube: 'Moverme un rato', color: 'rosa', perfil: ['mecerse'] }
+  ];
+  var OIDS = OPCIONES.map(function (O) { return O.id; });
+  var DEFECTO = ['luces', 'audifonos', 'abrazo', 'sola'];
+  var PIELES = {
+    cueva: { titulo: 'Mi cueva de calma', frase: 'Aquí puedes descansar el tiempo que quieras.', pista: 'Toca lo que necesitas para mostrarlo.' },
+    nube: { titulo: 'Mi nube', frase: 'Estás a salvo. Quédate el tiempo que necesites.', pista: 'Elige lo que necesitas y muéstralo.' }
+  };
+  // Lo que la familia pudo marcar en «Así soy yo» (mismas palabras de esa página). Solo se lee y se muestra tal cual.
+  var PERFIL_CALMA = { silencio: 'Silencio', abrazo: 'Un abrazo fuerte', musica: 'Música suave', objeto: 'Su objeto favorito', mecerse: 'Mecerse o columpiarse', luz: 'Luz bajita' };
+  var PERFIL_DESBORDA = { ruido: 'Ruido fuerte', gente: 'Mucha gente', luz: 'Luz muy fuerte', cambios: 'Cambios de plan', tocar: 'Que la toquen sin avisar', ropa: 'Ropa o etiquetas que pican' };
+  var GRUPOS = [
+    { id: 'ruidos', titulo: 'Ruidos', icono: 'k-ruido', color: 'rosa', desborda: ['ruido'], ideas: [
+      { id: 'r1', texto: 'Avísale antes de un ruido fuerte: la licuadora, el secador, el timbre.' },
+      { id: 'r2', texto: 'Si en casa hay audífonos, déjalos siempre en el mismo lugar para que los encuentre.', calma: ['musica'] },
+      { id: 'r3', texto: 'Busquen juntas un rincón con menos ruido, para cuando lo necesite.', calma: ['silencio'] },
+      { id: 'r4', texto: 'Baja el volumen del televisor y de la música cuando ella esté cerca.', calma: ['silencio'] }
+    ] },
+    { id: 'luces', titulo: 'Luces', icono: 'k-luz', color: 'arena', desborda: ['luz'], ideas: [
+      { id: 'l1', texto: 'En la noche, una lámpara pequeña en vez de la luz del techo.', calma: ['luz'] },
+      { id: 'l2', texto: 'Cierra un poco la cortina cuando el sol entra directo.' },
+      { id: 'l3', texto: 'Baja el brillo del celular y del televisor.' },
+      { id: 'l4', texto: 'Una gorra o una visera para salir en días de mucho sol.' }
+    ] },
+    { id: 'texturas', titulo: 'Texturas: ropa, comida y que la toquen', icono: 'k-textura', color: 'lavanda', desborda: ['ropa', 'tocar'], ideas: [
+      { id: 't1', texto: 'Corta las etiquetas de la ropa y lávala antes de estrenarla.' },
+      { id: 't2', texto: 'Deja que repita la ropa que le gusta sentir.' },
+      { id: 't3', texto: 'Avísale antes de tocarla: «te voy a peinar», «te voy a abrazar».' },
+      { id: 't4', texto: 'En la comida, pon lo nuevo al lado de lo que ya le gusta, sin obligarla.' },
+      { id: 't5', texto: 'Un abrazo apretado o una cobija gruesa encima, solo si ella quiere.', calma: ['abrazo'] }
+    ] },
+    { id: 'olores', titulo: 'Olores', icono: 'k-olor', color: 'menta', desborda: [], ideas: [
+      { id: 'o1', texto: 'Abre la ventana mientras cocinas algo de olor fuerte.' },
+      { id: 'o2', texto: 'Evita perfumes y ambientadores fuertes en la casa y en el carro.' },
+      { id: 'o3', texto: 'Si un olor le molesta, déjala alejarse sin regañarla.' },
+      { id: 'o4', texto: 'Lleva su objeto favorito cuando salgan: huele a casa.', calma: ['objeto'] }
+    ] },
+    { id: 'gente', titulo: 'Mucha gente', icono: 'k-gente', color: 'lavanda', desborda: ['gente', 'cambios'], ideas: [
+      { id: 'g1', texto: 'Vayan a la tienda o al centro comercial a la hora con menos gente.' },
+      { id: 'g2', texto: 'Cuéntale antes a dónde van, quién va a estar y cuándo vuelven.' },
+      { id: 'g3', texto: 'Acuerden una señal para decir «me quiero ir», y respétenla.' },
+      { id: 'g4', texto: 'En una fiesta o reunión, busquen antes un lugar tranquilo para descansar.' },
+      { id: 'g5', texto: 'Un rato en el columpio antes o después de un lugar lleno.', calma: ['mecerse'] }
+    ] }
+  ];
+  var IDEAS = [];
+  GRUPOS.forEach(function (G) { G.ideas.forEach(function (I) { IDEAS.push(I); }); });
+  var IIDS = IDEAS.map(function (I) { return I.id; });
+
+  function opcion(id) { return OPCIONES[OIDS.indexOf(id)] || null; }
+  function palabra(id, piel) { var O = opcion(id); return O ? (piel === 'nube' ? O.nube : O.palabra) : ''; }
+  function porDefecto() { return { v: 1, piel: 'cueva', opciones: DEFECTO.slice(), sirven: [] }; }
+  // Configuración del adulto siempre válida: piel conocida, 3 o 4 opciones en su orden fijo, ideas conocidas
+  function normalizar(c) {
+    var n = porDefecto();
+    if (!c || typeof c !== 'object' || Array.isArray(c)) return n;
+    n.piel = c.piel === 'nube' ? 'nube' : 'cueva';
+    if (Array.isArray(c.opciones)) {
+      var o = OIDS.filter(function (id) { return c.opciones.indexOf(id) !== -1; }).slice(0, MAX_OPC);
+      n.opciones = o.length >= MIN_OPC ? o : DEFECTO.slice();
+    }
+    if (Array.isArray(c.sirven)) n.sirven = IIDS.filter(function (id) { return c.sirven.indexOf(id) !== -1; });
+    return n;
+  }
+  // Lee una tarjeta de «Así soy yo» sin confiar en su forma
+  function marcadas(perfil, tarjeta, nombres) {
+    try {
+      var o = perfil.tarjetas[tarjeta].opciones;
+      if (!Array.isArray(o)) return [];
+      return o.filter(function (x) { return typeof x === 'string' && Object.prototype.hasOwnProperty.call(nombres, x); });
+    } catch (e) { return []; }
+  }
+  // Qué destacar: grupos donde la familia marcó «lo que la desborda» e ideas u opciones con «lo que la calma».
+  // No interpreta nada: devuelve las mismas palabras que la familia marcó.
+  function destacar(perfil) {
+    var calma = marcadas(perfil, 'calma', PERFIL_CALMA), desborda = marcadas(perfil, 'desborda', PERFIL_DESBORDA);
+    var r = { grupos: {}, ideas: {}, opciones: {}, hay: false };
+    function cruce(lista, marcas, nombres) { return (lista || []).filter(function (x) { return marcas.indexOf(x) !== -1; }).map(function (x) { return nombres[x]; }); }
+    GRUPOS.forEach(function (G) {
+      var g = cruce(G.desborda, desborda, PERFIL_DESBORDA);
+      if (g.length) { r.grupos[G.id] = g; r.hay = true; }
+      G.ideas.forEach(function (I) { var i = cruce(I.calma, calma, PERFIL_CALMA); if (i.length) { r.ideas[I.id] = i; r.hay = true; } });
+    });
+    OPCIONES.forEach(function (O) { var o = cruce(O.perfil, calma, PERFIL_CALMA); if (o.length) { r.opciones[O.id] = o; r.hay = true; } });
+    return r;
+  }
+
+  /* Enlace #k1.<base64url> con la lista de ideas que sirven.
+     Bytes: [banderas: 0 o 1=ejemplo] [n ideas 1-22] [n × número de idea, en orden creciente]. Nada de la niña. */
+  function codificar(sirven, op) {
+    var lista = Array.isArray(sirven) ? IIDS.filter(function (id) { return sirven.indexOf(id) !== -1; }) : [];
+    if (!lista.length) return null;
+    var w = new C.bytes.Escritor();
+    w.byte(op && op.ejemplo ? 1 : 0).byte(lista.length);
+    lista.forEach(function (id) { w.byte(IIDS.indexOf(id)); });
+    return C.enlace.empaquetar(PIEZA, w.bytes());
+  }
+  // Devuelve { sirven, ejemplo } o null. Nunca lanza error.
+  function decodificar(fragmento) {
+    try {
+      var arr = C.enlace.desempaquetar(PIEZA, fragmento);
+      if (!arr || !arr.length) return null;
+      var L = new C.bytes.Lector(arr);
+      var banderas = L.byte(); if (banderas > 1) return null;
+      var n = L.byte(); if (n < 1 || n > IDEAS.length) return null;
+      var sirven = [], previo = -1;
+      for (var i = 0; i < n; i++) { var x = L.byte(); if (x >= IDEAS.length || x <= previo) return null; previo = x; sirven.push(IIDS[x]); }
+      if (!L.fin()) return null;
+      return { sirven: sirven, ejemplo: banderas === 1 };
+    } catch (e) { return null; }
+  }
+  // Las ideas marcadas, agrupadas, en el orden del kit
+  function agrupar(sirven) {
+    var s = Array.isArray(sirven) ? sirven : [];
+    return GRUPOS.map(function (G) { return { grupo: G, ideas: G.ideas.filter(function (I) { return s.indexOf(I.id) !== -1; }) }; }).filter(function (x) { return x.ideas.length; });
+  }
+  // Texto para WhatsApp: solo las ideas y el enlace; nada de la niña
+  function textoLista(sirven, enlace) {
+    var t = 'Ideas sencillas que nos sirven en casa, por si te ayudan también:';
+    agrupar(sirven).forEach(function (x) { t += '\n\n' + x.grupo.titulo + ':\n' + x.ideas.map(function (I) { return '• ' + I.texto; }).join('\n'); });
+    if (enlace) t += '\n\nLas mismas ideas, en el celular:\n' + enlace;
+    return t;
+  }
+  return { PIEZA: PIEZA, CLAVE: CLAVE, MIN_OPC: MIN_OPC, MAX_OPC: MAX_OPC, OPCIONES: OPCIONES, OIDS: OIDS, DEFECTO: DEFECTO, PIELES: PIELES, GRUPOS: GRUPOS, IDEAS: IDEAS, IIDS: IIDS,
+    PERFIL_CALMA: PERFIL_CALMA, PERFIL_DESBORDA: PERFIL_DESBORDA,
+    opcion: opcion, palabra: palabra, porDefecto: porDefecto, normalizar: normalizar, destacar: destacar,
+    codificar: codificar, decodificar: decodificar, agrupar: agrupar, textoLista: textoLista };
+})(Contigo);
+/* === FIN CALMA · DATOS Y CODEC === */
+
+/* ===== Pieza «Mi rincón de calma»: pantallas ===== */
+(function () {
+  'use strict';
+  var C = Contigo, K = Calma, esc = C.esc;
+  function $(s) { return document.querySelector(s); }
+  var perfil = C.baul.leer('perfil');                 // de «Así soy yo», si existe en este celular (solo se lee)
+  var cfg = K.normalizar(C.baul.leer(K.CLAVE));
+  var marcas = K.destacar(perfil);
+  var estado = { vista: null, mostrando: null, origen: null, abiertaEn: 0, primera: true, panel: 'ideas', enlace: '' };
+  function dibujo(id, clase) { return '<svg class="' + (clase || 'dib') + '" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#' + id + '"/></svg>'; }
+  function marca() { return '<svg class="c-icono marca" aria-hidden="true"><use href="#m-hecho"/></svg>'; }
+
+  /* === CALMA · VISTA NIÑA === */
+  /* No guarda nada: ni qué toca, ni cuándo, ni cuánto respira. Solo lee los ajustes del adulto.
+     La respiración empieza solo si ella la toca; en Modo suave o con «reducir movimiento» el círculo no se mueve. */
+  var reloj = 0, respirando = false;
+  function pararRespirar() {
+    clearTimeout(reloj); respirando = false;
+    $('#orbe').classList.remove('activo');
+    $('#b-respirar').setAttribute('aria-pressed', 'false');
+    $('#b-respirar').querySelector('span').textContent = 'Respirar conmigo';
+    $('#respira-texto').textContent = 'Toca «Respirar conmigo» cuando quieras.';
+  }
+  function empezarRespirar() {
+    var o = $('#orbe'), t = $('#respira-texto'), fase = 0, frases = ['Toma aire despacio…', 'Suéltalo despacio…'], tiempos = [5000, 7000];
+    respirando = true;
+    $('#b-respirar').setAttribute('aria-pressed', 'true');
+    $('#b-respirar').querySelector('span').textContent = 'Parar';
+    if (!C.suave()) { o.classList.remove('activo'); void o.offsetWidth; o.classList.add('activo'); }
+    (function ciclo() { t.textContent = frases[fase]; reloj = setTimeout(function () { fase = 1 - fase; ciclo(); }, tiempos[fase]); })();
+  }
+  function pintarNina() {
+    var P = K.PIELES[cfg.piel];
+    $('#vista-nina').setAttribute('data-piel', cfg.piel);
+    $('#mostrar').setAttribute('data-piel', cfg.piel);
+    $('#t-nina').textContent = P.titulo;
+    $('#frase-nina').textContent = P.frase;
+    $('#pista-nina').textContent = P.pista;
+    $('#opciones-nina').innerHTML = cfg.opciones.map(function (id) {
+      var O = K.opcion(id);
+      return '<li><button type="button" class="opcion-nina t-' + O.color + '" data-op="' + id + '" aria-describedby="pista-nina">' + dibujo('c-' + id) + '<span>' + esc(K.palabra(id, cfg.piel)) + '</span></button></li>';
+    }).join('');
+  }
+  function inertes(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id); if (!el) return;
+      el.inert = si; if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+    var barra = document.querySelector('.c-barra');
+    if (barra) { barra.inert = si; if (si) barra.setAttribute('aria-hidden', 'true'); else barra.removeAttribute('aria-hidden'); }
+  }
+  function abrirMostrar(id, boton) {
+    if (!K.opcion(id)) return;
+    pararRespirar();
+    estado.mostrando = id; estado.origen = boton; estado.abiertaEn = Date.now();
+    $('#mostrar-use').setAttribute('href', '#c-' + id);
+    $('#mostrar-palabra').textContent = K.palabra(id, cfg.piel);
+    $('#mostrar').hidden = false;
+    inertes(true);
+    $('#mostrar-palabra').focus({ preventScroll: true });
+  }
+  function cerrarMostrar() {
+    if (!estado.mostrando) return;
+    $('#mostrar').hidden = true;
+    inertes(false);
+    var o = estado.origen; estado.mostrando = null; estado.origen = null;
+    if (o && document.body.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  $('#b-respirar').addEventListener('click', function () { if (respirando) pararRespirar(); else empezarRespirar(); });
+  $('#opciones-nina').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-op]') : null;
+    if (b) abrirMostrar(b.getAttribute('data-op'), b);
+  });
+  // «Volver» no responde en los primeros 0,4 s: un doble toque sin querer no cierra la tarjeta
+  $('#b-volver').addEventListener('click', function () { if (Date.now() - estado.abiertaEn < 400) return; cerrarMostrar(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && estado.mostrando) cerrarMostrar(); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && respirando) pararRespirar(); });
+  /* === FIN CALMA · VISTA NIÑA === */
+
+  C.puertaAdulto($('#b-puerta'), function () { vista('adulto'); }, 3000, function () {
+    var p = $('#pista-puerta'); p.textContent = 'Sigue presionando hasta que se llene (3 segundos).'; C.anunciar(p.textContent);
+  });
+
+  /* ---------- Vista adulto: aquí (y solo aquí) se guarda, en contigo.calma ---------- */
+  function guardar() {
+    var ok = C.baul.guardar(K.CLAVE, cfg);
+    $('#estado-guardado').textContent = ok ? 'Guardado en este celular.' : 'No se pudo guardar en este celular; el cambio dura mientras esta página siga abierta.';
+  }
+  function textoPartida() {
+    if (!perfil || typeof perfil !== 'object' || !marcas.hay) return '';
+    var ap = typeof perfil.apodo === 'string' ? Array.from(perfil.apodo.replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ').trim()).slice(0, 20).join('') : '';
+    return 'Desde «Así soy yo»' + (ap ? ' de ' + ap : '') + ': con un borde verde va lo que contaste que la calma o la desborda.';
+  }
+  function pintarIdeas() {
+    $('#grupos').innerHTML = K.GRUPOS.map(function (G) {
+      var g = marcas.grupos[G.id];
+      return '<section class="grupo t-' + G.color + (g ? ' destacado' : '') + '" aria-labelledby="g-' + G.id + '"><h3 id="g-' + G.id + '">' + dibujo(G.icono) + '<span>' + esc(G.titulo) + '</span></h3>' +
+        (g ? '<p class="sello-perfil">En «Así soy yo» marcaste que esto la desborda: ' + esc(g.join(', ')) + '.</p>' : '') +
+        '<ul class="ideas">' + G.ideas.map(function (I) {
+          var sirve = cfg.sirven.indexOf(I.id) !== -1, m = marcas.ideas[I.id];
+          return '<li class="idea' + (m ? ' destacada' : '') + '"><p id="idea-' + I.id + '">' + esc(I.texto) + '</p>' +
+            (m ? '<p class="sello-perfil">En «Así soy yo» marcaste que esto la calma: ' + esc(m.join(', ')) + '.</p>' : '') +
+            '<button type="button" class="opcion" data-sirve="' + I.id + '" aria-pressed="' + sirve + '" aria-describedby="idea-' + I.id + '">' + marca() + 'Me sirve</button></li>';
+        }).join('') + '</ul></section>';
+    }).join('');
+  }
+  function pintarRincon() {
+    document.querySelectorAll('[data-piel]').forEach(function (b) { if (b.tagName === 'BUTTON') b.setAttribute('aria-pressed', String(b.getAttribute('data-piel') === cfg.piel)); });
+    $('#filas-opc').innerHTML = K.OPCIONES.map(function (O) {
+      var ve = cfg.opciones.indexOf(O.id) !== -1, m = marcas.opciones[O.id], p = K.palabra(O.id, cfg.piel);
+      return '<li class="fila t-' + O.color + '">' + dibujo('c-' + O.id) + '<div><p class="fila-texto">' + esc(p) + '</p>' +
+        (m ? '<p class="sello-perfil">En «Así soy yo» marcaste que la calma: ' + esc(m.join(', ')) + '.</p>' : '') + '</div>' +
+        '<button type="button" class="opcion" data-ve="' + O.id + '" aria-pressed="' + ve + '" aria-label="' + esc('La ve: ' + p) + '">' + marca() + 'La ve</button></li>';
+    }).join('');
+  }
+  function pintarLista() {
+    var grupos = K.agrupar(cfg.sirven);
+    $('#lista-vacia').hidden = grupos.length > 0;
+    $('#lista-llena').hidden = grupos.length === 0;
+    $('#lista-mia').innerHTML = htmlLista(grupos);
+    $('#revise').checked = false; $('#b-copiar-lista').disabled = true; $('#b-ver-lista').disabled = true;
+    $('#estado-copia').textContent = ''; $('#copia-manual').hidden = true;
+    $('#aviso-local').hidden = location.protocol !== 'file:';
+  }
+  function htmlLista(grupos) {
+    return grupos.map(function (x) { return '<h3>' + esc(x.grupo.titulo) + '</h3><ul>' + x.ideas.map(function (I) { return '<li>' + esc(I.texto) + '</li>'; }).join('') + '</ul>'; }).join('');
+  }
+  function contarLista() { var n = cfg.sirven.length; $('#b-panel-lista').textContent = n ? 'Mi lista (' + n + ')' : 'Mi lista'; }
+  function panel(p) {
+    estado.panel = p;
+    ['ideas', 'rincon', 'lista'].forEach(function (x) { $('#panel-' + x).hidden = x !== p; });
+    document.querySelectorAll('[data-panel]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-panel') === p)); });
+    if (p === 'ideas') pintarIdeas(); else if (p === 'rincon') pintarRincon(); else pintarLista();
+    contarLista();
+  }
+  function pintarAdulto() {
+    var t = textoPartida();
+    $('#partida').textContent = t; $('#partida').hidden = !t;
+    panel(estado.panel);
+  }
+  document.querySelectorAll('[data-panel]').forEach(function (b) { b.addEventListener('click', function () { panel(b.getAttribute('data-panel')); b.focus(); }); });
+  $('#grupos').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-sirve]') : null; if (!b) return;
+    var id = b.getAttribute('data-sirve'), i = cfg.sirven.indexOf(id);
+    if (i === -1) cfg.sirven.push(id); else cfg.sirven.splice(i, 1);
+    cfg = K.normalizar(cfg); guardar();
+    b.setAttribute('aria-pressed', String(cfg.sirven.indexOf(id) !== -1));
+    contarLista();
+    C.anunciar(cfg.sirven.indexOf(id) !== -1 ? 'Va a tu lista.' : 'Salió de tu lista.');
+  });
+  document.querySelectorAll('button[data-piel]').forEach(function (b) {
+    b.addEventListener('click', function () { cfg.piel = b.getAttribute('data-piel') === 'nube' ? 'nube' : 'cueva'; cfg = K.normalizar(cfg); guardar(); pintarRincon(); b.focus(); });
+  });
+  $('#filas-opc').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-ve]') : null; if (!b) return;
+    var id = b.getAttribute('data-ve'), i = cfg.opciones.indexOf(id), aviso = $('#aviso-opc');
+    if (i !== -1) {
+      if (cfg.opciones.length <= K.MIN_OPC) { aviso.textContent = 'Deja al menos 3: así siempre hay de dónde elegir.'; return; }
+      cfg.opciones.splice(i, 1);
+    } else {
+      if (cfg.opciones.length >= K.MAX_OPC) { aviso.textContent = 'Ya hay 4. Quita una para elegir otra.'; return; }
+      cfg.opciones.push(id);
+    }
+    aviso.textContent = '';
+    cfg = K.normalizar(cfg); guardar(); pintarRincon();
+    var nb = $('[data-ve="' + id + '"]'); if (nb) nb.focus();
+  });
+  $('#revise').addEventListener('change', function () { var ok = $('#revise').checked; $('#b-copiar-lista').disabled = !ok; $('#b-ver-lista').disabled = !ok; });
+  function enlaceLista() { var f = K.codificar(cfg.sirven); return f ? location.href.split('#')[0] + '#' + f : ''; }
+  $('#b-copiar-lista').addEventListener('click', function () {
+    if (!$('#revise').checked) return;
+    estado.enlace = enlaceLista(); if (!estado.enlace) return;
+    var texto = K.textoLista(cfg.sirven, estado.enlace);
+    C.copiar(texto).then(function (ok) {
+      if (ok) { $('#estado-copia').textContent = 'Copiado. Ahora abre WhatsApp y pégalo en el chat.'; $('#copia-manual').hidden = true; }
+      else { $('#estado-copia').textContent = ''; $('#copia-manual').hidden = false; var ta = $('#texto-manual'); ta.value = texto; ta.focus(); ta.select(); }
+    });
+  });
+  $('#b-ver-lista').addEventListener('click', function () { if (!$('#revise').checked) return; var e = enlaceLista(); if (e) location.hash = e.split('#')[1]; });
+  $('#b-listo').addEventListener('click', function () { vista('nina'); });
+  C.dobleToque($('#b-borrar'), {
+    confirmar: 'Toca otra vez para borrar todo',
+    alConfirmar: function () {
+      C.baul.borrarTodo();
+      perfil = null; marcas = K.destacar(null); cfg = K.normalizar(null);
+      C.aplicarAjustes(); pintarAdulto();
+      $('#estado-guardado').textContent = 'Listo: este celular ya no guarda nada de Contigo.';
+      C.anunciar($('#estado-guardado').textContent);
+    }
+  });
+
+  /* ---------- Lista recibida (#k1.…) ---------- */
+  function quitarHash() { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { try { location.hash = ''; } catch (e2) {} } }
+  $('#b-lista-volver').addEventListener('click', function () { quitarHash(); vista('nina'); });
+  $('#b-roto-volver').addEventListener('click', function () { quitarHash(); vista('nina'); });
+
+  /* ---------- Vistas ---------- */
+  var VISTAS = ['nina', 'adulto', 'lista', 'roto'];
+  function vista(n, recibida) {
+    if (n !== 'nina' && respirando) pararRespirar();
+    VISTAS.forEach(function (v) { $('#vista-' + v).hidden = v !== n; });
+    estado.vista = n;
+    var numeros = document.getElementById('c-ayuda-adulto'); if (numeros) numeros.hidden = n === 'nina'; // 123/106/141 solo en vistas de adulto
+    if (n === 'nina') pintarNina(); else if (n === 'adulto') pintarAdulto(); else if (n === 'lista') $('#lista-recibida').innerHTML = htmlLista(K.agrupar(recibida));
+    if (!estado.primera) { window.scrollTo(0, 0); var h = $('#vista-' + n).querySelector('h1, h2'); if (h) h.focus({ preventScroll: true }); }
+    estado.primera = false;
+  }
+  // #k1.… = lista que llegó por enlace (no se guarda) · cualquier otro # no cambia nada
+  function enrutar() {
+    var h = location.hash || '';
+    if (h.indexOf('#' + K.PIEZA + '.') === 0) { var r = K.decodificar(h); if (r) vista('lista', r.sirven); else vista('roto'); return; }
+    if (!estado.vista || estado.vista === 'lista' || estado.vista === 'roto') vista('nina');
+  }
+  window.addEventListener('hashchange', enrutar);
+
+  C.iniciar({ vistaAdulto: false, textoEscuchar: function () { return ''; } });
+  enrutar();
+})();
+</script>
+</body>
+</html>

@@ -997,7 +997,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       </div>
       <div class="rejilla-recursos" id="panel-ti" role="tabpanel" aria-labelledby="tab-ti"></div>
       <div class="rejilla-recursos" id="panel-nina" role="tabpanel" aria-labelledby="tab-nina" hidden></div>
-      <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>Las herramientas no envían nada por su cuenta: solo sale lo que tú decides compartir. «Avísame cuando esté» queda anotado solo en este celular.</span></p>
+      <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>Las herramientas no envían nada por su cuenta: lo que escribes se queda en este celular y solo sale lo que tú decides compartir.</span></p>
     </div>
   </section>
 
@@ -1166,12 +1166,12 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     { id: "el-vaso", grupo: "ti", icono: "i-corazon", titulo: "El vaso", texto: "Para mandarle a la maestra o al papá: en un minuto entiende por qué se desborda al final del día y qué 3 cosas ayudan.", estado: "pieza", enlace: "/recursos/el-vaso.html" },
     { id: "diario", grupo: "ti", icono: "i-libreta", titulo: "Tu diario para la consulta", texto: "Anota lo que ves y llévale un resumen al pediatra. Hoy vive dentro del chat; la versión para imprimir viene en camino.", estado: "disponible", accion: "diario" },
     { id: "chequeo", grupo: "ti", icono: "i-pulso", titulo: "Chequeo de bienestar", texto: "Dos minutos para notar cómo estás tú. Si hace falta, te dice dónde pedir apoyo.", estado: "disponible", accion: "chequeo" },
-    { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan.", estado: "pronto" },
-    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Una tarjeta para tener a mano con las líneas de ayuda y qué hacer en un momento difícil.", estado: "pronto" },
+    { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan. Vas marcando lo que ya hiciste.", estado: "pieza", enlace: "/recursos/ruta-eps.html" },
+    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Tu plan de tormenta: qué la ayuda, qué evitar y a quién avisar, en una tarjeta con las líneas de ayuda para tener a mano.", estado: "pieza", enlace: "/recursos/plan-de-tormenta.html" },
     { id: "asi-estoy", grupo: "nina", icono: "i-conversa", titulo: "Así estoy, esto necesito", texto: "12 tarjetas grandes para que diga cómo está sin tener que hablar. Trae una hoja para imprimir para todo el salón.", estado: "pieza", enlace: "/recursos/asi-estoy.html" },
-    { id: "rutinas", grupo: "nina", icono: "i-cuadricula", titulo: "Rutinas visuales con pictogramas", texto: "Tarjetas para anticipar el día: lavar manos, comer, dormir, salir de casa.", estado: "pronto" },
-    { id: "cuentos", grupo: "nina", icono: "i-libro", titulo: "Cuentos sociales", texto: "Historias cortas que explican situaciones nuevas, como ir al médico o a la escuela.", estado: "pronto" },
-    { id: "kit-sensorial", grupo: "nina", icono: "i-audifonos", titulo: "Kit sensorial", texto: "Ideas sencillas para los ruidos, las luces y las texturas que la abruman.", estado: "pronto" },
+    { id: "rutinas", grupo: "nina", icono: "i-cuadricula", titulo: "Rutinas visuales con pictogramas", texto: "Su día en un caminito de dibujos: lo que va hecho se marca y lo que falta queda para otro día, sin castigo. Con hoja para el salón.", estado: "pieza", enlace: "/recursos/mi-dia.html" },
+    { id: "cuentos", grupo: "nina", icono: "i-libro", titulo: "Cuentos sociales", texto: "5 historias cortas para anticipar lo que va a pasar: el médico, el colegio, el corte de pelo, una vacuna y una fiesta. Las ajustas a ella.", estado: "pieza", enlace: "/recursos/cuentos.html" },
+    { id: "kit-sensorial", grupo: "nina", icono: "i-audifonos", titulo: "Kit sensorial", texto: "Su rincón de calma para respirar y mostrar lo que necesita, y 22 ideas sin costo para los ruidos, las luces y las texturas que la abruman.", estado: "pieza", enlace: "/recursos/calma.html" },
   ];
 
   let estadoServidor = null; // la sesión del agente: la guarda este navegador y viaja en cada POST

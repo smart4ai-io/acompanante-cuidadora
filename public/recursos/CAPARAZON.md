@@ -34,6 +34,11 @@
 | `contigo.asi-soy-yo` | «Así soy yo» | `{ tarjeta, esencial }` (para retomar a medias) |
 | `contigo.asi-estoy` | «Así estoy, esto necesito» (solo la vista adulto escribe) | configuración del adulto: tarjetas visibles, modo 3 o 12, palabras cambiadas, voz y sonido |
 | — | «El vaso» | no guarda nada propio (solo usa `contigo.ajustes`) |
+| `contigo.plan-de-tormenta` | «Plan de tormenta» | `{ v, plan: { apodo, bloques: { senales, ayuda, evitar, avisar } }, paso, listo }` · enlace `#t1.` |
+| `contigo.ruta-eps` | «Guía de la ruta en la EPS» | `{ v, hechos: [ids marcados], paso }` |
+| `contigo.mi-dia` | «Mi día» (solo vista adulto) | `{ v, momento, pasos[], palabras{}, modo }` · enlace `#d1.` |
+| `contigo.calma` | «Mi rincón de calma» (solo vista adulto) | `{ v, piel, opciones[], sirven[] }` · enlace `#k1.` (lista de ideas) |
+| `contigo.cuentos` | «Lo que va a pasar» (solo vista adulto) | `{ v:1, apodo, historias: { <id>: { quitadas, textos, ayudas } } }` · enlace `#h1.` |
 
 «Borrar todo lo de este celular» quita **todas** las claves `contigo.*` (también los ajustes).
 Nunca se guarda nombre, documento, EPS ni diagnóstico: esos campos no existen.
