@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/img/hero-madre-vertical-800.jpg" media="(max-width: 899px)">
+<link rel="preload" as="image" href="/img/hero-madre-800.jpg" media="(max-width: 899px)">
 <link rel="preload" as="image" href="/img/hero-madre.jpg" media="(min-width: 900px)">
 <style>
   /* ================= Sistema visual =================
@@ -167,6 +167,9 @@
   /* En celular, abajo a la izquierda (arriba están las etiquetas de la propia foto) */
   .hero .flota.f1 { bottom: 64px; left: 12px; }
   .hero .flota.f2 { bottom: 14px; left: 12px; animation-delay: -3s; animation-duration: 9s; }
+  /* Decisión de Santiago (2026-11-07): la imagen ganadora también en celular, completa (16:9);
+     sus propias etiquetas ya cuentan la historia, así que las de HTML se esconden en pantallas angostas. */
+  @media (max-width: 899px) { .hero .flota { display: none; } }
   @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   @media (min-width: 600px) { .acciones-hero { flex-direction: row; flex-wrap: wrap; } .acciones-hero .boton { width: auto; } }
   /* Pantallas anchas: la foto del hero llega «a sangre» hasta el borde derecho */
@@ -615,7 +618,6 @@
       <div class="hero-visual revelar d1">
         <div class="foto">
           <picture>
-            <source media="(max-width: 899px)" srcset="/img/hero-madre-vertical-800.jpg 800w, /img/hero-madre-vertical.jpg 1152w" sizes="100vw" width="1152" height="1536">
             <img src="/img/hero-madre.jpg" srcset="/img/hero-madre-800.jpg 800w, /img/hero-madre.jpg 1536w" sizes="(min-width: 900px) 60vw, 100vw" width="1536" height="864" fetchpriority="high" alt="Una madre colombiana de pie en su sala, con un café en la mano, mira con alivio un celular gigante que muestra el chat de la Acompañante; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS y Nunca diagnostica.">
           </picture>
         </div>
