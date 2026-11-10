@@ -95,11 +95,22 @@ const PATRONES_DIAGNOSTICO = [
   [/\d+\s*%[^.\n]{0,40}(autismo|\btea\b|autista|espectro)|(autismo|\btea\b|autista|espectro)[^.\n]{0,40}\d+\s*%/, "porcentaje junto a autismo"],
   [/\bcumple\s+(con\s+)?(los\s+|todos\s+los\s+)?criterios\b/, "cumple criterios"],
   [/\b(tiene|presenta)\s+(rasgos|signos|síntomas)\s+(claros\s+)?(de\s+autismo|autistas|de\s+tea\b)/, "atribuye rasgos de autismo"],
+  // 2026-11-10 (guía de lenguaje de Natalia): «está / no está dentro del espectro» y
+  // «presenta / no presenta / tiene autismo, TDAH o una neurodivergencia» sobre ella.
+  [/\bno\s+est[aá]\s+dentro\s+del\s+espectro/, "descarta el espectro"],
+  [/\b(sí,?\s+)?est[aá]\s+(claramente\s+|seguramente\s+|probablemente\s+|definitivamente\s+)?dentro\s+del\s+espectro/, "afirma que está dentro del espectro"],
+  [/\b(no\s+)?(presenta|tiene|padece|sufre\s+de)\s+(claramente\s+|seguramente\s+|probablemente\s+)?(autismo|tea\b|tdah\b|una\s+neurodivergencia|otra\s+neurodivergencia|neurodivergencia|un\s+trastorno\s+del\s+espectro|trastorno\s+del\s+espectro)/, "atribuye o descarta una neurodivergencia"],
+  [/\b(es|son)\s+(claramente\s+|seguramente\s+|probablemente\s+|definitivamente\s+)?neurodivergentes?\b/, "afirma que es neurodivergente"],
 ];
 
 // Frases cercanas (antes de la coincidencia) que indican que el modelo está
 // diciendo justamente que NO puede diagnosticar: no se bloquean.
-const SALVEDADES = /(no\s+(te\s+)?puedo|no\s+podemos|no\s+es\s+posible|no\s+se\s+puede|nadie\s+(te\s+)?puede|solo\s+(un|una)\b|sólo\s+(un|una)\b|\bsi\s+tiene\s+o\b|decir(te|le)?\s+si\b|saber\s+si\b|determinar\s+si\b|confirmar\s+si\b|no\s+significa|no\s+sé\s+si\b|no\s+lo\s+sé)/;
+const SALVEDADES = /(no\s+(te\s+)?puedo|no\s+podemos|no\s+es\s+posible|no\s+se\s+puede|nadie\s+(te\s+)?puede|solo\s+(un|una)\b|sólo\s+(un|una)\b|\bsi\s+tiene\s+o\b|decir(te|le)?\s+si\b|saber\s+si\b|determinar\s+si\b|determinamos\s+si\b|confirmar\s+si\b|no\s+significa|no\s+sé\s+si\b|no\s+lo\s+sé|no\s+diagnosticamos)/;
+// 2026-11-10 · Salvedades pegadas a la coincidencia (precisión sobre cobertura):
+// - sujeto genérico: «cuando una niña está dentro del espectro…», «muchas adolescentes que presentan…»;
+// - eco de lo que contó la cuidadora: «como nos cuentas que tu hija está dentro del espectro…».
+const SUJETO_GENERICO = /\b(una|cada|cualquier|toda|muchas|algunas|las|otras)\s+(niñas?|adolescentes?|personas?|chicas?)(\s+o\s+adolescentes?)?\s+(que\s+)?$/;
+const ECO_DE_LA_CUIDADORA = /\b(como|según)\s+(nos|me)\s+(cuentas|contaste|dices|dijiste|indicas)(\s+que)?\s+((tu|la|su)\s+(hija|nieta|niña|adolescente|alumna|estudiante)\s+|ella\s+)?$/;
 
 export function filtrarDiagnostico(respuesta) {
   const t = String(respuesta ?? "").toLowerCase();
@@ -111,7 +122,11 @@ export function filtrarDiagnostico(respuesta) {
       // Condicional "si (tu hija) es autista": un "si" sin tilde hasta 3 palabras
       // antes no es afirmación. ("creo que es autista" sí se bloquea.)
       const condicional = /(^|[^\p{L}])si\s+(\S+\s+){0,3}$/u.test(antes) || /(^|[^\p{L}])si\s*$/u.test(antes);
-      if (!SALVEDADES.test(antes) && !condicional) {
+      // «…está dentro del espectro autista o presenta otra neurodivergencia»: la segunda mitad
+      // sigue la suerte de la primera, que ya se revisó como coincidencia propia.
+      const segundaMitad = /dentro\s+del\s+espectro(\s+autista)?,?\s+o\s+(no\s+)?$/.test(antes);
+      const generico = SUJETO_GENERICO.test(antes) || ECO_DE_LA_CUIDADORA.test(antes) || segundaMitad;
+      if (!SALVEDADES.test(antes) && !condicional && !generico) {
         return { bloqueado: true, motivo: `${motivo}: «${m[0].trim()}»` };
       }
       if (m.index === g.lastIndex) g.lastIndex++;

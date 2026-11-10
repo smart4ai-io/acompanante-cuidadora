@@ -4,7 +4,8 @@
 // la sesión actualizada.
 //
 //   POST /api/chat   Content-Type: application/json
-//   { "estado": {…} | null, "mensaje": "texto", "accion": "mensaje" | "chequeo" | "resumen" | "fuentes" }
+//   { "estado": {…} | null, "mensaje": "texto", "accion": "mensaje" | "chequeo" | "resumen" | "fuentes",
+//     "perfil": { "nina": "resumen corto", "cuidadora": "resumen corto" } | null }   (2026-11-10)
 //   200 -> { "estado": {…}, "respuesta": { texto, candado, fuentes_usadas, uso, fragmentos, … }, "meta": {…} }
 //   4xx/5xx -> { "error": "<código>", "detalle": "…", "respuesta": { texto: RESPUESTA_ERROR, candado: "error", … } }
 //
@@ -77,7 +78,7 @@ function listaFuentes() {
   const docs = fuentes();
   const lineas = docs.map((f) => `- ${f.id} · ${f.titulo || ""} · estado: ${f.estado || "?"} · aval: ${f.aval || "?"}`);
   return {
-    texto: `Biblioteca de la Acompañante (${docs.length} documentos):\n${lineas.join("\n")}`,
+    texto: `Biblioteca de Contigo (${docs.length} documentos):\n${lineas.join("\n")}`,
     candado: null,
     fuentes_usadas: [],
     uso: { llamadas: 0 },
@@ -142,7 +143,9 @@ export async function manejar(request) {
     let r;
     if (accion === "chequeo") r = chequeoConEstado(estado);
     else if (accion === "resumen") r = await resumenConEstado(estado);
-    else r = await responderConEstado(estado, mensaje);
+    // El perfil sensorial viaja aparte de la sesión: se valida y recorta en agente.js, va al
+    // modelo delimitado y no se escribe en ningún log ni en la guardia (ni vuelve en «estado»).
+    else r = await responderConEstado(estado, mensaje, { perfil: cuerpo.perfil });
 
     await esperarAvisos(); // que el aviso al webhook de la guardia salga antes de terminar
     return json({ estado: r.estado, respuesta: r.respuesta, meta: { proveedor: proveedor() } });

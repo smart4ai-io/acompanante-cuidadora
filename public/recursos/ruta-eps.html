@@ -33,10 +33,10 @@
   --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
   --borde: #DCDFEE;
   /* Tonos profundos AA para botones, enlaces y acentos */
-  --principal: #1F7A55;             /* blanco encima 5,29:1 */
-  --principal-hondo: #176446;
+  --principal: #6B3FA0;             /* morado · blanco encima 7,38:1 (la acción nunca va en verde) */
+  --principal-hondo: #5A2F8E;
   --sobre-principal: #FFFFFF;
-  --hover-suave: #EAF6F1;
+  --hover-suave: #F2ECFA;
   --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
   --sobre-acento: #FFFFFF;
   --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
@@ -55,7 +55,7 @@
 :root[data-tema="oscuro"] {
   --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
   --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
-  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --principal: #C9B2F5; --principal-hondo: #DCCBFA; --sobre-principal: #1A0F2E; --hover-suave: #322A45;
   --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
   --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
   --sombra: 0 12px 32px rgba(0,0,0,.35);
@@ -67,11 +67,11 @@
   --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
   --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
   --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
-  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --principal: #5E4A85; --principal-hondo: #4B3B6B; --acento: #8C2C55; --azul-hondo: #3A4F9C;
   --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
 }
 :root[data-suave="si"][data-tema="oscuro"] {
-  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --fondo-pagina: #17161B; --principal: #C3B6DD; --principal-hondo: #D5CCE8; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
   --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
 }
 :root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
@@ -812,7 +812,7 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
       <ol class="camino" id="camino"></ol>
       <p class="ayuda-linea" data-leer>Si hay riesgo para la vida o una crisis emocional: Línea 106 o 123. Los números están escritos aquí; esta página no llama.</p>
       <div class="acciones">
-        <button type="button" class="c-boton secundario" id="b-leyes">Las leyes, en corto</button>
+        <button type="button" class="c-boton secundario" id="b-leyes">Tus derechos, en corto</button>
         <button type="button" class="c-boton texto" id="b-camino-inicio">Volver al inicio</button>
       </div>
       <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
@@ -825,7 +825,7 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
 
   <section class="pantalla" data-pantalla="leyes" aria-labelledby="t-leyes" hidden>
     <div class="hoja">
-      <h2 id="t-leyes" tabindex="-1" data-leer>Las leyes, en corto</h2>
+      <h2 id="t-leyes" tabindex="-1" data-leer>Tus derechos, en corto</h2>
       <p class="aviso-legal" data-leer>Orientación general, no es asesoría legal; los canales cambian según la EPS.</p>
       <ul class="leyes" id="leyes"></ul>
       <p class="bajada" id="leyes-mientras" data-leer></p>
@@ -866,7 +866,7 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
       <ul class="c-numeros">
         <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
         <li><strong>106</strong> Línea 106, para hablar con alguien</li>
-        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+        <li><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</li>
       </ul>
       <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
     </div>
@@ -901,12 +901,12 @@ var RutaEps = (function () {
       explica: [
         f('Pide la cita por los canales de tu EPS: línea telefónica, página web, aplicación o punto de atención. Los canales exactos cambian según la EPS.', 'ruta-eps', ['Pide la cita por los canales de tu EPS', 'línea telefónica, página web, aplicación o punto de atención', 'Los canales exactos dependen de la EPS']),
         f('Pide primero cita con medicina general o pediatría. Desde ahí pueden remitirte a otras especialidades.', 'ruta-eps', ['Pide primero cita con medicina general o pediatría', 'Desde ahí pueden remitirte a otras especialidades']),
-        f('Cuenta lo que has observado de la niña. Un resumen de lo que has anotado puede ayudarte.', 'ruta-eps', ['Cuenta lo que has observado de la niña', 'El resumen del diario puede ayudarte'])
+        f('Cuenta lo que has observado de la niña o adolescente. Un resumen de lo que has anotado puede ayudarte.', 'ruta-eps', ['Cuenta lo que has observado de la niña', 'El resumen del diario puede ayudarte'])
       ],
       marcas: [
         m('p1-canal', 'Pedí la cita por un canal de mi EPS.', 'ruta-eps', 'Pide la cita por los canales de tu EPS'),
         m('p1-general', 'Pedí cita con medicina general o pediatría.', 'ruta-eps', 'medicina general o pediatría'),
-        m('p1-contar', 'Conté lo que he observado de la niña.', 'ruta-eps', 'Cuenta lo que has observado de la niña')
+        m('p1-contar', 'Conté lo que he observado de ella.', 'ruta-eps', 'Cuenta lo que has observado de la niña')
       ] },
     { id: 'prueba', titulo: 'Guardar prueba', icono: 'p-prueba', color: 'arena', extra: 'plantilla',
       explica: [
@@ -948,7 +948,7 @@ var RutaEps = (function () {
     { id: 'tutela', titulo: 'Si nada funciona: la tutela', icono: 'p-tutela', color: 'arena', extra: null,
       explica: [
         f('La tutela es una acción que una persona puede presentar ante un juez para pedir que se proteja un derecho fundamental que está siendo vulnerado o amenazado. Está en la Constitución.', 'tutela', ['La tutela es una acción que una persona puede presentar ante un juez para pedir que se proteja un derecho fundamental que está siendo vulnerado o amenazado', 'Está en la Constitución']),
-        f('Puede ser una opción cuando la EPS niega o demora un servicio de salud que la niña necesita y ya intentaste los pasos anteriores sin respuesta. Si procede o no, lo valora la persona que te asesore: depende del caso.', 'tutela', ['Cuando la EPS niega o demora un servicio de salud que la niña necesita', 'la tutela puede ser una opción', 'Si procede o no, lo valora la persona que te asesore: depende del caso']),
+        f('Puede ser una opción cuando la EPS niega o demora un servicio de salud que la niña o adolescente necesita y ya intentaste los pasos anteriores sin respuesta. Si procede o no, lo valora la persona que te asesore: depende del caso.', 'tutela', ['Cuando la EPS niega o demora un servicio de salud que la niña o adolescente necesita', 'la tutela puede ser una opción', 'Si procede o no, lo valora la persona que te asesore: depende del caso']),
         f('Es un trámite serio y nadie te puede asegurar cómo termina. Antes de ponerla, habla con una persona que conozca del tema.', 'tutela', ['Una tutela es un trámite serio', 'No te puedo asegurar cómo termina', 'sin hablar antes con una persona que conozca del tema'])
       ],
       marcas: [
@@ -977,9 +977,9 @@ var RutaEps = (function () {
     f('¿Me dieron la respuesta por escrito?:', 'ruta-eps', 'pide la respuesta por escrito')
   ];
   var LEYES = [
-    { titulo: 'Ley 1618 de 2013', texto: f('Protege los derechos de las personas con discapacidad. Para saber cómo aplica en tu caso, conviene hablar con una persona que conozca de leyes o con la entidad que te oriente en tu municipio.', 'ley-1618-2013-discapacidad', ['que protege los derechos de las personas con discapacidad', 'Para saber cómo aplica en tu caso, conviene hablar con una persona que conozca de leyes o con la entidad que te oriente en tu municipio']) },
-    { titulo: 'Ley 1616 de 2013', texto: f('En Colombia la salud mental es un derecho, y esta ley lo dice. Da prioridad a la niñez y a la juventud. Si necesitas atención psicológica o psiquiátrica, puedes pedirla a tu EPS.', 'ley-1616-2013-salud-mental', ['En Colombia la salud mental es un derecho', 'prioridad a la niñez y a la juventud', 'Si necesitas atención psicológica o psiquiátrica, puedes pedirla a tu EPS']) },
-    { titulo: 'Ley 2628 de 2026', texto: f('Es una ley nueva sobre la atención al autismo. Algunas partes necesitan una reglamentación para empezar a funcionar: no se pueden pedir como algo que ya funciona hoy. Para saber qué aplica en tu caso, consulta con una persona que conozca de leyes.', 'ley-2628-2026', ['sobre la atención al autismo', 'Algunas partes necesitan una reglamentación para empezar a funcionar', 'no se deben prometer como vigentes o aplicables hoy', 'Para saber qué aplica en tu caso, consulta con una persona que conozca de leyes']) }
+    { titulo: 'Derechos de las personas con discapacidad', texto: f('Protege los derechos de las personas con discapacidad. Para saber cómo aplica en tu caso, conviene hablar con una persona que conozca de leyes o con la entidad que te oriente en tu municipio.', 'ley-1618-2013-discapacidad', ['que protege los derechos de las personas con discapacidad', 'Para saber cómo aplica en tu caso, conviene hablar con una persona que conozca de leyes o con la entidad que te oriente en tu municipio']) },
+    { titulo: 'Salud mental', texto: f('En Colombia la salud mental es un derecho. Se da prioridad a la niñez y a la juventud. Si necesitas atención psicológica o psiquiátrica, puedes pedirla a tu EPS.', 'ley-1616-2013-salud-mental', ['En Colombia la salud mental es un derecho', 'prioridad a la niñez y a la juventud', 'Si necesitas atención psicológica o psiquiátrica, puedes pedirla a tu EPS']) },
+    { titulo: 'Atención al autismo', texto: f('Hay una norma nueva sobre la atención al autismo. Algunas partes necesitan una reglamentación para empezar a funcionar: no se pueden pedir como algo que ya funciona hoy. Para saber qué aplica en tu caso, consulta con una persona que conozca de leyes.', 'ley-2628-2026', ['sobre la atención al autismo', 'Algunas partes necesitan una reglamentación para empezar a funcionar', 'no se deben prometer como vigentes o aplicables hoy', 'Para saber qué aplica en tu caso, consulta con una persona que conozca de leyes']) }
   ];
   var MIENTRAS = f('Mientras tanto, puedes usar los derechos que ya existen: los pasos de esta guía.', 'ley-2628-2026', 'puede usar los derechos que ya existen');
   var AYUDA = f('Si hay riesgo para la vida o una crisis emocional: Línea 106 o 123.', 'ruta-eps', 'Si hay riesgo para la vida o crisis emocional: Línea 106 o 123');
@@ -1103,7 +1103,7 @@ var RutaEps = (function () {
       return t.join(' ');
     }
     if (n === 'camino') return 'Tu camino. ' + R.PASOS.map(function (P, i) { return (i + 1) + ', ' + P.titulo + ': ' + R.marcadas(guardado, i + 1) + ' de ' + P.marcas.length + ' marcados.'; }).join(' ') + ' ' + R.AYUDA.texto;
-    if (n === 'leyes') return 'Las leyes, en corto. ' + R.AVISO + ' ' + R.LEYES.map(function (L) { return L.titulo + '. ' + L.texto.texto; }).join(' ') + ' ' + R.MIENTRAS.texto;
+    if (n === 'leyes') return 'Tus derechos, en corto. ' + R.AVISO + ' ' + R.LEYES.map(function (L) { return L.titulo + '. ' + L.texto.texto; }).join(' ') + ' ' + R.MIENTRAS.texto;
     return Array.prototype.map.call(seccion(n).querySelectorAll('[data-leer]'), function (el) { return (el.innerText || el.textContent).replace(/\s*\n\s*/g, ', ').trim(); }).join('. ');
   }
 

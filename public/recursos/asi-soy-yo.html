@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
-<meta name="description" content="Así soy yo: la flor de tu hija para compartir con la maestra y con el papá. Prototipo de Contigo.">
+<meta name="description" content="Así soy yo: en 90 segundos, qué estímulos la desbordan, cuáles la regulan y sus señales de aviso. Tú decides con quién lo compartes. Prototipo de Contigo.">
 <title>Así soy yo · Contigo</title>
 <!-- Pieza 1 de la Ola 1 de «Recursos» de Contigo (2026-11-08). Página autocontenida: CSS, JS y dibujos aquí mismo.
      La única carga externa es la fuente Poppins (con respaldo de sistema). La política de seguridad de arriba
@@ -32,10 +32,10 @@
   --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
   --borde: #DCDFEE;
   /* Tonos profundos AA para botones, enlaces y acentos */
-  --principal: #1F7A55;             /* blanco encima 5,29:1 */
-  --principal-hondo: #176446;
+  --principal: #6B3FA0;             /* morado · blanco encima 7,38:1 (la acción nunca va en verde) */
+  --principal-hondo: #5A2F8E;
   --sobre-principal: #FFFFFF;
-  --hover-suave: #EAF6F1;
+  --hover-suave: #F2ECFA;
   --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
   --sobre-acento: #FFFFFF;
   --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
@@ -54,7 +54,7 @@
 :root[data-tema="oscuro"] {
   --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
   --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
-  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --principal: #C9B2F5; --principal-hondo: #DCCBFA; --sobre-principal: #1A0F2E; --hover-suave: #322A45;
   --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
   --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
   --sombra: 0 12px 32px rgba(0,0,0,.35);
@@ -66,11 +66,11 @@
   --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
   --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
   --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
-  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --principal: #5E4A85; --principal-hondo: #4B3B6B; --acento: #8C2C55; --azul-hondo: #3A4F9C;
   --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
 }
 :root[data-suave="si"][data-tema="oscuro"] {
-  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --fondo-pagina: #17161B; --principal: #C3B6DD; --principal-hondo: #D5CCE8; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
   --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
 }
 :root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
@@ -230,7 +230,7 @@ main:focus { outline: none; }
 .por-completar { margin-top: 8px; color: var(--texto-suave); }
 .banda-ejemplo { background: var(--lavanda-claro); color: var(--sobre-pastel); border-radius: 20px; padding: 14px 16px; margin-bottom: 14px; border: 1px solid var(--lavanda); }
 .banda-ejemplo .acciones { margin-top: 12px; }
-.banda-ejemplo .c-boton.texto { color: #1F5F45; }
+.banda-ejemplo .c-boton.texto { color: #5A2F8E; }
 .zona-borrar { margin: 22px 0 0; text-align: center; }
 .estado-borrar { font-size: 17px; color: var(--texto-suave); }
 .lista-sale { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 8px; }
@@ -841,8 +841,9 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
   <section class="pantalla" data-pantalla="inicio" id="pantalla-inicio" aria-labelledby="t-inicio">
     <div class="hoja">
       <div class="flor flor-mini" id="flor-mini" aria-hidden="true"></div>
-      <h1 id="t-inicio" tabindex="-1" data-leer>Así soy yo</h1>
-      <p class="bajada" data-leer>Arma la flor de tu hija: lo que la calma, lo que la desborda y cómo te avisa que necesita ayuda. Después la compartes con la maestra o con el papá.</p>
+      <p class="paso">Así soy yo</p>
+      <h1 id="t-inicio" tabindex="-1" data-leer>¿Por qué ella es extraordinariamente única?</h1>
+      <p class="bajada" data-leer>En 90 segundos identifica qué estímulos la desbordan y cuáles la regulan. También cuáles son sus señales de aviso. Tú decides con quién compartes esta información.</p>
       <ul class="datos-rapidos" data-leer aria-label="Cuánto toma"><li>3 preguntas</li><li>90 segundos</li><li>Sin cuenta</li></ul>
       <p class="pista" data-leer>Se guarda en este celular. No sale de aquí hasta que tú lo compartas.</p>
       <p class="aviso-inicio" id="inicio-aviso" role="status" hidden></p>
@@ -1024,7 +1025,7 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
       <ul class="c-numeros">
         <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
         <li><strong>106</strong> Línea 106, para hablar con alguien</li>
-        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+        <li><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</li>
       </ul>
       <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
     </div>
@@ -1264,7 +1265,7 @@ var AsiSoyYo = (function (C) {
     flor: function () {
       var p = activo(), faltan = T6.slice(3).some(function (T) { return !A.tieneAlgo(p, T.id); });
       $('#banda-ejemplo').hidden = !estado.ejemplo;
-      $('#t-flor').textContent = 'La flor de ' + (p.apodo || 'tu hija');
+      $('#t-flor').textContent = 'Lo que hace única a ' + (p.apodo || 'tu hija');
       $('#flor-estado').textContent = estado.ejemplo ? 'Así se ve con las 6 tarjetas llenas. Toca «Compartir» para ver cómo llega.' : faltan ? 'Lo esencial está listo. Ya la puedes compartir.' : 'Está completa. Ya la puedes compartir.';
       $('#flor-grande').innerHTML = svgFlor(p, { animar: true, petalosBoton: !estado.ejemplo, centroBoton: !estado.ejemplo });
       $('#b-completar').hidden = estado.ejemplo || !faltan;
@@ -1309,7 +1310,7 @@ var AsiSoyYo = (function (C) {
   function textoEscuchar() {
     var n = estado.pantalla;
     if (n === 'tarjeta') { var T = T6[estado.tarjeta]; return T.titulo.mama + '. Toca hasta 3. Las opciones son: ' + T.opciones.map(function (o) { return o.texto; }).join(', ') + '.'; }
-    if (n === 'flor') { var p = activo(); return 'La flor de ' + (p.apodo || 'tu hija') + '. ' + hablado(p, 'mama') + ' Esto lo cuenta la familia; no es una evaluación.'; }
+    if (n === 'flor') { var p = activo(); return 'Lo que hace única a ' + (p.apodo || 'tu hija') + '. ' + hablado(p, 'mama') + ' Esto lo cuenta la familia; no es una evaluación.'; }
     if (n === 'lectura') { return $('#lectura-intro').textContent + ' ' + hablado(estado.recibido.perfil, estado.rol) + ' Esto lo cuenta la familia; no es una evaluación.'; }
     return Array.prototype.map.call(seccion(n).querySelectorAll('[data-leer]'), function (el) { return (el.innerText || el.textContent).replace(/\s*\n\s*/g, ', ').trim(); }).join('. ');
   }

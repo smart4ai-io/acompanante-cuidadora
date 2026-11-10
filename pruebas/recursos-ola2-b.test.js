@@ -418,7 +418,7 @@ describe("calma", () => {
   });
 
   test("piel adolescente «la nube»: nada infantil (sin dibujos de niña, palabras de grande)", () => {
-    assert.equal(K.PIELES.nube.frase, "Estás a salvo. Quédate el tiempo que necesites.");
+    assert.equal(K.PIELES.nube.frase, "Este es tu lugar seguro. Quédate el tiempo que necesites."); // guía de lenguaje, regla 6 (2026-11-10)
     assert.doesNotMatch(K.PIELES.nube.titulo, /cueva/i);
     assert.match(P.cssPieza, /#vista-nina\[data-piel="nube"\] \.opcion-nina \.dib \{ display: none; \}/);
     assert.match(P.cssPieza, /#mostrar\[data-piel="nube"\] \.mostrar-dibujo \{ display: none; \}/);

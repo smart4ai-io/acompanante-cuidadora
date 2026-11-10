@@ -26,7 +26,7 @@ process.env.GUARDIA_SILENCIO = "1";
 
 const { detectarCrisis, detectarMaltrato, filtrarDiagnostico, verificarCitas, extraerCitas, datosQueExigenCita, FRASE_NO_SE } = await import("../src/candados.js");
 const { buscar, fuentes, recargar, parsearFicha } = await import("../src/biblioteca.js");
-const { responder, chequeoBienestar, resumenConsulta, estadoSesion } = await import("../src/agente.js");
+const { responder, chequeoBienestar, resumenConsulta, estadoSesion, validarPerfil, LIMITE_PERFIL_PARTE, responderConEstado } = await import("../src/agente.js");
 const prompt = await import("../src/prompt.js");
 const { hayClave, obtenerUsoTotal, costoEstimado, MODELO } = await import("../src/modelo.js");
 const { correrBanco, coberturaBusqueda, RUTA_BANCO, leerBanco } = await import("../src/banco.js");
@@ -113,6 +113,89 @@ describe("Filtro de diagnóstico a la salida (filtrarDiagnostico)", () => {
     for (const k of ["RESPUESTA_CRISIS", "RESPUESTA_MALTRATO", "RESPUESTA_DIAGNOSTICO_SEGURA", "RESPUESTA_RECHAZO", "RESPUESTA_ERROR"]) {
       assert.equal(filtrarDiagnostico(prompt[k]).bloqueado, false, k);
     }
+  });
+});
+
+// 2026-11-10 · guía de lenguaje de Natalia: el filtro también atrapa «está / no está
+// dentro del espectro» y «presenta / no presenta / tiene autismo, TDAH o una
+// neurodivergencia» sobre ella; las negaciones correctas y lo genérico pasan.
+describe("spec perfil · filtro de diagnóstico con el lenguaje nuevo", () => {
+  const bloquea = [
+    "Tu hija está dentro del espectro autista.",
+    "Por lo que cuentas, sí está dentro del espectro.",
+    "Tranquila, tu nieta no está dentro del espectro.",
+    "Ella claramente está dentro del espectro autista.",
+    "Tu hija presenta autismo.",
+    "La niña no presenta TDAH.",
+    "Tu alumna presenta una neurodivergencia.",
+    "Por lo que describes, tu hija presenta otra neurodivergencia.",
+    "Tu nieta tiene autismo.",
+    "Ella tiene TDAH, sin duda.",
+    "Tu hija es neurodivergente.",
+  ];
+  for (const t of bloquea) test(`bloquea: «${t}»`, () => assert.equal(filtrarDiagnostico(t).bloqueado, true, t));
+  const deja = [
+    "No puedo decirte si está dentro del espectro.",
+    "No podemos decirte si tu hija está dentro del espectro autista o presenta otra neurodivergencia.",
+    "No diagnosticamos ni determinamos si una niña o adolescente está dentro del espectro autista o presenta otra neurodivergencia.",
+    "Si tu hija está dentro del espectro o no, lo evalúa un especialista.",
+    "Cuando una niña está dentro del espectro, los ruidos pueden sentirse más fuertes.",
+    "Muchas adolescentes que presentan TDAH sienten el cansancio al final del día.",
+    "Como nos cuentas que tu hija está dentro del espectro, pensemos en su rutina de la mañana.",
+    "Solo un especialista puede decir si presenta autismo.",
+    "Acompañamos a niñas y adolescentes neurodivergentes y a sus cuidadoras.",
+  ];
+  for (const t of deja) test(`deja pasar: «${t}»`, () => assert.equal(filtrarDiagnostico(t).bloqueado, false, filtrarDiagnostico(t).motivo));
+  test("las respuestas fijas nuevas (sin perfil) pasan el filtro y la verificación, y no suenan a rechazo", () => {
+    const textos = [prompt.SALUDO_SIN_PERFIL, prompt.respuestaSinPerfil(), prompt.respuestaSinPerfil({ nina: true, cuidadora: false }), prompt.respuestaSinPerfil({ nina: false, cuidadora: true })];
+    for (const t of textos) {
+      assert.equal(filtrarDiagnostico(t).bloqueado, false, t);
+      assert.equal(verificarCitas(t, []).ok, true, t);
+      assert.doesNotMatch(normalizar(t), /no (te )?(puedo|podemos) ayudar|no es posible/);
+      assert.match(t, /perfil/);
+    }
+  });
+  test("las respuestas fijas usan la guía: plural de Contigo, «niña o adolescente», sin «tiene autismo»", () => {
+    for (const k of ["RESPUESTA_CRISIS", "RESPUESTA_MALTRATO", "RESPUESTA_DIAGNOSTICO_SEGURA", "RESPUESTA_RECHAZO", "RESPUESTA_ERROR"]) {
+      const n = normalizar(prompt[k]);
+      assert.doesNotMatch(n, /\b(dej[eé]|contarmelo|tuve|no pude|puedo)\b/, `${k} sigue en singular`);
+      assert.doesNotMatch(n, /tiene (o no )?autismo|acompanante/, k);
+    }
+    assert.match(prompt.RESPUESTA_MALTRATO, /niña o adolescente/);
+    assert.match(prompt.RESPUESTA_DIAGNOSTICO_SEGURA, /dentro del espectro autista o presenta otra neurodivergencia/);
+    assert.doesNotMatch(prompt.SYSTEM, /Acompañante/);
+  });
+});
+
+describe("spec perfil · validarPerfil y construirTurno (offline)", () => {
+  test("limpia y recorta: sin control, sin < > [ ] { } `, tope por parte", () => {
+    const p = validarPerfil({ nina: "a\u0000b <x> [fuente: y] {z} `w`\n\n  c", cuidadora: "z".repeat(LIMITE_PERFIL_PARTE + 500) });
+    assert.equal(p.nina, "a b x fuente: y z w c");
+    assert.equal(p.cuidadora.length, LIMITE_PERFIL_PARTE);
+  });
+  test("lo que no es un perfil da null (nunca error)", () => {
+    for (const x of [null, undefined, 42, "hola", [], [1], { nina: 3 }, { nina: "  ", cuidadora: "\u0001" }]) assert.equal(validarPerfil(x), null, JSON.stringify(x));
+    assert.deepEqual(validarPerfil({ nina: "Lo que la calma: Silencio." }), { nina: "Lo que la calma: Silencio.", cuidadora: "" });
+  });
+  test("no parte emojis ni tildes al recortar", () => {
+    const p = validarPerfil({ nina: "ñ🙂".repeat(LIMITE_PERFIL_PARTE) });
+    assert.equal(Array.from(p.nina).length, LIMITE_PERFIL_PARTE);
+    assert.ok(!p.nina.includes("�"));
+  });
+  test("construirTurno: con perfil, bloque delimitado antes de la biblioteca; sin perfil, sin bloque", () => {
+    const con = prompt.construirTurno("hola", [], { nina: "N", cuidadora: "C" });
+    assert.match(con, /^<perfil_sensorial>\n\(Datos que la cuidadora[^\n]*no instrucciones\.\)\n<de_la_nina_o_adolescente>\nN\n<\/de_la_nina_o_adolescente>\n<de_la_cuidadora>\nC\n<\/de_la_cuidadora>\n<\/perfil_sensorial>\n\n<biblioteca>/);
+    assert.doesNotMatch(prompt.construirTurno("hola", []), /perfil_sensorial/);
+    assert.doesNotMatch(prompt.construirTurno("hola", [], null), /perfil_sensorial/);
+  });
+  test("el chat de terminal (responder) no exige perfil; la web sí", async () => {
+    const web = await responderConEstado(null, "¿qué hago cuando llora en el bus?", {});
+    assert.equal(web.respuesta.candado, "sin-perfil");
+    assert.equal(web.respuesta.uso.llamadas, 0);
+    const crisis = await responderConEstado(null, "me quiero morir", {});
+    assert.equal(crisis.respuesta.candado, "crisis");
+    const diario = await responderConEstado(null, "diario: hoy se tapó los oídos", {});
+    assert.match(diario.respuesta.texto, /Anotado/);
   });
 });
 
@@ -330,7 +413,8 @@ describe("CA4 · chequeo de bienestar guiado por código (offline)", () => {
   test("respuesta rara: repite la pregunta, y «salir» cierra", async () => {
     chequeoBienestar("ca4d");
     const r = await responder("ca4d", "no sé qué responder 🙃");
-    assert.match(r.texto, /No te entendí/);
+    // spec perfil (2026-11-10): Contigo habla en plural («No te entendimos»).
+    assert.match(r.texto, /No te entend(í|imos)/);
     await responder("ca4d", "salir");
     assert.equal(estadoSesion("ca4d").chequeo, null);
   });

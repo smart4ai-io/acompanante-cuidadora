@@ -3,10 +3,11 @@
 > 2026-11-08 · Nace con `asi-soy-yo.html`. Se copia **idéntico** a cada pieza nueva; si cambia, sube a v2 y se copia a todas.
 
 ## Qué trae
-- **Tokens de color** del manual de Somos Extraordinarios (menta, lavanda, rosa, arena + tonos profundos AA) y **tema claro/oscuro** (sigue al sistema; el botón de la luna lo fija).
+- **Tokens de color** (pasteles menta, lavanda, rosa, arena + tonos profundos AA) y **tema claro/oscuro** (sigue al sistema; el botón de la luna lo fija).
+- **Color de acción: morado** (`--principal` #6B3FA0, blanco encima 7,38:1; oscuro #C9B2F5; modo suave #5E4A85 / #C3B6DD). Nunca verde para la acción (guía de lenguaje, regla 8; cambio del 2026-11-10).
 - **Modo sensorial bajo**, en pantalla «Modo suave»: colores apagados, sin degradados, sin sombras, sin movimiento. También se apaga todo movimiento con «reducir movimiento» del celular.
 - **Cabecera** con «Modo suave», tema y el sello «Prototipo · datos de ejemplo».
-- **Barra fija** «Pausa · Calma · Necesito ayuda · Salir». Calma = respiración 4-6 s. Necesito ayuda = tarjeta grande para mostrar; en vistas de adulto muestra 123, 106 y 141 **escritos** (no llama ni envía). Salir = va al inicio del sitio (fuera del sitio, «puedes cerrar»).
+- **Barra fija** «Pausa · Calma · Necesito ayuda · Salir». Calma = respiración 4-6 s. Necesito ayuda = tarjeta grande para mostrar; en vistas de adulto muestra 123, 106 y 141 («ante un posible maltrato a una niña, niño o adolescente») **escritos** (no llama ni envía). Salir = va al inicio del sitio (fuera del sitio, «puedes cerrar»).
 - **Voz** opcional (`Contigo.voz`): solo con un toque; si no hay voz en español, los botones con `data-voz` se esconden.
 - **Baúl** (`Contigo.baul`): localStorage con claves `contigo.*`, todo en try/catch.
 - **Puerta de adulto** (`Contigo.puertaAdulto`): mantener presionado 3 s (también con teclado).
@@ -23,7 +24,7 @@
    - La etiqueta `<meta http-equiv="Content-Security-Policy" …>` y el `<link>` de Poppins.
 2. El contenido de la pieza va dentro de `<main id="principal">`.
 3. Al final, en el script de la pieza: `Contigo.iniciar({ vistaAdulto: true|false, textoEscuchar: () => '…' })`.
-   En vistas de niña usa `vistaAdulto: false` (la tarjeta de ayuda no muestra los números).
+   En vistas de niña o adolescente usa `vistaAdulto: false` (la tarjeta de ayuda no muestra los números).
 4. Agrega la página a `pruebas/recursos.test.js` y corre `node --test pruebas/recursos.test.js`.
 
 ## Claves en el celular (localStorage)
@@ -37,6 +38,8 @@
 | `contigo.plan-de-tormenta` | «Plan de tormenta» | `{ v, plan: { apodo, bloques: { senales, ayuda, evitar, avisar } }, paso, listo }` · enlace `#t1.` |
 | `contigo.ruta-eps` | «Guía de la ruta en la EPS» | `{ v, hechos: [ids marcados], paso }` |
 | `contigo.mi-dia` | «Mi día» (solo vista adulto) | `{ v, momento, pasos[], palabras{}, modo }` · enlace `#d1.` |
+| `contigo.sus-ciclos` | «Sus ciclos, su ritmo» (vista adulto) | `{ v:1, dias: { "AAAA-MM-DD": { s, d, n, a, c } } }` · máx. 500 días · sin enlace # |
+| `contigo.mi-perfil` | Perfil sensorial de la cuidadora (index, dentro del chat) | 5 respuestas cortas + fecha de la energía; viaja resumido con cada mensaje, el servidor no lo guarda |
 | `contigo.calma` | «Mi rincón de calma» (solo vista adulto) | `{ v, piel, opciones[], sirven[] }` · enlace `#k1.` (lista de ideas) |
 | `contigo.cuentos` | «Lo que va a pasar» (solo vista adulto) | `{ v:1, apodo, historias: { <id>: { quitadas, textos, ayudas } } }` · enlace `#h1.` |
 

@@ -5,9 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="description" content="Una acompañante por chat para madres y abuelas de niñas autistas en Colombia. Gratis, en español, a cualquier hora. Orienta y remite; nunca diagnostica.">
-<title>Acompañante de la cuidadora · No tienes que cuidar sola</title>
-<!-- v4 (2026-11-08): estilo alineado al manual de marca de Somos Extraordinarios (Poppins, pasteles, círculos). Mismos textos, estructura y JS de la v3.
+<meta name="description" content="Contigo: protegemos niñas y adolescentes extraordinarias y acompañamos a sus cuidadoras. Herramientas, tips e información práctica para madres, abuelas y maestras en Colombia. No diagnosticamos, no formulamos, no generalizamos.">
+<title>Contigo · Protegemos niñas y adolescentes extraordinarias y acompañamos a sus cuidadoras</title>
+<!-- v5 (2026-11-10): textos de Natalia Orozco y GUIA_DE_LENGUAJE.md («Contigo», plural, «niña o adolescente»),
+     acción en morado (nada de verde como color de acción), perfil sensorial en dos partes antes de conversar
+     (el de ella = «Así soy yo», clave contigo.perfil; el de la cuidadora = aquí, clave contigo.mi-perfil),
+     que viaja en cada mensaje como resumen corto y no se guarda en el servidor. Versión anterior: index.html.bak_2026-11-10.
+     v4 (2026-11-08): estilo alineado al manual de marca de Somos Extraordinarios (Poppins, pasteles, círculos). Mismos textos, estructura y JS de la v3.
      Propuesta integral v3 (2026-11-07). Landing tipo aplicación con el chat REAL incrustado.
      La lógica del chat es la misma de index.html e index.v2.html (POST /api/chat con
      {estado, mensaje, accion}; la sesión vive en localStorage). Aquí no hay lógica del agente.
@@ -38,8 +42,14 @@
     --magenta: #E61D73;
     --naranja: #E8703D;
     /* Variantes profundas para texto, botones y enlaces (contraste WCAG) */
-    --principal: #1F7A55;       /* botón principal y enlaces · blanco encima 5,29:1 · sobre blanco 5,29:1 */
-    --principal-hondo: #176446; /* hover y texto sobre menta · blanco encima 7,12:1 · sobre menta 5,56:1 */
+    /* v5 (2026-11-10): la acción va en MORADO (pedido de Natalia: el verde se asocia a una postura política).
+       Antes: --principal #1F7A55 y --principal-hondo #176446 (verdes). */
+    --principal: #6A3DB8;       /* botón principal y enlaces · blanco encima 7,06:1 · sobre blanco 7,06:1 · sobre lavanda clara 6,55:1 */
+    --principal-hondo: #4E2A93; /* hover y texto sobre pastel · blanco encima 10,11:1 · sobre lavanda 6,42:1 */
+    --principal-claro: #F1EBFF; /* fondo suave de hover y de lo elegido */
+    --lila: #D9C8FF;            /* botón principal sobre fondos oscuros · texto --morado-noche encima 10,28:1 · sobre ciruela 9,53:1 */
+    --morado-noche: #2A1650;
+    --sombra-accion: rgba(106, 61, 184, 0.26);
     --azul-hondo: #3355D6;      /* etiquetas · sobre blanco 6,16:1 · sobre lavanda clara 5,74:1 */
     --azul-noche: #2D47B8;      /* texto sobre lavanda plena 4,93:1 */
     --magenta-hondo: #B8125C;   /* «¿Estás en peligro?» y acentos · sobre blanco 6,40:1 · sobre rosa clara 5,79:1 */
@@ -58,7 +68,7 @@
     --blanco: #FFFFFF;
     --fondo-chat: #F7F8FD;
     --burbuja-ella: #FFFFFF;
-    --burbuja-yo: var(--menta);
+    --burbuja-yo: #ECE4FF;      /* v5: lila claro (antes menta: sin verde en el chat) · tinta encima 13,42:1 */
     --burbuja-sistema: var(--arena-claro);
     --alerta-fondo: #FBE6EE;
     --alerta-texto: #9A0F4D;
@@ -109,19 +119,19 @@
   .calido .etiqueta-mono::before { background: linear-gradient(135deg, var(--rosa), var(--magenta)); }
   .rotulo { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fuente-texto); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; line-height: 1.2; }
   .rotulo.futuro { background: var(--arena); color: var(--naranja-hondo); }
-  .rotulo.listo { background: var(--menta); color: var(--principal-hondo); }
+  .rotulo.listo { background: var(--principal-claro); color: var(--principal-hondo); }
   .rotulo.listo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--principal); }
   /* Frases de apoyo: Poppins 300 en cursiva (como «Aprendiendo a ser su lugar seguro») */
   .apoyo { font-weight: 300; font-style: italic; }
 
   /* ================= Botones ================= */
-  .boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 999px; border: 0; background: var(--principal); color: var(--blanco); font-family: var(--fuente-texto); font-weight: 600; font-size: 17px; text-decoration: none; cursor: pointer; box-shadow: 0 10px 24px rgba(31, 122, 85, 0.24); transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
-  .boton:hover { background: var(--principal-hondo); transform: translateY(-1px); box-shadow: 0 14px 28px rgba(31, 122, 85, 0.28); }
+  .boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 999px; border: 0; background: var(--principal); color: var(--blanco); font-family: var(--fuente-texto); font-weight: 600; font-size: 17px; text-decoration: none; cursor: pointer; box-shadow: 0 10px 24px var(--sombra-accion); transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+  .boton:hover { background: var(--principal-hondo); transform: translateY(-1px); box-shadow: 0 14px 28px var(--sombra-accion); }
   .boton:active { transform: translateY(1px); }
   .boton .icono { width: 22px; height: 22px; }
   .boton.pequeno { min-height: 48px; padding: 0 20px; font-size: 15.5px; box-shadow: none; }
   .boton.claro { background: rgba(255, 255, 255, 0.75); color: var(--principal); border: 1.5px solid var(--principal); box-shadow: none; }
-  .boton.claro:hover { background: var(--menta-claro); }
+  .boton.claro:hover { background: var(--principal-claro); }
 
   /* ================= Franja fija de ayuda ================= */
   .franja-ayuda { position: fixed; top: 0; left: 0; right: 0; z-index: 80; height: var(--alto-franja); display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 12px; background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid var(--borde); font-size: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -141,12 +151,12 @@
   .marca .linea2 { font-weight: 600; }
   .o-circulo { display: inline-block; width: 0.62em; height: 0.62em; margin: 0 0.04em; border-radius: 50%; background: linear-gradient(140deg, #F4A640, var(--naranja)); vertical-align: -0.02em; }
   .logo { width: 40px; height: 40px; border-radius: 50%; background: var(--degradado-orbe); color: var(--principal-hondo); display: grid; place-items: center; flex: 0 0 auto; position: relative; }
-  .logo::after { content: ""; position: absolute; right: -5px; bottom: -3px; width: 17px; height: 17px; border-radius: 50%; background: linear-gradient(140deg, var(--menta), var(--verde)); opacity: 0.85; mix-blend-mode: multiply; }
+  .logo::after { content: ""; position: absolute; right: -5px; bottom: -3px; width: 17px; height: 17px; border-radius: 50%; background: linear-gradient(140deg, var(--lavanda), var(--principal)); opacity: 0.85; mix-blend-mode: multiply; }
   .logo .icono { width: 21px; height: 21px; position: relative; z-index: 1; }
   .menu-principal { display: none; }
   .menu-principal a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 13px; border-radius: 999px; color: var(--tinta); font-weight: 500; font-size: 15px; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
-  .menu-principal a:hover { background: var(--menta-claro); color: var(--principal-hondo); }
-  .menu-principal a[aria-current="true"] { background: var(--menta-claro); color: var(--principal-hondo); box-shadow: inset 0 0 0 1px var(--menta); }
+  .menu-principal a:hover { background: var(--principal-claro); color: var(--principal-hondo); }
+  .menu-principal a[aria-current="true"] { background: var(--principal-claro); color: var(--principal-hondo); box-shadow: inset 0 0 0 1px var(--lavanda); }
   .cta-nav { display: none !important; margin-left: auto; }
   .boton-menu { margin-left: auto; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); display: grid; place-items: center; cursor: pointer; flex: 0 0 auto; }
   .boton-menu .icono-cerrar { display: none; }
@@ -215,7 +225,7 @@
   .flota { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: 999px; background: rgba(234, 246, 241, 0.82); border: 1px solid var(--vidrio-borde); box-shadow: var(--sombra-vidrio); backdrop-filter: blur(14px) saturate(150%); -webkit-backdrop-filter: blur(14px) saturate(150%); font-size: 14px; font-weight: 500; color: var(--tinta); white-space: nowrap; animation: flotar 8s ease-in-out infinite; }
   .flota.f2 { background: rgba(244, 246, 255, 0.85); }
   .flota .icono { width: 18px; height: 18px; color: var(--azul-hondo); }
-  .flota .vivo { width: 9px; height: 9px; border-radius: 50%; background: var(--verde); box-shadow: 0 0 0 4px rgba(77, 171, 129, 0.25); }
+  .flota .vivo { width: 9px; height: 9px; border-radius: 50%; background: var(--principal); box-shadow: 0 0 0 4px rgba(106, 61, 184, 0.22); }
   /* En celular, abajo a la izquierda (arriba están las etiquetas de la propia foto) */
   .hero .flota.f1 { bottom: 64px; left: 12px; }
   .hero .flota.f2 { bottom: 14px; left: 12px; animation-delay: -3s; animation-duration: 9s; }
@@ -237,7 +247,7 @@
     .hero h1 { font-size: clamp(46px, 4.3vw, 66px); }
     .hero .subtitulo { font-size: 19.5px; }
     .acciones-hero .boton.claro { background: transparent; border-color: transparent; padding: 0 14px; }
-    .acciones-hero .boton.claro:hover { background: var(--menta-claro); transform: none; }
+    .acciones-hero .boton.claro:hover { background: var(--principal-claro); transform: none; }
     .garantias { gap: 6px; }
     .garantias li { font-size: 13.5px; padding: 5px 11px 5px 8px; white-space: nowrap; }
     .garantias .icono { width: 16px; height: 16px; }
@@ -275,7 +285,7 @@
   .preguntas { display: grid; gap: 10px; margin-top: 26px; }
   .preguntas-titulo { font-weight: 600; font-size: 16px; margin-top: 28px; color: var(--tinta); }
   .pregunta-ejemplo { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 12px 20px; border-radius: 999px; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); font-size: 16.5px; text-align: left; cursor: pointer; box-shadow: var(--sombra-suave); transition: border-color 0.2s, transform 0.2s, background 0.2s; }
-  .pregunta-ejemplo:hover { border-color: var(--principal); background: var(--menta-claro); transform: translateX(3px); }
+  .pregunta-ejemplo:hover { border-color: var(--principal); background: var(--principal-claro); transform: translateX(3px); }
   .pregunta-ejemplo .icono { color: var(--principal); }
   .dentro-chat { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
   .dentro-chat span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; background: rgba(255, 255, 255, 0.75); border: 1px solid var(--borde); font-size: 14.5px; font-weight: 500; }
@@ -297,7 +307,7 @@
   .volver:hover { background: rgba(255, 255, 255, 0.7); }
   .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--degradado-orbe); color: var(--principal-hondo); display: grid; place-items: center; flex: 0 0 auto; position: relative; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8); }
   .avatar .icono { width: 22px; height: 22px; }
-  .avatar::after { content: ""; position: absolute; right: 0; bottom: 1px; width: 12px; height: 12px; border-radius: 50%; background: var(--verde); border: 2px solid var(--blanco); }
+  .avatar::after { content: ""; position: absolute; right: 0; bottom: 1px; width: 12px; height: 12px; border-radius: 50%; background: var(--principal); border: 2px solid var(--blanco); }
   .quien-chat { min-width: 0; flex: 1 1 auto; }
   .nombre { font-family: var(--fuente-titulo); font-weight: 600; font-size: 16.5px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .estado { font-size: 13.5px; color: var(--principal-hondo); line-height: 1.2; }
@@ -331,20 +341,20 @@
   .bienvenida .titulito { font-size: 14.5px; color: var(--tinta-suave); margin: 4px 2px -4px; font-weight: 500; }
   .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .opcion { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 10px; min-height: 96px; padding: 14px; border-radius: 22px; border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); font-weight: 500; font-size: 15.5px; line-height: 1.3; text-align: left; cursor: pointer; box-shadow: 0 1px 2px rgba(42, 33, 64, 0.06); }
-  .opcion .icono { width: 34px; height: 34px; padding: 6px; border-radius: 50%; color: var(--principal-hondo); background: var(--menta); }
+  .opcion .icono { width: 34px; height: 34px; padding: 6px; border-radius: 50%; color: var(--principal-hondo); background: var(--principal-claro); }
   .opcion:nth-child(2) .icono { background: var(--lavanda); color: var(--azul-noche); }
   .opcion:nth-child(3) .icono { background: var(--arena); color: var(--naranja-hondo); }
   .opcion:nth-child(4) .icono { background: var(--rosa); color: var(--alerta-texto); }
   .opcion:hover { border-color: var(--principal); }
   .chip { border: 1px dashed #C5CCE8; background: rgba(255, 255, 255, 0.75); color: var(--tinta); border-radius: 18px; padding: 10px 14px; font-size: 15.5px; cursor: pointer; text-align: left; min-height: 48px; }
-  .chip:hover { border-color: var(--principal); background: var(--blanco); }
+  .chip:hover { border-color: var(--principal); background: var(--principal-claro); }
   .ejemplos-lista { display: grid; gap: 8px; }
   .rapidas { display: flex; gap: 8px; overflow-x: auto; padding: 10px 12px 8px; background: var(--fondo-chat); scrollbar-width: none; flex: 0 0 auto; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
   .rapidas::-webkit-scrollbar { display: none; }
   .rapidas[hidden] { display: none; }
   .rapida { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--principal); background: var(--blanco); color: var(--principal); font-weight: 600; font-size: 15px; cursor: pointer; white-space: nowrap; }
   .rapida .icono { width: 20px; height: 20px; }
-  .rapida:hover { background: var(--menta-claro); }
+  .rapida:hover { background: var(--principal-claro); }
   .nota-chat { display: flex; align-items: center; gap: 6px; padding: 2px 12px 0; background: var(--blanco); border-top: 1px solid var(--borde); font-size: 13.5px; color: var(--tinta-suave); flex: 0 0 auto; }
   .nota-chat .guardado { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; }
   .nota-chat .guardado .icono { width: 16px; height: 16px; color: var(--principal); }
@@ -353,8 +363,8 @@
   .redactar { display: flex; gap: 8px; padding: 6px 12px calc(12px + env(safe-area-inset-bottom)); align-items: flex-end; background: var(--blanco); flex: 0 0 auto; }
   .redactar textarea { flex: 1 1 auto; resize: none; border: 1.5px solid var(--borde); border-radius: 26px; padding: 13px 18px; font: inherit; font-size: 17px; line-height: 1.4; background: var(--lavanda-claro); color: var(--tinta); max-height: 140px; min-height: 52px; }
   .redactar textarea::placeholder { color: #6B6B80; }
-  .redactar textarea:focus { border-color: var(--principal); outline: none; box-shadow: 0 0 0 3px rgba(31, 122, 85, 0.18); }
-  .enviar { width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--principal); color: var(--blanco); cursor: pointer; flex: 0 0 auto; display: grid; place-items: center; box-shadow: 0 6px 14px rgba(31, 122, 85, 0.25); }
+  .redactar textarea:focus { border-color: var(--principal); outline: none; box-shadow: 0 0 0 3px rgba(106, 61, 184, 0.18); }
+  .enviar { width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--principal); color: var(--blanco); cursor: pointer; flex: 0 0 auto; display: grid; place-items: center; box-shadow: 0 6px 14px var(--sombra-accion); }
   .enviar:hover { background: var(--principal-hondo); }
   button:disabled, textarea:disabled { opacity: 0.5; cursor: not-allowed; }
   /* Panel del modo demostración */
@@ -503,7 +513,7 @@
   .avisame { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; padding: 0 16px; border-radius: 999px; border: 1.5px dashed #E2B98F; background: var(--arena-claro); color: var(--naranja-hondo); font-weight: 600; font-size: 15px; cursor: pointer; }
   .avisame:hover { border-style: solid; }
   .avisame .icono { width: 20px; height: 20px; }
-  .avisame[aria-pressed="true"] { border-style: solid; border-color: var(--principal); background: var(--menta-claro); color: var(--principal-hondo); }
+  .avisame[aria-pressed="true"] { border-style: solid; border-color: var(--principal); background: var(--principal-claro); color: var(--principal-hondo); }
   .nota-recursos { margin-top: 22px; font-size: 15px; color: var(--tinta-suave); display: flex; gap: 8px; align-items: flex-start; }
   .nota-recursos .icono { width: 18px; height: 18px; color: var(--principal); margin-top: 3px; }
 
@@ -562,7 +572,7 @@
   .persona-org p { font-size: 16.5px; color: var(--tinta-suave); }
   .sellos { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; align-items: center; }
   .sello { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 999px; background: var(--blanco); border: 1px solid var(--borde-calido); font-size: 15px; font-weight: 500; color: var(--tinta); }
-  .sello .punto-vivo { width: 10px; height: 10px; border-radius: 50%; background: var(--verde); box-shadow: 0 0 0 4px rgba(77, 171, 129, 0.25); flex: 0 0 auto; }
+  .sello .punto-vivo { width: 10px; height: 10px; border-radius: 50%; background: var(--principal); box-shadow: 0 0 0 4px rgba(106, 61, 184, 0.22); flex: 0 0 auto; }
   .hoy { margin-top: 18px; font-size: 16px; color: var(--tinta-suave); max-width: 46em; font-weight: 300; font-style: italic; }
   @media (min-width: 760px) { .equipo { grid-template-columns: 1fr 1fr; gap: 20px; } }
   /* Celular: foto arriba y texto en una franja ciruela debajo (no encima de las caras).
@@ -602,6 +612,108 @@
   .interruptor[aria-checked="true"] .riel { background: var(--principal); }
   .interruptor[aria-checked="true"] .riel::after { transform: translateX(18px); }
   @media (min-width: 900px) { .pie-grid { grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; } }
+
+  /* ================= v5 (2026-11-10) · Contigo, perfil sensorial y morado ================= */
+  /* Marca: «Contigo» con la «o» final en círculo (misma idea del wordmark anterior) */
+  .marca .nombre-marca { font-weight: 700; font-size: 1.32em; letter-spacing: -0.02em; }
+  .marca .lema-marca { display: block; font-weight: 400; font-size: 0.72em; color: var(--tinta-suave); letter-spacing: 0; }
+  @media (max-width: 420px) { .marca .lema-marca { display: none; } }
+  /* Botón principal sobre fondos oscuros (cierre ciruela, tarjeta de crisis): lila con texto morado noche */
+  .cierre-texto .boton, .crisis .boton { background: var(--lila); color: var(--morado-noche); box-shadow: none; }
+  .cierre-texto .boton:hover, .crisis .boton:hover { background: #E8DEFF; }
+  /* Hero: nombre + lema, para quién, los dos mensajes visibles desde el primer instante */
+  .etiqueta-larga { text-transform: none; letter-spacing: 0.01em; font-size: 15px; line-height: 1.4; font-weight: 600; align-items: flex-start; }
+  .etiqueta-larga::before { margin-top: 6px; }
+  .hero h1 .nombre-producto { display: block; font-size: 0.62em; color: var(--principal); letter-spacing: -0.01em; margin-bottom: 8px; }
+  .hero h1 .lema { display: block; }
+  .principio-hero { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 20px; padding: 10px 18px 10px 12px; border-radius: 999px; background: var(--rosa-claro); border: 1px solid var(--rosa); font-weight: 700; font-size: 16px; line-height: 1.3; color: var(--alerta-texto); }
+  .principio-hero .icono { color: var(--magenta-hondo); width: 22px; height: 22px; }
+  .aviso-perfil { margin: 0 0 22px; padding: 18px 20px; border-radius: 24px; background: var(--principal-claro); border: 1.5px solid var(--lavanda); }
+  .aviso-perfil strong { display: block; font-size: 19px; color: var(--principal-hondo); margin-bottom: 4px; }
+  .aviso-perfil p { font-size: 17px; color: var(--tinta); }
+  @media (max-width: 899px) { .hero h1 { font-size: 31px; margin: 10px 0 12px; } .hero .subtitulo { font-size: 17.5px; margin-bottom: 18px; } .etiqueta-larga { font-size: 14px; } .aviso-perfil { margin-bottom: 16px; } }
+  @media (min-width: 900px) { .aviso-perfil.solo-celular { display: none; } .hero h1 { font-size: clamp(34px, 2.85vw, 46px); } .hero .subtitulo { font-size: 18px; margin-bottom: 20px; } .hero { padding-top: 28px; } }
+  /* El celular de la foto del hero: una pantalla HTML encima, con el mensaje del perfil (pedido de Natalia).
+     Tapa la pantalla de la imagen (que decía «Acompañante» en verde). Tamaños relativos a la foto (cqw). */
+  .hero .foto { container-type: inline-size; }
+  .telefono-hero { position: absolute; z-index: 2; left: 21.2%; top: 1.4%; width: 27.4%; height: 87%; padding: 0.9cqw; border-radius: 4.2cqw; background: linear-gradient(150deg, #4A4560, #1E1E2A 45%, #2E2A3E); box-shadow: 0 2cqw 5cqw rgba(42, 33, 64, 0.35); display: flex; }
+  .telefono-hero .th-pantalla { flex: 1 1 auto; border-radius: 3.4cqw; overflow: hidden; background: var(--fondo-chat); display: flex; flex-direction: column; }
+  .telefono-hero .th-barra { display: flex; align-items: center; gap: 1.2cqw; padding: 3.2cqw 1.8cqw 1.6cqw; background: var(--degradado-suave); border-bottom: 1px solid var(--borde); font-weight: 700; font-size: clamp(8px, 1.9cqw, 17px); color: var(--tinta); }
+  .telefono-hero .th-avatar { width: 4.2cqw; height: 4.2cqw; border-radius: 50%; background: var(--degradado-orbe); display: grid; place-items: center; color: var(--principal-hondo); flex: 0 0 auto; }
+  .telefono-hero .th-avatar .icono { width: 62%; height: 62%; }
+  .telefono-hero .th-cuerpo { flex: 1 1 auto; padding: 2cqw 1.6cqw; display: flex; flex-direction: column; gap: 1.4cqw; justify-content: center; }
+  .telefono-hero .th-burbuja { background: var(--blanco); border: 1px solid #D6DFFF; border-radius: 2cqw; border-top-left-radius: 0.6cqw; padding: 1.4cqw 1.6cqw; font-size: clamp(7px, 1.62cqw, 15px); line-height: 1.38; color: var(--tinta); }
+  .telefono-hero .th-burbuja strong { display: block; color: var(--principal-hondo); font-size: 1.12em; margin-bottom: 0.4em; }
+  .telefono-hero .th-boton { align-self: stretch; text-align: center; border: 0; cursor: pointer; font-family: inherit; line-height: 1.2; border-radius: 999px; background: var(--principal); color: var(--blanco); font-weight: 600; font-size: clamp(7px, 1.55cqw, 14px); padding: 1.2cqw 1cqw; }
+  .telefono-hero .th-nota { font-size: clamp(6px, 1.25cqw, 12px); color: var(--tinta-suave); text-align: center; }
+  @media (max-width: 899px) { .telefono-hero .th-texto { display: none; } .telefono-hero .th-burbuja.corta { font-size: 2.6cqw; } }
+  @media (min-width: 900px) { .telefono-hero .th-burbuja.corta { display: none; } }
+
+  /* Chat: tarjeta del perfil (antes del primer mensaje) */
+  .tarjeta-perfil { border-radius: 24px; background: var(--blanco); border: 1.5px solid var(--lavanda); padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(42, 33, 64, 0.06); }
+  .tarjeta-perfil .tp-titulo { font-weight: 700; font-size: 17.5px; color: var(--principal-hondo); line-height: 1.3; }
+  .tarjeta-perfil .tp-texto { font-size: 16px; line-height: 1.45; }
+  .pasos-perfil { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .paso-perfil { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 18px; background: var(--lavanda-claro); border: 1px solid var(--borde); }
+  .paso-perfil .pp-num { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--blanco); border: 1.5px solid var(--lavanda); font-weight: 700; font-size: 14px; color: var(--principal-hondo); flex: 0 0 auto; }
+  .paso-perfil.listo .pp-num { background: var(--principal); border-color: var(--principal); color: var(--blanco); }
+  .paso-perfil .pp-texto { flex: 1 1 auto; min-width: 0; font-size: 15px; line-height: 1.3; }
+  .paso-perfil .pp-texto b { display: block; font-size: 15.5px; }
+  .paso-perfil .pp-estado { font-size: 13px; color: var(--tinta-suave); }
+  .paso-perfil.listo .pp-estado { color: var(--principal-hondo); font-weight: 600; }
+  .boton-perfil { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 0; background: var(--principal); color: var(--blanco); font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer; }
+  .boton-perfil:hover { background: var(--principal-hondo); }
+  .paso-perfil.listo .boton-perfil { background: var(--blanco); color: var(--principal); border: 1.5px solid var(--principal); }
+  .tarjeta-perfil .tp-nota { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; color: var(--tinta-suave); line-height: 1.4; }
+  .tarjeta-perfil .tp-nota .icono { width: 16px; height: 16px; color: var(--principal); margin-top: 2px; }
+  .tarjeta-perfil .tp-acciones { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+  .tarjeta-perfil .boton { min-height: 48px; font-size: 16px; padding: 0 20px; box-shadow: none; }
+  .tarjeta-perfil.completo { border-color: var(--principal); }
+  .invitar-perfil { align-self: flex-start; margin-top: -2px; min-height: 48px; box-shadow: none; font-size: 16px; padding: 0 20px; }
+  /* Chat: panel del perfil (pasos de la cuidadora y «ver o borrar») dentro del mismo teléfono */
+  .panel-perfil { flex: 1 1 auto; overflow-y: auto; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 14px; background: var(--fondo-chat); }
+  .panel-perfil[hidden] { display: none; }
+  .telefono.con-panel > .bienvenida, .telefono.con-panel > .mensajes, .telefono.con-panel > .rapidas, .telefono.con-panel > .nota-chat, .telefono.con-panel > .redactar { display: none !important; }
+  .panel-perfil .pp-progreso { display: flex; gap: 6px; }
+  .panel-perfil .pp-progreso i { flex: 1 1 0; height: 6px; border-radius: 6px; background: var(--borde); }
+  .panel-perfil .pp-progreso i.hecho { background: var(--principal); }
+  .panel-perfil .pp-paso { font-size: 13.5px; font-weight: 600; color: var(--tinta-suave); letter-spacing: 0.04em; text-transform: uppercase; }
+  .panel-perfil h3 { font-size: 21px; font-weight: 700; line-height: 1.25; }
+  .panel-perfil h3:focus { outline: none; }
+  .panel-perfil .pp-ayuda { font-size: 15.5px; color: var(--tinta-suave); }
+  .opciones-perfil { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .opcion-perfil { width: 100%; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 10px 16px; border-radius: 18px; border: 1.5px solid var(--borde); background: var(--blanco); color: var(--tinta); font-size: 16.5px; line-height: 1.3; text-align: left; cursor: pointer; }
+  .opcion-perfil::before { content: ""; width: 22px; height: 22px; border-radius: 7px; border: 2px solid #8C86A8; flex: 0 0 auto; background: var(--blanco) no-repeat center / 14px; }
+  .opcion-perfil.unica::before { border-radius: 50%; }
+  .opcion-perfil[aria-pressed="true"] { border-color: var(--principal); background: var(--principal-claro); font-weight: 600; }
+  .opcion-perfil[aria-pressed="true"]::before { border-color: var(--principal); background-color: var(--principal); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E"); }
+  .opcion-perfil:hover { border-color: var(--principal); }
+  .pp-botones { display: flex; gap: 10px; margin-top: auto; padding-top: 6px; }
+  .pp-botones .boton { flex: 1 1 auto; min-height: 52px; box-shadow: none; padding: 0 16px; }
+  .pp-botones .boton.claro { flex: 0 0 auto; }
+  .resumen-perfil { display: grid; gap: 10px; }
+  .resumen-perfil section { padding: 14px; border-radius: 18px; background: var(--blanco); border: 1px solid var(--borde); }
+  .resumen-perfil h4 { margin: 0 0 4px; font-size: 15.5px; color: var(--principal-hondo); }
+  .resumen-perfil p { font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
+  .resumen-perfil .acciones-parte { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+  .resumen-perfil .acciones-parte .boton-perfil { min-height: 44px; }
+  .enlace-boton.morado { color: var(--principal); }
+
+  /* Casa Contigo (la página la construye otro equipo en /casa-contigo.html) */
+  .casa-contigo { background: linear-gradient(150deg, var(--lavanda-claro), var(--rosa-claro) 55%, var(--arena-claro)); }
+  .casa-tarjeta { display: grid; gap: 26px; align-items: center; padding: 28px; border-radius: var(--radio-grande); background: rgba(255, 255, 255, 0.82); border: 1px solid var(--vidrio-borde); box-shadow: var(--sombra-vidrio); }
+  .salas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .salas li { padding: 7px 14px; border-radius: 999px; background: var(--blanco); border: 1px solid var(--borde); font-size: 14.5px; font-weight: 500; }
+  .casa-tarjeta .boton { margin-top: 22px; }
+  @media (min-width: 900px) { .casa-tarjeta { grid-template-columns: 1.2fr 1fr; padding: 48px; gap: 48px; } }
+  /* Pie: iniciativa de Pulso Mundo y Smart4AI (texto, sin logos de terceros) */
+  .iniciativa { margin-top: 14px; font-size: 15.5px; color: var(--tinta); }
+  /* Bento con seis formas: la del perfil sensorial, ancha y primera */
+  @media (min-width: 760px) { .bento > .tarjeta.destacada { grid-column: 1 / -1; } }
+  @media (min-width: 1100px) {
+    .bento > .tarjeta.destacada { grid-column: span 6; flex-direction: row; align-items: flex-start; gap: 22px; }
+    .bento > .tarjeta.destacada .texto-destacada { display: flex; flex-direction: column; gap: 10px; max-width: 62em; }
+  }
 
   /* ================= Movimiento ================= */
   /* Entrada al hacer scroll: solo si el navegador lo permite y nadie pidió «reducir movimiento». */
@@ -670,15 +782,15 @@
 <!-- ======================= CABECERA ======================= -->
 <header class="cabecera" id="cabecera">
   <div class="contenedor">
-    <a class="marca" href="#inicio" aria-label="Acompañante de la cuidadora, inicio">
+    <a class="marca" href="#inicio" aria-label="Contigo, inicio">
       <span class="logo"><svg class="icono"><use href="#i-logo"/></svg></span>
-      <span>Acompañante<br><span class="linea2">de la cuidad<span class="o-circulo" aria-hidden="true"></span>ra</span></span>
+      <span><span class="nombre-marca">Contigo</span></span>
     </a>
     <nav class="menu-principal" aria-label="Secciones">
       <a href="#inicio" data-spy="inicio">Inicio</a>
       <a href="#como-funciona" data-spy="como-funciona">Cómo funciona</a>
-      <a href="#para-quien" data-spy="para-quien">Para quién</a>
       <a href="#recursos" data-spy="recursos">Recursos</a>
+      <a href="/casa-contigo.html">Casa Contigo</a>
       <a href="#seguridad" data-spy="seguridad">Seguridad</a>
       <a href="#quienes" data-spy="quienes">Quiénes somos</a>
     </nav>
@@ -694,11 +806,12 @@
     <a href="#como-funciona">Cómo funciona<svg class="icono"><use href="#i-flecha"/></svg></a>
     <a href="#para-quien">Para quién<svg class="icono"><use href="#i-flecha"/></svg></a>
     <a href="#recursos">Recursos<svg class="icono"><use href="#i-flecha"/></svg></a>
+    <a href="/casa-contigo.html">Casa Contigo<svg class="icono"><use href="#i-flecha"/></svg></a>
     <a href="#seguridad">Seguridad<svg class="icono"><use href="#i-flecha"/></svg></a>
     <a href="#quienes">Quiénes somos<svg class="icono"><use href="#i-flecha"/></svg></a>
   </nav>
   <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
-  <p class="nota-cajon">Gratis, sin registrarte. Orienta y remite; nunca diagnostica.</p>
+  <p class="nota-cajon">Gratis, sin registrarte. No diagnosticamos, no formulamos, no generalizamos.</p>
 </div>
 
 <main id="contenido">
@@ -706,24 +819,42 @@
   <section class="hero" id="inicio" aria-labelledby="titular">
     <div class="contenedor hero-grid">
       <div class="hero-texto revelar">
-        <span class="etiqueta-mono">Para madres y abuelas · Colombia</span>
-        <h1 id="titular">No tienes que cuidar <span class="resalte">sola</span></h1>
-        <p class="subtitulo">Una acompañante por chat para madres y abuelas de niñas autistas en Colombia. Gratis, en español, a cualquier hora.</p>
+        <span class="etiqueta-mono etiqueta-larga">Para madres, abuelas y maestras que acompañan a niñas y adolescentes extraordinarias</span>
+        <h1 id="titular"><span class="nombre-producto">Contigo</span><span class="lema">Protegemos niñas y adolescentes <span class="resalte">extraordinarias</span> y acompañamos a sus cuidadoras</span></h1>
+        <p class="subtitulo">Herramientas, tips e información práctica para acompañar de forma asertiva a niñas y adolescentes neurodivergentes y cuidar el bienestar de sus cuidadoras.</p>
+        <!-- En celular el mensaje del perfil va aquí; en escritorio, dentro del teléfono de la foto -->
+        <div class="aviso-perfil solo-celular">
+          <strong>Cada ser extraordinario es único.</strong>
+          <p>Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).</p>
+        </div>
+        <p class="principio-hero"><svg class="icono" aria-hidden="true"><use href="#i-escudo"/></svg>No diagnosticamos, no formulamos, no generalizamos.</p>
         <div class="acciones-hero">
-          <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="boton" data-abrir-perfil>Empezar con mi perfil · 4 min<svg class="icono"><use href="#i-flecha"/></svg></button>
           <a class="boton claro" href="#como-funciona">Ver cómo funciona<svg class="icono"><use href="#i-abajo"/></svg></a>
         </div>
         <ul class="garantias">
           <li><svg class="icono"><use href="#i-check"/></svg>Sin registrarte</li>
-          <li><svg class="icono"><use href="#i-check"/></svg>No pide tu nombre</li>
-          <li><svg class="icono"><use href="#i-check"/></svg>Nunca diagnostica</li>
+          <li><svg class="icono"><use href="#i-check"/></svg>No pedimos tu nombre</li>
+          <li><svg class="icono"><use href="#i-check"/></svg>Tu perfil queda en tu celular</li>
         </ul>
       </div>
       <div class="hero-visual revelar d1">
         <div class="foto">
           <picture>
-            <img src="/img/hero-madre.jpg" srcset="/img/hero-madre-800.jpg 800w, /img/hero-madre.jpg 1536w" sizes="(min-width: 900px) 60vw, 100vw" width="1536" height="864" fetchpriority="high" alt="Una madre colombiana de pie en su sala, con un café en la mano, mira con alivio un celular gigante que muestra el chat de la Acompañante; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS y Nunca diagnostica.">
+            <img src="/img/hero-madre.jpg" srcset="/img/hero-madre-800.jpg 800w, /img/hero-madre.jpg 1536w" sizes="(min-width: 900px) 60vw, 100vw" width="1536" height="864" fetchpriority="high" alt="Una madre colombiana de pie en su sala, con un café en la mano, mira con alivio un celular gigante con el chat de Contigo; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS y Tu diario.">
           </picture>
+          <!-- Pantalla del celular de la foto: el primer mensaje de Contigo (el perfil) -->
+          <div class="telefono-hero">
+            <div class="th-pantalla">
+              <div class="th-barra" aria-hidden="true"><span class="th-avatar"><svg class="icono"><use href="#i-logo"/></svg></span>Contigo</div>
+              <div class="th-cuerpo">
+                <p class="th-burbuja th-texto"><strong>Cada ser extraordinario es único.</strong>Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).</p>
+                <p class="th-burbuja corta" aria-hidden="true"><strong>Cada ser extraordinario es único.</strong>Tu perfil y el de ella · 4 min</p>
+                <button type="button" class="th-boton th-texto" data-abrir-perfil>Empezar mi perfil</button>
+                <p class="th-nota th-texto">Queda solo en tu celular</p>
+              </div>
+            </div>
+          </div>
         </div>
         <span class="flota f1" aria-hidden="true"><span class="vivo"></span>En línea · a cualquier hora</span>
         <span class="flota f2" aria-hidden="true"><svg class="icono"><use href="#i-candado"/></svg>Se guarda solo en tu celular</span>
@@ -736,63 +867,80 @@
     <div class="contenedor conversar-grid">
       <div class="conversar-texto revelar">
         <span class="etiqueta-mono">La aplicación · pruébala aquí</span>
-        <h2 id="t-conversar">Conversa con ella ahora mismo</h2>
-        <p class="intro">Escríbele como le escribirías a una amiga que sabe de autismo infantil. Te escucha, te explica con calma y te dice a dónde ir.</p>
-        <p class="preguntas-titulo">Toca una pregunta y mira cómo responde:</p>
+        <h2 id="t-conversar">Conversa con Contigo ahora mismo</h2>
+        <p class="intro">Primero, tu perfil sensorial y el de ella (4 minutos). Después escribes con tus palabras y te acompañamos a partir de lo que nos contaste: te escuchamos, te explicamos con calma y te decimos a dónde ir.</p>
+        <p class="preguntas-titulo">Toca una pregunta y mira cómo respondemos:</p>
         <div class="preguntas">
-          <button type="button" class="pregunta-ejemplo" data-pregunta="mi hija no me mira a los ojos, ¿será autista?">«Mi hija no me mira a los ojos, ¿será autista?»<svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="pregunta-ejemplo" data-pregunta="se pone a gritar cuando vamos al supermercado, ¿qué hago?">«Se pone a gritar cuando vamos al supermercado, ¿qué hago?»<svg class="icono"><use href="#i-flecha"/></svg></button>
           <button type="button" class="pregunta-ejemplo" data-pregunta="la EPS me negó la cita con neuropediatra">«La EPS me negó la cita con neuropediatra»<svg class="icono"><use href="#i-flecha"/></svg></button>
           <button type="button" class="pregunta-ejemplo" data-pregunta="estoy agotada y no tengo con quién hablar">«Estoy agotada y no tengo con quién hablar»<svg class="icono"><use href="#i-flecha"/></svg></button>
-          <button type="button" class="pregunta-ejemplo" data-pregunta="¿cómo preparo la cita con el pediatra?">«¿Cómo preparo la cita con el pediatra?»<svg class="icono"><use href="#i-flecha"/></svg></button>
+          <button type="button" class="pregunta-ejemplo" data-pregunta="¿cómo preparo la consulta con el especialista?">«¿Cómo preparo la consulta con el especialista?»<svg class="icono"><use href="#i-flecha"/></svg></button>
         </div>
         <div class="dentro-chat" aria-label="Lo que encuentras dentro del chat">
-          <span><svg class="icono"><use href="#i-pulso"/></svg>Chequeo de bienestar</span>
-          <span><svg class="icono"><use href="#i-libreta"/></svg>Tu diario</span>
+          <span><svg class="icono"><use href="#i-persona"/></svg>Perfil sensorial</span>
+          <span><svg class="icono"><use href="#i-pulso"/></svg>Chequeo de tu bienestar</span>
+          <span><svg class="icono"><use href="#i-libreta"/></svg>Bitácora</span>
           <span><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</span>
           <span><svg class="icono"><use href="#i-libro"/></svg>Fuentes</span>
         </div>
-        <p class="privacidad-corta"><svg class="icono"><use href="#i-candado"/></svg><span>Tu conversación se guarda solo en tu celular. No escribas el nombre ni los datos de la niña: para acompañarte no los necesita.</span></p>
+        <p class="privacidad-corta"><svg class="icono"><use href="#i-candado"/></svg><span>Tu conversación y tu perfil se guardan solo en tu celular. No escribas el nombre ni los datos de la niña o adolescente: para acompañarte no los necesitamos.</span></p>
         <button type="button" class="boton abrir-chat-movil" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
       </div>
 
       <!-- La interfaz de chat REAL (misma de v2). Escritorio: dentro del marco. Celular: pantalla completa con #chat. -->
       <div class="app-chat" id="vistaChat">
         <div class="marco-celular">
-          <section class="telefono" aria-label="Chat con la Acompañante de la cuidadora">
+          <section class="telefono" id="telefono" aria-label="Chat con Contigo">
             <header class="barra">
               <button type="button" class="volver" id="btnInicio" aria-label="Volver a la página"><svg class="icono"><use href="#i-atras"/></svg><span class="txt">Volver</span></button>
               <div class="avatar" aria-hidden="true"><svg class="icono"><use href="#i-logo"/></svg></div>
               <div class="quien-chat">
-                <div class="nombre">Acompañante</div>
+                <div class="nombre">Contigo</div>
                 <div class="estado" id="estado">en línea</div>
               </div>
-              <button type="button" class="btn-fuentes" id="btnFuentes" aria-label="Ver las fuentes de la Acompañante"><svg class="icono"><use href="#i-libreta"/></svg><span>Fuentes</span></button>
+              <button type="button" class="btn-fuentes" id="btnFuentes" aria-label="Ver las fuentes de Contigo"><svg class="icono"><use href="#i-libreta"/></svg><span>Fuentes</span></button>
               <button type="button" class="btn-dentro" id="btnVerDentro">Por dentro</button>
             </header>
             <div class="franja-guardia" id="franjaGuardia" role="status" hidden></div>
 
             <div class="bienvenida" id="ejemplos">
-              <div class="burbuja ella">Hola, aquí estoy para escucharte.
-Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir con tus palabras o tocar una opción.<span class="hora">Acompañante</span></div>
-              <p class="titulito">¿Qué quieres hacer?</p>
+              <div class="burbuja ella">Hola, somos Contigo. Te acompañamos a ti y a la niña o adolescente que cuidas.<span class="hora">Contigo</span></div>
+              <!-- Perfil sensorial: lo pinta pintarTarjetaPerfil() según lo que haya en este celular -->
+              <div class="tarjeta-perfil" id="tarjetaPerfil">
+                <p class="tp-titulo">Cada ser extraordinario es único.</p>
+                <p class="tp-texto">Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).</p>
+                <ol class="pasos-perfil">
+                  <li class="paso-perfil" id="pasoCuidadora"><span class="pp-num">1</span><span class="pp-texto"><b>Tu perfil</b><span class="pp-estado" id="estadoCuidadora">2 minutos</span></span><button type="button" class="boton-perfil" data-perfil-cuidadora>Empezar</button></li>
+                  <li class="paso-perfil" id="pasoNina"><span class="pp-num">2</span><span class="pp-texto"><b>El de ella · «Así soy yo»</b><span class="pp-estado" id="estadoNina">90 segundos</span></span><a class="boton-perfil" href="/recursos/asi-soy-yo.html" id="enlaceNina">Hacer</a></li>
+                </ol>
+                <p class="tp-nota"><svg class="icono" aria-hidden="true"><use href="#i-candado"/></svg><span>Queda solo en tu celular. Contigo lo usa para responderte sin que lo guardemos en un servidor.</span></p>
+                <div class="tp-acciones" id="accionesPerfil" hidden>
+                  <button type="button" class="enlace-boton morado" data-ver-perfil>Ver o borrar mi perfil</button>
+                </div>
+              </div>
+              <p class="titulito">También puedes:</p>
               <div class="opciones">
-                <button type="button" class="opcion" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Hacer el chequeo</button>
-                <button type="button" class="opcion" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Mi diario</button>
+                <button type="button" class="opcion" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Chequeo de tu bienestar</button>
+                <button type="button" class="opcion" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Bitácora para la consulta</button>
                 <button type="button" class="opcion" data-accion="resumen"><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</button>
                 <button type="button" class="opcion" data-accion="persona"><svg class="icono"><use href="#i-persona"/></svg>Hablar con una persona</button>
               </div>
-              <p class="titulito">O empieza con un ejemplo:</p>
+              <p class="titulito" id="titulitoEjemplos">Con tu perfil listo, prueba un ejemplo:</p>
               <div class="ejemplos-lista">
-                <button type="button" class="chip" data-ejemplo="mi hija no me mira a los ojos, ¿será autista?">«mi hija no me mira a los ojos, ¿será autista?»</button>
+                <button type="button" class="chip" data-ejemplo="se pone a gritar cuando vamos al supermercado, ¿qué hago?">«se pone a gritar cuando vamos al supermercado, ¿qué hago?»</button>
                 <button type="button" class="chip" data-ejemplo="la EPS me negó la cita con neuropediatra">«la EPS me negó la cita con neuropediatra»</button>
               </div>
             </div>
 
+            <!-- Panel del perfil de la cuidadora (5 pasos) y «ver o borrar»: ocupa el chat mientras está abierto -->
+            <div class="panel-perfil" id="panelPerfil" hidden></div>
+
             <div class="mensajes" id="mensajes" aria-live="polite"></div>
 
             <div class="rapidas" id="rapidas" hidden>
-              <button type="button" class="rapida" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Hacer el chequeo</button>
-              <button type="button" class="rapida" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Mi diario</button>
+              <button type="button" class="rapida" data-ver-perfil><svg class="icono"><use href="#i-persona"/></svg>Mi perfil</button>
+              <button type="button" class="rapida" data-accion="chequeo"><svg class="icono"><use href="#i-pulso"/></svg>Chequeo de tu bienestar</button>
+              <button type="button" class="rapida" data-accion="diario"><svg class="icono"><use href="#i-libreta"/></svg>Bitácora</button>
               <button type="button" class="rapida" data-accion="resumen"><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</button>
               <button type="button" class="rapida" data-accion="persona"><svg class="icono"><use href="#i-persona"/></svg>Hablar con una persona</button>
             </div>
@@ -833,48 +981,50 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       <div class="cabeza-seccion centro revelar">
         <span class="vinculo" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="etiqueta-mono">Cómo funciona</span>
-        <h2 id="t-como">Tres pasos, a tu ritmo</h2>
-        <p class="intro">Sin formularios ni citas. Abres, escribes y ella te acompaña.</p>
+        <h2 id="t-como">Cada ser extraordinario es único</h2>
+        <p class="intro">Para comenzar, queremos conocer tu perfil sensorial y el de la persona que acompañas.</p>
+        <p class="intro" style="margin-top:10px">Abres, escribes y te acompañamos teniendo en cuenta tu especificidad o la de la persona que tienes a tu cuidado.</p>
       </div>
       <div class="pasos">
         <article class="paso revelar">
           <div class="vineta" aria-hidden="true">
-            <div class="mini yo">Mi hija se tapa los oídos cuando hay ruido. ¿Es normal?</div>
-            <div class="mini yo" style="max-width:60%">Estoy preocupada.</div>
+            <div class="mini ella">Lo que la desborda: <b>ruido fuerte</b>, mucha gente.<br>Lo que la calma: <b>silencio</b>, su objeto favorito.</div>
+            <div class="mini yo" style="max-width:70%">Mi energía hoy: baja.</div>
           </div>
           <span class="numero">01</span>
-          <h3>Cuéntale</h3>
-          <p>Con tus palabras, cuando quieras: lo que ves en tu hija o nieta, o cómo te sientes tú.</p>
+          <h3>Haces el perfil sensorial</h3>
+          <p>El tuyo y el de ella, en 4 minutos. Queda en tu celular y nos permite responderte sin generalizar.</p>
         </article>
         <article class="paso revelar d1">
           <div class="vineta" aria-hidden="true">
-            <div class="mini ella">Gracias por contarme. Algunas niñas sienten los sonidos más fuertes. Te explico qué observar.<br><span class="fuente">fuente citada · biblioteca</span></div>
+            <div class="mini yo">Se pone a gritar en el supermercado.</div>
+            <div class="mini ella">Como nos contaste que el ruido fuerte la desborda, ¿pasa al entrar o después de un rato?<br><span class="fuente">a partir de su perfil</span></div>
           </div>
           <span class="numero">02</span>
-          <h3>Te orienta con fuentes confiables</h3>
-          <p>Responde con calma y, cuando usa un documento de su biblioteca curada, te dice cuál es.</p>
+          <h3>Escribes y te acompañamos</h3>
+          <p>Con tus palabras, cuando quieras. Te respondemos a partir del perfil y, si nos falta un dato, te preguntamos antes de sugerir.</p>
         </article>
         <article class="paso revelar d2">
           <div class="vineta" aria-hidden="true">
             <div class="destinos">
-              <div class="destino"><svg class="icono"><use href="#i-hospital"/></svg>Pediatra · con tu resumen</div>
+              <div class="destino"><svg class="icono"><use href="#i-hospital"/></svg>Especialista · con tu resumen</div>
               <div class="destino"><svg class="icono"><use href="#i-camino"/></svg>EPS · qué pedir</div>
               <div class="destino"><svg class="icono"><use href="#i-telefono"/></svg>Línea 106 · si lo necesitas</div>
             </div>
           </div>
           <span class="numero">03</span>
-          <h3>Te remite a quien puede ayudar</h3>
-          <p>Pediatra, EPS o líneas de ayuda: te dice a dónde ir y cómo llegar mejor preparada.</p>
+          <h3>Te remitimos a quien puede ayudar</h3>
+          <p>Especialista, EPS o líneas de ayuda: te decimos a dónde ir y cómo llegar mejor preparada.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="franja-principio" aria-label="Principio de la Acompañante">
+  <section class="franja-principio" aria-label="Nuestro principio">
     <div class="contenedor revelar">
       <span class="etiqueta-mono">Nuestro principio</span>
-      <p class="grande">Orienta y remite; <span class="subraya">nunca diagnostica.</span></p>
-      <p class="chico">Solo un especialista puede evaluar a una niña. La Acompañante te ayuda a llegar a esa consulta mejor preparada y más tranquila.</p>
+      <p class="grande">No diagnosticamos, no formulamos, <span class="subraya">no generalizamos.</span></p>
+      <p class="chico">No diagnosticamos ni reemplazamos el concepto clínico. Mientras consultas con el especialista, Contigo te entrega información, tips y herramientas para facilitar tu día a día.</p>
     </div>
   </section>
 
@@ -882,30 +1032,38 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   <section class="seccion" id="lo-que-hace" aria-labelledby="t-hace">
     <div class="contenedor">
       <div class="cabeza-seccion revelar">
-        <span class="etiqueta-mono">Lo que hace</span>
-        <h2 id="t-hace">Cinco formas de acompañarte</h2>
-        <p class="intro">Conversa contigo como una persona que sabe de autismo infantil, con foco en niñas, y del cuidado de quien cuida.</p>
+        <span class="etiqueta-mono">Lo que hacemos</span>
+        <h2 id="t-hace">Seis formas de acompañarte</h2>
+        <p class="intro">Sabemos de neurodivergencia en niñas y adolescentes, de cómo cada cerebro vive los estímulos y del cuidado de quien cuida.</p>
       </div>
       <div class="bento">
+        <article class="tarjeta destacada revelar">
+          <span class="chapa"><svg class="icono"><use href="#i-persona"/></svg></span>
+          <div class="texto-destacada">
+            <h3>Exploramos el perfil sensorial</h3>
+            <p>Describimos los puntos más relevantes de la forma única en que su cerebro recibe, organiza, interpreta y responde a los estímulos del entorno. Así entenderás mejor sus patrones de comportamiento y sus umbrales de reacción. También hacemos un mapeo del perfil sensorial de la cuidadora.</p>
+            <button type="button" class="boton pequeno" data-abrir-perfil style="align-self:flex-start">Empezar con mi perfil<svg class="icono"><use href="#i-flecha"/></svg></button>
+          </div>
+        </article>
         <article class="tarjeta revelar">
           <span class="chapa"><svg class="icono"><use href="#i-corazon"/></svg></span>
-          <h3>Te escucha y te cuida</h3>
-          <p>Un lugar para desahogarte a cualquier hora, sin juicios. Te escucha con calma y te dice dónde pedir apoyo.</p>
+          <h3>Te escuchamos y te cuidamos</h3>
+          <p>Un lugar para desahogarte a cualquier hora, sin juicios. Te escuchamos con calma y te decimos dónde pedir apoyo.</p>
         </article>
         <article class="tarjeta revelar d1">
           <span class="chapa"><svg class="icono"><use href="#i-ojo"/></svg></span>
-          <h3>Señales a tiempo para hablar con el pediatra</h3>
-          <p>Te explica señales del desarrollo para que las conversen en la consulta. Nunca dice si una niña tiene o no autismo.</p>
+          <h3>Señales para conversar con el especialista</h3>
+          <p>Te explicamos señales del desarrollo para que las conversen en la consulta. Nunca determinamos si una niña o adolescente está dentro del espectro autista o presenta otra neurodivergencia.</p>
         </article>
         <article class="tarjeta revelar d2">
           <span class="chapa"><svg class="icono"><use href="#i-libreta"/></svg></span>
-          <h3>Tu diario y el resumen para la consulta</h3>
-          <p>Anota lo que ves día a día. Antes de la cita, te arma un resumen para llevarle al médico.</p>
+          <h3>Bitácora y resumen para la consulta</h3>
+          <p>Anota comportamientos, reacciones a estímulos y momentos de agitación, ansiedad y calma. Antes de la cita, te armamos un resumen para el especialista.</p>
         </article>
         <article class="tarjeta revelar">
           <span class="chapa"><svg class="icono"><use href="#i-camino"/></svg></span>
-          <h3>Te guía ante la EPS</h3>
-          <p>Qué pedir, cómo pedirlo y cuándo procede una tutela, con la fuente de cada dato para que puedas revisarlo.</p>
+          <h3>Te guiamos ante la EPS</h3>
+          <p>Qué pedir, cómo pedirlo y qué hacer si te lo niegan, paso a paso y con la fuente de cada dato para que puedas revisarlo.</p>
         </article>
         <article class="tarjeta tarjeta-foto revelar d1">
           <div class="foto">
@@ -916,8 +1074,8 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
           </div>
           <div class="texto">
             <span class="chapa"><svg class="icono"><use href="#i-pulso"/></svg></span>
-            <h3>Chequeo de bienestar</h3>
-            <p>Dos minutos y cuatro preguntas cortas sobre cómo te has sentido. Si hace falta, te dice con cariño dónde pedir apoyo. Porque cuidarte también es cuidarla.</p>
+            <h3>Chequeo de tu bienestar</h3>
+            <p>Solo si tú estás regulada puedes acompañar con acierto a las niñas y adolescentes que acompañas. Dos minutos para revisar tu nivel de estrés y de bienestar. Si hace falta, te decimos dónde pedir apoyo.</p>
             <button type="button" class="boton pequeno claro" data-recurso-accion="chequeo" style="align-self:flex-start">Hacer el chequeo<svg class="icono"><use href="#i-flecha"/></svg></button>
           </div>
         </article>
@@ -931,14 +1089,14 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       <div class="cabeza-seccion centro revelar">
         <span class="etiqueta-mono">Para quién</span>
         <h2 id="t-quien">Para quienes cuidan</h2>
-        <p class="intro">Hecha con y para las mujeres que sostienen el cuidado de una niña autista en Colombia.</p>
+        <p class="intro">Hecha con y para las mujeres que sostienen el cuidado de niñas y adolescentes extraordinarias en Colombia.</p>
       </div>
       <div class="publicos">
         <article class="publico revelar">
           <div class="foto">
             <picture>
               <!-- Recorte de la foto horizontal (ella y sus etiquetas); en celular también la grande, porque el recorte es estrecho -->
-              <img class="recorte" src="/img/hero-madre.jpg" width="1536" height="864" loading="lazy" style="object-position: 97% 50%" alt="La madre, de pie en su sala con un café, sonríe; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS, Tu diario y Nunca diagnostica.">
+              <img class="recorte" src="/img/hero-madre.jpg" width="1536" height="864" loading="lazy" style="object-position: 97% 50%" alt="La madre, de pie en su sala con un café, sonríe; a su lado flotan las etiquetas Te escucho, Señales a tiempo, Ruta en la EPS y Tu diario.">
             </picture>
           </div>
           <div class="texto">
@@ -957,7 +1115,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
             <h3>Pensada para ti, abuela</h3>
             <ul class="lista-check">
               <li><svg class="icono"><use href="#i-letra"/></svg><span>Letra grande y botones grandes.</span></li>
-              <li><svg class="icono"><use href="#i-conversa"/></svg><span>Sin palabras difíciles: si algo no se entiende, te lo explica otra vez.</span></li>
+              <li><svg class="icono"><use href="#i-conversa"/></svg><span>Sin palabras difíciles: si algo no se entiende, te lo explicamos otra vez.</span></li>
               <li><svg class="icono"><use href="#i-reloj"/></svg><span>A cualquier hora, sin contraseñas.</span></li>
             </ul>
           </div>
@@ -965,9 +1123,8 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         <article class="publico futuro revelar d2">
           <div class="ilustra" aria-hidden="true"><span class="circulo"><svg class="icono"><use href="#i-birrete"/></svg></span></div>
           <div class="texto">
-            <span class="rotulo futuro" style="align-self:flex-start">A futuro</span>
-            <h3>Docentes y cuidadores</h3>
-            <p>Profesores, padres y otras personas que acompañan a niñas autistas en la escuela y en la casa.</p>
+            <h3>Para ti, maestra</h3>
+            <p>Para acompañar en el aula a niñas y adolescentes extraordinarias: las herramientas que la familia te comparte y, a futuro, cursos para docentes.</p>
             <a class="enlace-flecha" href="#educacion">Ver la propuesta de educación<svg class="icono"><use href="#i-flecha"/></svg></a>
           </div>
         </article>
@@ -982,7 +1139,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         <div class="revelar">
           <span class="etiqueta-mono">Recursos</span>
           <h2 id="t-recursos">Una biblioteca de herramientas que crece</h2>
-          <p class="intro">Herramientas sencillas para ti, para la niña y para compartir con la maestra y el papá. Se abren sin cuenta y lo que escribes se queda en tu celular.</p>
+          <p class="intro">Herramientas sencillas para ti, para ella y para compartir con la maestra y la familia. Se abren sin cuenta y lo que escribes se queda en tu celular.</p>
         </div>
         <div class="foto revelar d1">
           <picture>
@@ -993,11 +1150,36 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       </div>
       <div class="pestanas" role="tablist" aria-label="Tipo de recurso">
         <button type="button" class="pestana" role="tab" id="tab-ti" aria-controls="panel-ti" aria-selected="true" tabindex="0">Para ti</button>
-        <button type="button" class="pestana" role="tab" id="tab-nina" aria-controls="panel-nina" aria-selected="false" tabindex="-1">Para la niña</button>
+        <button type="button" class="pestana" role="tab" id="tab-nina" aria-controls="panel-nina" aria-selected="false" tabindex="-1">Para ella</button>
       </div>
       <div class="rejilla-recursos" id="panel-ti" role="tabpanel" aria-labelledby="tab-ti"></div>
       <div class="rejilla-recursos" id="panel-nina" role="tabpanel" aria-labelledby="tab-nina" hidden></div>
       <p class="nota-recursos"><svg class="icono"><use href="#i-candado"/></svg><span>Las herramientas no envían nada por su cuenta: lo que escribes se queda en este celular y solo sale lo que tú decides compartir.</span></p>
+    </div>
+  </section>
+
+  <!-- 6b · Casa Contigo (la página /casa-contigo.html la construye otro equipo) -->
+  <section class="seccion casa-contigo" id="casa-contigo" aria-labelledby="t-casa">
+    <div class="contenedor">
+      <div class="casa-tarjeta revelar">
+        <div>
+          <span class="etiqueta-mono">Un espacio para ti</span>
+          <h2 id="t-casa">Casa Contigo</h2>
+          <p class="intro">El espacio de bienestar donde cuidadoras de niñas y adolescentes extraordinarias encuentran conocimiento, calma y su lugar seguro.</p>
+          <a class="boton" href="/casa-contigo.html">Entrar a Casa Contigo<svg class="icono"><use href="#i-flecha"/></svg></a>
+        </div>
+        <ul class="salas" aria-label="Salas de la casa">
+          <li>Refugio de bienestar</li>
+          <li>Biblioteca extraordinaria</li>
+          <li>Sala de integración sensorial</li>
+          <li>Tu lugar seguro</li>
+          <li>La sala de los expertos</li>
+          <li>Una cocina extraordinaria</li>
+          <li>Salón de inspiración</li>
+          <li>Jardín de ideas</li>
+          <li>Sala de cine</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -1008,13 +1190,13 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         <div class="foto">
           <picture>
             <source media="(max-width: 700px)" srcset="/img/educacion-800.jpg">
-            <img src="/img/educacion.jpg" width="1536" height="864" loading="lazy" alt="Una docente colombiana en un aula luminosa presenta en una pantalla el curso «Acompañar a niñas autistas en el aula» a una madre, un padre, una abuela y una docente que toman notas.">
+            <img src="/img/educacion.jpg" width="1536" height="864" loading="lazy" alt="Una docente colombiana en un aula luminosa presenta un curso en una pantalla a una madre, un padre, una abuela y una docente que toman notas.">
           </picture>
         </div>
         <div class="educacion-texto">
           <span class="rotulo futuro">A futuro · educación</span>
           <h2 id="t-educacion">Aprender juntas, también en el aula</h2>
-          <p class="intro">Proponemos cursos virtuales para madres, padres, cuidadores y profesores, empezando por instituciones educativas de Medellín y Antioquia.</p>
+          <p class="intro">Proponemos cursos virtuales para madres, abuelas, maestras y toda la familia, empezando por instituciones educativas de Medellín y Antioquia.</p>
         </div>
       </div>
     </div>
@@ -1025,16 +1207,16 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     <div class="contenedor">
       <div class="cabeza-seccion revelar">
         <span class="etiqueta-mono">Seguridad y ética</span>
-        <h2 id="t-seguridad">Aquí estás a salvo</h2>
-        <p class="intro">Estas reglas la Acompañante las cumple siempre. Las más importantes no dependen de la inteligencia artificial.</p>
+        <h2 id="t-seguridad">Este es tu lugar seguro</h2>
+        <p class="intro">Estas reglas las cumplimos siempre. Las más importantes no dependen de la inteligencia artificial.</p>
       </div>
       <div class="seguridad-grid">
         <article class="crisis revelar">
           <div>
-            <span class="etiqueta-mono">Ante una crisis o un maltrato</span>
+            <span class="etiqueta-mono">Ante una crisis o una alerta de maltrato</span>
             <h3 style="margin-top:10px">Reglas fijas, no la inteligencia artificial</h3>
           </div>
-          <p>Si escribes algo que suena a riesgo para tu vida o a maltrato a una niña, unas reglas fijas te dan de inmediato las líneas de ayuda y registran una alerta para que el equipo la revise.</p>
+          <p>Si expresas aquí algo que prende las alarmas de riesgo o que alerta sobre un posible maltrato a una niña o adolescente, unas líneas rojas definidas por especialistas te remitirán de inmediato a las líneas de ayuda.</p>
           <div class="numeros-grandes">
             <a href="tel:106" aria-label="Llamar a la Línea 106, apoyo emocional"><strong>106</strong><span>Apoyo emocional</span></a>
             <a href="tel:123" aria-label="Llamar al 123, emergencias"><strong>123</strong><span>Emergencias</span></a>
@@ -1043,20 +1225,20 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         </article>
         <div class="garantias-eticas">
           <article class="etica revelar">
-            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-escudo"/></svg></span><h3>Nunca diagnostica</h3></div>
-            <p>Un filtro revisa cada respuesta para que nunca diga si una niña tiene o no autismo. Eso lo evalúa un especialista.</p>
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-escudo"/></svg></span><h3>No diagnosticamos ni damos concepto clínico</h3></div>
+            <p>Un filtro revisa cada respuesta para que nunca determine si una niña o adolescente está dentro del espectro autista o presenta otra neurodivergencia. Siempre recordaremos que el diagnóstico lo da un especialista.</p>
           </article>
           <article class="etica revelar d1">
-            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-candado"/></svg></span><h3>Tu privacidad, sin letra pequeña</h3></div>
-            <p>Tu conversación se guarda solo en tu celular; el servidor no la guarda. Si hay una alerta de crisis, queda registrada la hora y un fragmento corto para que el equipo pueda revisar.</p>
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-candado"/></svg></span><h3>Tu perfil y tu conversación, solo en tu celular</h3></div>
+            <p>El perfil sensorial (el tuyo y el de ella) queda en tu celular. Contigo lo usa para responderte sin que lo guardemos en un servidor: viaja con cada mensaje y no queda registrado. Lo puedes ver y borrar cuando quieras. Si hay una alerta de crisis, queda registrada la hora y un fragmento corto del mensaje para que el equipo pueda revisar.</p>
           </article>
           <article class="etica revelar">
-            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-persona"/></svg></span><h3>No pide datos de la niña</h3></div>
-            <p>Ni nombre, ni documento, ni EPS. Mejor no los escribas: para acompañarte no los necesita.</p>
+            <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-persona"/></svg></span><h3>No pedimos datos que la identifiquen</h3></div>
+            <p>Ni nombre, ni documento, ni EPS. El perfil habla de lo que la calma y la desborda, no de quién es. Mejor no escribas esos datos: para acompañarte no los necesitamos.</p>
           </article>
           <article class="etica revelar d1">
             <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-codigo"/></svg></span><h3>Código abierto</h3></div>
-            <p>Cualquiera puede revisar cómo funciona. <a href="https://github.com/smart4ai-io/acompanante-cuidadora" target="_blank" rel="noopener">Ver el código en GitHub</a>.</p>
+            <p>Cualquiera puede revisar cómo funciona Contigo. <a href="https://github.com/smart4ai-io/acompanante-cuidadora" target="_blank" rel="noopener">Ver el código en GitHub</a>.</p>
           </article>
         </div>
       </div>
@@ -1077,8 +1259,8 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
           <div>
             <h3>Natalia Orozco</h3>
             <span class="org">Pulsomundo S.A.S.</span>
-            <!-- pendiente visto bueno de Natalia -->
-            <p>Periodista y documentalista de derechos humanos, ha liderado programas que forman a familias para acompañar a hijos neurodivergentes.</p>
+            <!-- Texto literal de Natalia (Word del 9-nov, sección 6 «Quiénes somos») -->
+            <p>Periodista y documentalista de derechos humanos. Activista por la inclusión. Mamá de un niño diagnosticado dentro del espectro autista. Ha liderado programas que forman a familias para acompañar a niños, niñas y adolescentes neurodivergentes.</p>
           </div>
         </article>
         <article class="persona-org revelar d1">
@@ -1092,9 +1274,9 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         </article>
       </div>
       <div class="sellos revelar">
-        <p class="sello"><span class="punto-vivo" aria-hidden="true"></span>Prototipo en prueba · Postulados a UNICEF Femtech Ventures 2026</p>
+        <p class="sello"><span class="punto-vivo" aria-hidden="true"></span>Postulados a UNICEF Femtech Ventures 2026</p>
       </div>
-      <p class="hoy revelar">Hoy es un prototipo web probado en laboratorio, con código abierto. El chat y los recursos ya tienen el visto bueno de una terapeuta, y la guía ante la EPS, el de asesoría legal; faltan el aval de ética y el piloto con cuidadoras.</p>
+      <p class="hoy revelar">Una iniciativa de Pulso Mundo y Smart4AI, con código abierto. El chat y los recursos tienen el visto bueno de una terapeuta, y la guía ante la EPS, el de asesoría legal.</p>
 
       <div class="cierre revelar">
         <div class="foto">
@@ -1105,7 +1287,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
         </div>
         <div class="cierre-texto">
           <h2>No tienes que cuidar sola</h2>
-          <p>Escríbele ahora. Es gratis, en español y a cualquier hora.</p>
+          <p>Escríbenos ahora. Es gratis, en español y a cualquier hora.</p>
           <button type="button" class="boton" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
         </div>
       </div>
@@ -1118,27 +1300,29 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   <div class="contenedor">
     <div class="pie-grid">
       <div>
-        <a class="marca" href="#inicio" aria-label="Acompañante de la cuidadora, volver al inicio"><span class="logo"><svg class="icono"><use href="#i-logo"/></svg></span><span>Acompañante<br><span class="linea2">de la cuidad<span class="o-circulo" aria-hidden="true"></span>ra</span></span></a>
-        <p style="margin-top:14px; max-width: 30em;">Orienta y remite; nunca diagnostica. No reemplaza la atención de tu médico ni de tu EPS.</p>
+        <a class="marca" href="#inicio" aria-label="Contigo, volver al inicio"><span class="logo"><svg class="icono"><use href="#i-logo"/></svg></span><span class="nombre-marca">Contigo</span></a>
+        <p style="margin-top:14px; max-width: 30em;">Protegemos niñas y adolescentes extraordinarias y acompañamos a sus cuidadoras. No diagnosticamos, no formulamos, no generalizamos. No reemplazamos la atención de tu médico ni de tu EPS.</p>
+        <p class="iniciativa">Una iniciativa de <strong>Pulso Mundo</strong> y <strong>Smart4AI</strong></p>
       </div>
       <div>
         <h2>Líneas de ayuda</h2>
         <ul>
           <li><a href="tel:106"><span class="num">106</span></a> Apoyo emocional, gratis</li>
           <li><a href="tel:123"><span class="num">123</span></a> Emergencias</li>
-          <li><a href="tel:141"><span class="num">141</span></a> ICBF: protección de niñas y niños</li>
+          <li><a href="tel:141"><span class="num">141</span></a> ICBF: protección de niñas, niños y adolescentes</li>
         </ul>
       </div>
       <div>
         <h2>El proyecto</h2>
         <ul>
+          <li><a href="/casa-contigo.html">Casa Contigo</a></li>
           <li><a href="https://github.com/smart4ai-io/acompanante-cuidadora" target="_blank" rel="noopener">Código abierto en GitHub</a></li>
           <li><button type="button" class="interruptor" id="interruptorDemo" role="switch" aria-checked="false"><span class="riel" aria-hidden="true"></span>Modo demostración</button></li>
         </ul>
       </div>
     </div>
     <div class="legal">
-      <span>© 2026 Pulsomundo S.A.S. y Smart4AI · Prototipo en prueba</span>
+      <span>© 2026 Pulsomundo S.A.S. y Smart4AI</span>
       <span>Hecho en Medellín, Colombia</span>
     </div>
   </div>
@@ -1153,26 +1337,57 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   const CLAVE_AVISOS = "acompanante-cuidadora-avisos"; // recursos que la persona pidió que le avisemos (solo en este navegador)
   const ESPERA_MAXIMA_MS = 100000;
   // Mismo texto que RESPUESTA_ERROR de src\prompt.js (se usa si no hay conexión).
-  const RESPUESTA_ERROR = "Tuve un problema técnico y no pude responderte. Intenta de nuevo en un rato.\nSi es urgente: *Línea 106* o *123*.";
+  const RESPUESTA_ERROR = "Tuvimos un problema técnico y no pudimos responderte. Intenta de nuevo en un rato.\nSi es urgente: *Línea 106* o *123*.";
   const TEXTO_BORRAR = "Borrar conversación";
   const NOTA_NORMAL = "Solo en tu celular";
   const NOTA_DIARIO = "Escribe lo que viste hoy y toca enviar";
   const ESCRITORIO = "(min-width: 900px)"; // mismo corte que el CSS: arriba, chat incrustado; abajo, pantalla completa
 
   // ---------------- Recursos: para agregar uno nuevo basta con sumar un objeto aquí ----------------
-  // grupo: "ti" | "nina" · estado: "pieza" (página propia en /recursos/, con enlace) | "disponible" (dentro del chat, con accion "chequeo" | "diario") | "pronto"
+  // grupo: "ti" | "nina" · estado: "pieza" (página propia, con enlace) | "disponible" (dentro del chat, con accion "chequeo" | "diario" | "perfil") | "pronto"
+  // v5 (2026-11-10): títulos y textos de Natalia en las cuatro primeras; «Sus ciclos, su ritmo» la construye otro equipo.
   const RECURSOS = [
-    { id: "asi-soy-yo", grupo: "ti", icono: "i-persona", titulo: "Así soy yo", texto: "Arma en 90 segundos la flor de tu hija: qué la calma, qué la desborda y cómo avisa. Tú decides si la compartes con la maestra o el papá.", estado: "pieza", enlace: "/recursos/asi-soy-yo.html" },
-    { id: "el-vaso", grupo: "ti", icono: "i-corazon", titulo: "El vaso", texto: "Para mandarle a la maestra o al papá: en un minuto entiende por qué se desborda al final del día y qué 3 cosas ayudan.", estado: "pieza", enlace: "/recursos/el-vaso.html" },
-    { id: "diario", grupo: "ti", icono: "i-libreta", titulo: "Tu diario para la consulta", texto: "Anota lo que ves y llévale un resumen al pediatra. Hoy vive dentro del chat; la versión para imprimir viene en camino.", estado: "disponible", accion: "diario" },
-    { id: "chequeo", grupo: "ti", icono: "i-pulso", titulo: "Chequeo de bienestar", texto: "Dos minutos para notar cómo estás tú. Si hace falta, te dice dónde pedir apoyo.", estado: "disponible", accion: "chequeo" },
+    { id: "asi-soy-yo", grupo: "ti", icono: "i-persona", titulo: "¿Por qué ella es extraordinariamente única?", texto: "En 90 segundos identifica qué estímulos la desbordan y cuáles la regulan. También cuáles son sus señales de aviso. Tú decides con quién compartes esta información.", estado: "pieza", enlace: "/recursos/asi-soy-yo.html" },
+    { id: "lugar-seguro", grupo: "ti", icono: "i-tarjeta", titulo: "¿Cómo puedes ser su lugar seguro?", texto: "Cómo prestarle tu calma frente a la frustración por un cambio, un colapso sensorial o una crisis de ansiedad, entre otros momentos.", estado: "pieza", enlace: "/recursos/plan-de-tormenta.html" },
+    { id: "diario", grupo: "ti", icono: "i-libreta", titulo: "Bitácora para la consulta", texto: "Anota comportamientos, reacciones a estímulos y momentos de agitación, ansiedad y calma. Este resumen le será muy útil al especialista. Hoy este diario sensorial y comportamental vive dentro del chat; la versión para imprimir viene en camino.", estado: "disponible", accion: "diario" },
+    { id: "chequeo", grupo: "ti", icono: "i-pulso", titulo: "Chequeo de tu bienestar", texto: "Solo si tú estás regulada puedes acompañar con acierto a las niñas y adolescentes que acompañas. Dos minutos para revisar tu nivel de estrés y de bienestar. Si hace falta, te decimos dónde pedir apoyo.", estado: "disponible", accion: "chequeo" },
+    { id: "mi-perfil", grupo: "ti", icono: "i-check", titulo: "Tu perfil sensorial", texto: "Qué te desborda, qué te regula, tus señales de aviso, tu energía de hoy y quién te apoya. Dos minutos, y queda en tu celular.", estado: "disponible", accion: "perfil" },
+    { id: "sus-ciclos", grupo: "ti", icono: "i-reloj", titulo: "Sus ciclos, su ritmo", texto: "Los cambios de la pubertad y del ciclo menstrual en niñas y adolescentes extraordinarias, y cómo acompañarla en cada etapa.", estado: "pieza", enlace: "/recursos/sus-ciclos.html" },
+    { id: "el-vaso", grupo: "ti", icono: "i-corazon", titulo: "El vaso", texto: "Para mandarle a la maestra o a la familia: en un minuto entiende por qué se desborda al final del día y qué 3 cosas ayudan.", estado: "pieza", enlace: "/recursos/el-vaso.html" },
     { id: "ruta-eps", grupo: "ti", icono: "i-camino", titulo: "Guía de la ruta en la EPS", texto: "Paso a paso para pedir la valoración, qué decir en cada cita y qué hacer si te la niegan. Vas marcando lo que ya hiciste.", estado: "pieza", enlace: "/recursos/ruta-eps.html" },
-    { id: "tarjeta-crisis", grupo: "ti", icono: "i-tarjeta", titulo: "Tarjeta de crisis", texto: "Tu plan de tormenta: qué la ayuda, qué evitar y a quién avisar, en una tarjeta con las líneas de ayuda para tener a mano.", estado: "pieza", enlace: "/recursos/plan-de-tormenta.html" },
     { id: "asi-estoy", grupo: "nina", icono: "i-conversa", titulo: "Así estoy, esto necesito", texto: "12 tarjetas grandes para que diga cómo está sin tener que hablar. Trae una hoja para imprimir para todo el salón.", estado: "pieza", enlace: "/recursos/asi-estoy.html" },
     { id: "rutinas", grupo: "nina", icono: "i-cuadricula", titulo: "Rutinas visuales con pictogramas", texto: "Su día en un caminito de dibujos: lo que va hecho se marca y lo que falta queda para otro día, sin castigo. Con hoja para el salón.", estado: "pieza", enlace: "/recursos/mi-dia.html" },
     { id: "cuentos", grupo: "nina", icono: "i-libro", titulo: "Cuentos sociales", texto: "5 historias cortas para anticipar lo que va a pasar: el médico, el colegio, el corte de pelo, una vacuna y una fiesta. Las ajustas a ella.", estado: "pieza", enlace: "/recursos/cuentos.html" },
     { id: "kit-sensorial", grupo: "nina", icono: "i-audifonos", titulo: "Kit sensorial", texto: "Su rincón de calma para respirar y mostrar lo que necesita, y 22 ideas sin costo para los ruidos, las luces y las texturas que la abruman.", estado: "pieza", enlace: "/recursos/calma.html" },
   ];
+
+  // ---------------- Perfil sensorial (v5, 2026-11-10) ----------------
+  // Dos partes, las dos SOLO en este navegador (localStorage, claves contigo.* como las piezas de Recursos):
+  //  · la de ella: la escribe «Así soy yo» en contigo.perfil (aquí solo se lee y, si ella lo pide, se borra);
+  //  · la de la cuidadora: contigo.mi-perfil, con los 5 pasos del panel de abajo.
+  // Con cada mensaje viaja un resumen corto en texto ({nina, cuidadora}); el servidor lo recorta, lo usa
+  // como DATOS para responder y no lo guarda (ver src\agente.js). Nunca se guardan nombre, documento ni EPS.
+  const CLAVE_PERFIL_NINA = "contigo.perfil";
+  const CLAVE_PROGRESO_NINA = "contigo.asi-soy-yo";
+  const CLAVE_PERFIL_CUIDADORA = "contigo.mi-perfil";
+  // Etiquetas de «Así soy yo» (ids y textos copiados de recursos\asi-soy-yo.html; los ids son su formato).
+  const TARJETAS_NINA = [
+    ["calma", "Lo que la calma", { silencio: "Silencio", abrazo: "Un abrazo fuerte", musica: "Música suave", objeto: "Su objeto favorito", mecerse: "Mecerse o columpiarse", luz: "Luz bajita" }],
+    ["desborda", "Lo que la desborda", { ruido: "Ruido fuerte", gente: "Mucha gente", luz: "Luz muy fuerte", cambios: "Cambios de plan", tocar: "Que la toquen sin avisar", ropa: "Ropa o etiquetas que pican" }],
+    ["avisa", "Cómo avisa que necesita ayuda", { oidos: "Se tapa los oídos", callada: "Se queda callada", esconde: "Se esconde", llora: "Llora o grita", mueve: "Se mueve más", repite: "Repite una frase" }],
+    ["encanta", "Lo que le encanta", { animales: "Animales", dinosaurios: "Dinosaurios", dibujar: "Dibujar y pintar", musica: "Música y bailar", agua: "Agua y piscina", estrellas: "Estrellas y planetas" }],
+    ["comunica", "Cómo se comunica", { palabras: "Con palabras", pocas: "Con pocas palabras", senala: "Señalando o con gestos", dibujos: "Con dibujos o tarjetas", escribe: "Escribiendo o en el celular", mano: "Te lleva de la mano" }],
+    ["crisis", "Lo que funciona en una crisis", { bajito: "Hablarle poco y bajito", espacio: "Darle espacio", tranquilo: "Llevarla a un lugar tranquilo", objeto: "Darle su objeto favorito", esperar: "Esperar sin tocarla", agua: "Ofrecerle agua" }],
+  ];
+  // Los 5 pasos del perfil de la cuidadora (unos 2 minutos). max = cuántas opciones se pueden elegir.
+  const PASOS_CUIDADORA = [
+    { id: "desborda", resumen: "Lo que me desborda", titulo: "¿Qué estímulos te desbordan a ti?", max: 3, opciones: [["ruido", "Ruido fuerte"], ["gente", "Mucha gente"], ["desorden", "Desorden alrededor"], ["interrupciones", "Que me interrumpan seguido"], ["prisa", "Andar con prisa"], ["luz", "Luz muy fuerte"], ["olores", "Olores fuertes"], ["pantallas", "Muchos mensajes y pantallas"]] },
+    { id: "regula", resumen: "Lo que me regula", titulo: "¿Qué te regula y te devuelve la calma?", max: 3, opciones: [["silencio", "Un rato de silencio"], ["caminar", "Caminar o moverme"], ["musica", "Música"], ["hablar", "Hablar con alguien de confianza"], ["respirar", "Respirar despacio"], ["bebida", "Un café o una aromática a solas"], ["dormir", "Dormir o descansar"], ["fe", "Rezar o meditar"]] },
+    { id: "senales", resumen: "Mis señales de aviso", titulo: "¿Cuáles son tus señales de aviso cuando ya estás al límite?", max: 3, opciones: [["irritable", "Me irrito rápido"], ["llanto", "Me dan ganas de llorar"], ["tension", "Siento el cuerpo tenso"], ["mente", "No puedo pensar con claridad"], ["aislarme", "Me encierro o me aíslo"], ["voz", "Subo la voz más de lo que quisiera"], ["sueno", "Duermo mal"], ["dolor", "Me duele la cabeza o el estómago"]] },
+    { id: "energia", resumen: "Mi energía", titulo: "¿Cómo está hoy tu energía?", max: 1, opciones: [["llena", "Bien, con energía"], ["media", "Más o menos"], ["baja", "Baja"], ["agotada", "Agotada"]] },
+    { id: "apoyo", resumen: "Quién me apoya", titulo: "¿Quién te apoya en el cuidado?", max: 3, opciones: [["pareja", "Mi pareja"], ["familia", "Mi familia"], ["amigas", "Amigas o vecinas"], ["colegio", "El colegio o la maestra"], ["grupo", "Un grupo de madres o cuidadoras"], ["profesional", "Una profesional (psicóloga o terapeuta)"], ["nadie", "Por ahora, nadie"]] },
+  ];
+  const LIMITE_RESUMEN = 650; // el servidor recorta a 700 por parte; aquí se deja margen
 
   let estadoServidor = null; // la sesión del agente: la guarda este navegador y viaja en cada POST
   let conversacion = []; // [{rol: "yo"|"ella"|"sistema", texto, hora}]
@@ -1181,6 +1396,247 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   let proveedor = null; // "gateway", "anthropic" o "manual", según responde el servidor
   let ocupado = false;
   let demo = false; // modo demostración: muestra el panel «Por dentro»
+
+  // ---------------- perfil sensorial: leer, resumir, guardar y borrar ----------------
+  function leerJson(clave) {
+    try {
+      const v = JSON.parse(localStorage.getItem(clave) || "null");
+      return v && typeof v === "object" && !Array.isArray(v) ? v : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function hoyLocal() {
+    return new Date().toLocaleDateString("sv-SE"); // AAAA-MM-DD
+  }
+  // Quita caracteres de control y espacios de más (el servidor vuelve a limpiar).
+  function limpio(t, max) {
+    return Array.from(String(t == null ? "" : t).replace(/[\u0000-\u001F\u007F-\u009F]/g, " ").replace(/\s+/g, " ").trim()).slice(0, max).join("");
+  }
+  function cortar(t) {
+    return Array.from(t).slice(0, LIMITE_RESUMEN).join("");
+  }
+  // Resumen de la parte de ella (de «Así soy yo»). El apodo NO viaja: no hace falta para responder.
+  function resumenNina() {
+    const p = leerJson(CLAVE_PERFIL_NINA);
+    if (!p || !p.tarjetas || typeof p.tarjetas !== "object") return "";
+    const partes = [];
+    for (const [id, titulo, etiquetas] of TARJETAS_NINA) {
+      const t = p.tarjetas[id];
+      if (!t || typeof t !== "object") continue;
+      const elegidas = (Array.isArray(t.opciones) ? t.opciones : []).filter((o) => etiquetas[o]).map((o) => etiquetas[o]);
+      const nota = limpio(t.nota, 60);
+      if (nota) elegidas.push(`«${nota}»`);
+      if (elegidas.length) partes.push(`${titulo}: ${elegidas.join(", ")}.`);
+    }
+    return cortar(partes.join(" "));
+  }
+  function leerCuidadora() {
+    const p = leerJson(CLAVE_PERFIL_CUIDADORA) || {};
+    const limpioPerfil = { v: 1, energiaFecha: typeof p.energiaFecha === "string" ? p.energiaFecha : "" };
+    for (const paso of PASOS_CUIDADORA) {
+      const validas = paso.opciones.map((o) => o[0]);
+      limpioPerfil[paso.id] = (Array.isArray(p[paso.id]) ? p[paso.id] : []).filter((x) => validas.includes(x)).slice(0, paso.max);
+    }
+    return limpioPerfil;
+  }
+  function guardarCuidadora(p) {
+    try {
+      localStorage.setItem(CLAVE_PERFIL_CUIDADORA, JSON.stringify(p));
+    } catch (e) {
+      /* sin almacenamiento: el perfil dura mientras la página esté abierta */
+    }
+  }
+  function resumenCuidadora(p = leerCuidadora()) {
+    const partes = [];
+    for (const paso of PASOS_CUIDADORA) {
+      const elegidas = p[paso.id].map((id) => (paso.opciones.find((o) => o[0] === id) || [])[1]).filter(Boolean);
+      if (!elegidas.length) continue;
+      let titulo = paso.resumen;
+      if (paso.id === "energia") titulo = p.energiaFecha && p.energiaFecha !== hoyLocal() ? `Mi energía (anotada el ${p.energiaFecha})` : "Mi energía hoy";
+      partes.push(`${titulo}: ${elegidas.join(", ")}.`);
+    }
+    return cortar(partes.join(" "));
+  }
+  // Lo que viaja con cada mensaje (o null si no hay nada).
+  function perfilParaEnviar() {
+    const nina = resumenNina();
+    const cuidadora = resumenCuidadora();
+    return nina || cuidadora ? { nina, cuidadora } : null;
+  }
+  function estadoPerfil() {
+    const nina = Boolean(resumenNina());
+    const cuidadora = Boolean(resumenCuidadora());
+    return { nina, cuidadora, completo: nina && cuidadora };
+  }
+  function borrarClave(clave) {
+    try {
+      localStorage.removeItem(clave);
+    } catch (e) {
+      /* sin almacenamiento: no pasa nada */
+    }
+  }
+
+  // Tarjeta del perfil en la bienvenida del chat: estado de cada parte.
+  function pintarTarjetaPerfil() {
+    const e = estadoPerfil();
+    const pasoC = $("pasoCuidadora");
+    const pasoN = $("pasoNina");
+    pasoC.classList.toggle("listo", e.cuidadora);
+    pasoN.classList.toggle("listo", e.nina);
+    pasoC.querySelector(".pp-num").textContent = e.cuidadora ? "✓" : "1";
+    pasoN.querySelector(".pp-num").textContent = e.nina ? "✓" : "2";
+    $("estadoCuidadora").textContent = e.cuidadora ? "Listo · en tu celular" : "2 minutos";
+    $("estadoNina").textContent = e.nina ? "Listo · en tu celular" : "90 segundos";
+    pasoC.querySelector("[data-perfil-cuidadora]").textContent = e.cuidadora ? "Editar" : "Empezar";
+    $("enlaceNina").textContent = e.nina ? "Editar" : "Hacer";
+    $("tarjetaPerfil").classList.toggle("completo", e.completo);
+    $("accionesPerfil").hidden = !(e.nina || e.cuidadora);
+    $("titulitoEjemplos").textContent = e.completo ? "Tu perfil está listo. Escribe o prueba un ejemplo:" : "Con tu perfil listo, prueba un ejemplo:";
+    if (e.completo) {
+      $("tarjetaPerfil").querySelector(".tp-titulo").textContent = "Tu perfil está listo.";
+      $("tarjetaPerfil").querySelector(".tp-texto").textContent = "Ya conocemos su perfil sensorial y el tuyo. Escríbenos con tus palabras y te acompañamos a partir de lo que nos contaste.";
+    } else {
+      $("tarjetaPerfil").querySelector(".tp-titulo").textContent = "Cada ser extraordinario es único.";
+      $("tarjetaPerfil").querySelector(".tp-texto").textContent = "Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).";
+    }
+    // Las invitaciones dentro de la conversación desaparecen cuando el perfil ya está completo.
+    for (const b of document.querySelectorAll(".invitar-perfil")) b.hidden = e.completo;
+  }
+
+  // ---------------- panel del perfil (dentro del teléfono del chat) ----------------
+  let pasoActual = 0;
+  function abrirPanel() {
+    $("telefono").classList.add("con-panel");
+    $("panelPerfil").hidden = false;
+  }
+  function cerrarPanel() {
+    $("telefono").classList.remove("con-panel");
+    $("panelPerfil").hidden = true;
+    $("panelPerfil").innerHTML = "";
+    pintarTarjetaPerfil();
+    pintarVacio();
+    const caja = $("mensajes");
+    caja.scrollTop = caja.scrollHeight;
+  }
+  function enfocarTitulo() {
+    const h = $("panelPerfil").querySelector("h3");
+    if (h) {
+      try {
+        h.focus({ preventScroll: true });
+      } catch (e) {
+        h.focus();
+      }
+    }
+    $("panelPerfil").scrollTop = 0;
+  }
+  // Paso i del perfil de la cuidadora.
+  function pintarPaso(i) {
+    pasoActual = i;
+    const paso = PASOS_CUIDADORA[i];
+    const p = leerCuidadora();
+    const elegidas = p[paso.id];
+    const lleno = paso.max > 1 && elegidas.length >= paso.max;
+    const ayuda = paso.max === 1 ? "Elige una." : lleno ? `Ya elegiste ${paso.max}. Toca una para quitarla.` : `Elige hasta ${paso.max}. Si ninguna encaja, sigue.`;
+    const panel = $("panelPerfil");
+    panel.innerHTML =
+      `<div class="pp-progreso" aria-hidden="true">${PASOS_CUIDADORA.map((_, k) => `<i class="${k <= i ? "hecho" : ""}"></i>`).join("")}</div>` +
+      `<p class="pp-paso">Tu perfil · paso ${i + 1} de ${PASOS_CUIDADORA.length}</p>` +
+      `<h3 tabindex="-1">${escaparHtml(paso.titulo)}</h3>` +
+      `<p class="pp-ayuda" aria-live="polite">${escaparHtml(ayuda)}</p>` +
+      `<ul class="opciones-perfil">${paso.opciones
+        .map(([id, texto]) => {
+          const si = elegidas.includes(id);
+          return `<li><button type="button" class="opcion-perfil${paso.max === 1 ? " unica" : ""}" data-op="${escaparHtml(id)}" aria-pressed="${si}"${!si && lleno ? " disabled" : ""}>${escaparHtml(texto)}</button></li>`;
+        })
+        .join("")}</ul>` +
+      `<div class="pp-botones"><button type="button" class="boton claro" data-pp="atras">${i === 0 ? "Cerrar" : "Atrás"}</button>` +
+      `<button type="button" class="boton" data-pp="siguiente">${i === PASOS_CUIDADORA.length - 1 ? "Guardar mi perfil" : "Siguiente"}</button></div>`;
+    abrirPanel();
+    enfocarTitulo();
+  }
+  function alternarOpcion(id) {
+    const paso = PASOS_CUIDADORA[pasoActual];
+    const p = leerCuidadora();
+    let lista = p[paso.id];
+    if (paso.max === 1) lista = lista.includes(id) ? [] : [id];
+    else if (lista.includes(id)) lista = lista.filter((x) => x !== id);
+    else if (lista.length < paso.max) lista = lista.concat(id);
+    p[paso.id] = lista;
+    if (paso.id === "energia") p.energiaFecha = lista.length ? hoyLocal() : "";
+    guardarCuidadora(p);
+    pintarPaso(pasoActual);
+    const b = $("panelPerfil").querySelector(`[data-op="${id}"]`);
+    if (b) b.focus();
+  }
+  // «Ver o borrar»: lo que hay en este celular y lo que viaja con cada mensaje.
+  function pintarResumen() {
+    const nina = resumenNina();
+    const cuidadora = resumenCuidadora();
+    const e = { nina: Boolean(nina), cuidadora: Boolean(cuidadora) };
+    const completo = e.nina && e.cuidadora;
+    const parte = (titulo, texto, acciones) =>
+      `<section><h4>${titulo}</h4>${texto ? `<p>${escaparHtml(texto)}</p>` : '<p class="vacio">Todavía no está.</p>'}<div class="acciones-parte">${acciones}</div></section>`;
+    const accionesC = `<button type="button" class="boton-perfil" data-perfil-cuidadora>${e.cuidadora ? "Editar" : "Hacer mi perfil · 2 min"}</button>` + (e.cuidadora ? '<button type="button" class="enlace-boton peligro" data-borrar="cuidadora">Borrar mi perfil</button>' : "");
+    const accionesN = `<a class="boton-perfil" href="/recursos/asi-soy-yo.html">${e.nina ? "Editar en «Así soy yo»" : "Hacer el de ella · 90 s"}</a>` + (e.nina ? '<button type="button" class="enlace-boton peligro" data-borrar="nina">Borrar el de ella</button>' : "");
+    const panel = $("panelPerfil");
+    panel.innerHTML =
+      `<p class="pp-paso">Perfil sensorial</p>` +
+      `<h3 tabindex="-1">${completo ? "Tu perfil está listo" : "Cada ser extraordinario es único"}</h3>` +
+      `<p class="pp-ayuda">${completo ? "Esto es lo que viaja con cada mensaje para que te respondamos a partir de ustedes. Queda en tu celular y no lo guardamos en un servidor." : "Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos). Queda solo en tu celular."}</p>` +
+      `<div class="resumen-perfil">${parte("Tu perfil", cuidadora, accionesC)}${parte("El de ella · «Así soy yo»", nina, accionesN)}</div>` +
+      `<div class="pp-botones">${completo ? '<button type="button" class="boton" data-pp="conversar">Listo, a conversar</button>' : !e.cuidadora ? '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><button type="button" class="boton" data-perfil-cuidadora>Empezar con el mío</button>' : '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><a class="boton" href="/recursos/asi-soy-yo.html">Seguir con el de ella</a>'}</div>`;
+    abrirPanel();
+    enfocarTitulo();
+  }
+  // Puerta de entrada desde cualquier botón «Empezar con mi perfil»: abre el chat y el paso que falta.
+  function abrirPerfil(modo) {
+    abrirChat();
+    if (modo === "pasos" || (modo !== "ver" && !estadoPerfil().cuidadora)) pintarPaso(0);
+    else pintarResumen();
+  }
+  let borradoPendiente = null;
+  function borrarParte(cual, boton) {
+    // Doble toque: el primero arma, el segundo borra (igual que «Borrar conversación»).
+    if (borradoPendiente !== cual) {
+      borradoPendiente = cual;
+      boton.textContent = "¿Seguro? Toca otra vez";
+      setTimeout(() => {
+        if (borradoPendiente === cual) {
+          borradoPendiente = null;
+          if (document.body.contains(boton)) boton.textContent = cual === "nina" ? "Borrar el de ella" : "Borrar mi perfil";
+        }
+      }, 4000);
+      return;
+    }
+    borradoPendiente = null;
+    if (cual === "nina") {
+      borrarClave(CLAVE_PERFIL_NINA);
+      borrarClave(CLAVE_PROGRESO_NINA);
+    } else {
+      borrarClave(CLAVE_PERFIL_CUIDADORA);
+    }
+    pintarResumen();
+    pintarTarjetaPerfil();
+  }
+  $("panelPerfil").addEventListener("click", (ev) => {
+    const op = ev.target.closest("[data-op]");
+    if (op && !op.disabled) return alternarOpcion(op.dataset.op);
+    const b = ev.target.closest("[data-pp]");
+    if (b) {
+      const que = b.dataset.pp;
+      if (que === "siguiente") return pasoActual < PASOS_CUIDADORA.length - 1 ? pintarPaso(pasoActual + 1) : pintarResumen();
+      if (que === "atras") return pasoActual > 0 ? pintarPaso(pasoActual - 1) : cerrarPanel();
+      if (que === "cerrar") return cerrarPanel();
+      if (que === "conversar") {
+        cerrarPanel();
+        enfocarEntrada();
+        return;
+      }
+    }
+    const borrar = ev.target.closest("[data-borrar]");
+    if (borrar) borrarParte(borrar.dataset.borrar, borrar);
+  });
 
   // ---------------- servidor (igual que index.html) ----------------
   async function llamar(cuerpo) {
@@ -1271,20 +1727,36 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     $("rapidas").hidden = vacia;
   }
 
+  // Una respuesta «sin perfil» lleva debajo el botón para hacerlo (se esconde cuando el perfil está completo).
+  function nodoMensaje(m) {
+    const f = document.createDocumentFragment();
+    f.appendChild(burbuja(m));
+    if (m.invitaPerfil) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "boton invitar-perfil";
+      b.dataset.abrirPerfil = "";
+      b.textContent = "Hacer el perfil · 4 min";
+      b.hidden = estadoPerfil().completo;
+      f.appendChild(b);
+    }
+    return f;
+  }
+
   function pintarConversacion() {
     const caja = $("mensajes");
     caja.innerHTML = "";
-    for (const m of conversacion) caja.appendChild(burbuja(m));
+    for (const m of conversacion) caja.appendChild(nodoMensaje(m));
     pintarVacio();
     caja.scrollTop = caja.scrollHeight;
   }
 
-  function agregar(rol, texto) {
-    const m = { rol, texto: String(texto), hora: new Date().toISOString() };
+  function agregar(rol, texto, extra = {}) {
+    const m = { rol, texto: String(texto), hora: new Date().toISOString(), ...extra };
     conversacion.push(m);
     if (conversacion.length > 400) conversacion.splice(0, conversacion.length - 400);
     const caja = $("mensajes");
-    caja.appendChild(burbuja(m));
+    caja.appendChild(nodoMensaje(m));
     pintarVacio();
     caja.scrollTop = caja.scrollHeight;
   }
@@ -1303,7 +1775,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     for (const e of porDentro) {
       const div = document.createElement("div");
       div.className = "entrada-dentro";
-      const rojo = ["crisis", "maltrato", "diagnostico", "rechazo", "error", "sin-fuente", "limite"].includes(e.candado);
+      const rojo = ["crisis", "maltrato", "diagnostico", "rechazo", "error", "sin-fuente", "limite", "sin-perfil"].includes(e.candado);
       const filas = [["Candado", `<span class="etiqueta${rojo ? " roja" : ""}">${escaparHtml(e.candado || "ninguno")}</span>`]];
       if (e.motivo) filas.push(["Motivo", escaparHtml(e.motivo)]);
       if (e.fragmentos) filas.push(["Fragmentos", escaparHtml(e.fragmentos.length ? e.fragmentos.map((f) => `${f.id_fuente} › ${f.seccion} (${f.puntaje})`).join(" · ") : "ninguno (la biblioteca no encontró nada)")]);
@@ -1312,6 +1784,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       if (e.tokens) filas.push(["Tokens", escaparHtml(e.tokens)]);
       if (e.origen) filas.push(["Resumen hecho por", escaparHtml(e.origen === "literal" ? "red de seguridad (notas tal cual)" : e.origen)]);
       if (e.puntajes) filas.push(["Puntajes (no se le muestran)", escaparHtml(Object.entries(e.puntajes).map(([k, v]) => `${k.toUpperCase()}=${v}`).join(" · "))]);
+      if (e.perfil) filas.push(["Perfil sensorial", escaparHtml(`de ella ${e.perfil.nina ? "✓" : "—"} · de la cuidadora ${e.perfil.cuidadora ? "✓" : "—"} · ${e.perfil.caracteres} caracteres (viajó en el mensaje; el servidor no lo guarda)`)]);
       if (e.guardia) filas.push(["Alerta registrada", escaparHtml(e.guardia)]);
       if (e.error) filas.push(["Error", escaparHtml(e.error)]);
       div.innerHTML = `<strong>${escaparHtml(horaCorta(e.hora))} · ${escaparHtml(e.que)}</strong><dl>${filas.map(([k, v]) => `<dt>${escaparHtml(k)}</dt><dd>${v}</dd>`).join("")}</dl>`;
@@ -1335,6 +1808,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       origen: r.origen || null,
       puntajes: r.puntajes || null,
       guardia: r.guardia ? `${r.guardia.tipo} · ${horaCorta(r.guardia.hora)}` : null,
+      perfil: r.perfil || null,
       error: r.error || null,
     });
     if (porDentro.length > 50) porDentro.length = 50;
@@ -1372,7 +1846,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       ponerOcupado(false);
     }
     if (que === "fuentes" && !r.error) agregar("sistema", r.texto);
-    else agregar("ella", r.texto);
+    else agregar("ella", r.texto, r.candado === "sin-perfil" ? { invitaPerfil: true } : {});
     if (r.guardia) {
       registro.push(r.guardia);
       mostrarFranja(r.guardia);
@@ -1392,7 +1866,8 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     $("entrada").value = "";
     ajustarAltura();
     $("notaTexto").textContent = NOTA_NORMAL;
-    ejecutar("mensaje", { accion: "mensaje", mensaje: t });
+    // El perfil sensorial (resumen corto) viaja con cada mensaje; vive solo en este celular.
+    ejecutar("mensaje", { accion: "mensaje", mensaje: t, perfil: perfilParaEnviar() });
   }
 
   // El foco va a la caja de texto sin mover la página (en escritorio el chat está dentro de la página).
@@ -1425,6 +1900,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     else if (accion === "resumen") ejecutar("resumen", { accion: "resumen" });
     else if (accion === "diario") prepararDiario();
     else if (accion === "persona") enviar("quiero hablar con una persona"); // src\agente.js lo atiende sin modelo y registra la alerta
+    else if (accion === "perfil") abrirPerfil();
   }
 
   let reinicioPendiente = null;
@@ -1666,7 +2142,7 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
       }, { rootMargin: "-45% 0px -50% 0px" });
       for (const a of enlaces) { const s = $(a.dataset.spy); if (s) espia.observe(s); }
       // Secciones sin enlace propio: al pasar por ellas no queda marcado ningún enlace.
-      for (const id of ["conversar", "lo-que-hace", "educacion"]) espia.observe($(id));
+      for (const id of ["conversar", "lo-que-hace", "para-quien", "casa-contigo", "educacion"]) espia.observe($(id));
     }
     const cab = $("cabecera");
     const sombra = () => cab.classList.toggle("con-sombra", window.scrollY > 8);
@@ -1687,6 +2163,22 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   });
   $("entrada").addEventListener("input", ajustarAltura);
   for (const b of document.querySelectorAll(".chip")) b.addEventListener("click", () => enviar(b.dataset.ejemplo));
+  // Perfil: «Empezar con mi perfil» (hero, tarjetas, invitaciones), «Tu perfil» y «Ver o borrar».
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest && ev.target.closest("[data-abrir-perfil], [data-perfil-cuidadora], [data-ver-perfil]");
+    if (!b) return;
+    if (b.hasAttribute("data-perfil-cuidadora")) abrirPerfil("pasos");
+    else if (b.hasAttribute("data-ver-perfil")) abrirPerfil("ver");
+    else abrirPerfil();
+  });
+  // Al volver de «Así soy yo» (botón atrás) o desde otra pestaña, el estado del perfil se vuelve a leer.
+  function refrescarPerfil() {
+    pintarTarjetaPerfil();
+    if (!$("panelPerfil").hidden && !$("panelPerfil").querySelector("[data-op]")) pintarResumen();
+  }
+  window.addEventListener("pageshow", refrescarPerfil);
+  window.addEventListener("storage", refrescarPerfil);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refrescarPerfil(); });
   for (const b of document.querySelectorAll("[data-accion]")) b.addEventListener("click", () => accionRapida(b.dataset.accion));
   $("btnFuentes").addEventListener("click", () => ejecutar("fuentes", { accion: "fuentes" }));
   $("btnReiniciar").addEventListener("click", reiniciar);
@@ -1725,8 +2217,20 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
     abrirChat();
     accionRapida(b.dataset.recursoAccion);
   });
+  // Enlaces directos desde Casa Contigo y los Recursos (2026-11-10): /#chat abre el chat;
+  // /#chequeo abre el chat y arranca el chequeo de bienestar; /#perfil abre el chat en el perfil.
+  // Se reescribe a #chat sin crear otra entrada en el historial.
+  function atajoDelHash() {
+    const atajo = { "#chequeo": "chequeo", "#perfil": "perfil" }[location.hash];
+    if (!atajo) return false;
+    history.replaceState(null, "", location.pathname + location.search + "#chat");
+    aplicarVista();
+    accionRapida(atajo);
+    return true;
+  }
   window.addEventListener("hashchange", () => {
     if (location.hash === "#demo") ponerDemo(true);
+    if (atajoDelHash()) return;
     aplicarVista();
   });
   window.addEventListener("popstate", aplicarVista); // botón «atrás» entre entradas sin cambio de «#»
@@ -1739,12 +2243,13 @@ Cuéntame cómo estás o qué te preocupa de tu hija o nieta. Puedes escribir co
   cargarGuardado();
   ponerDemo(location.hash === "#demo" || demoGuardado());
   pintarConversacion();
+  pintarTarjetaPerfil();
   pintarPorDentro();
   pintarRegistro();
   pintarMeta();
   pintarCta();
   prepararMovimiento();
-  aplicarVista();
+  if (!atajoDelHash()) aplicarVista();
 })();
 </script>
 </body>

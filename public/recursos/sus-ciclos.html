@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="es-CO" data-tema="claro" data-suave="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Sus ciclos, su ritmo: anticipar la primera menstruación, anotar su ciclo (dolor del 1 al 10, sentidos y ánimo) y ver qué se repite. Prototipo de Contigo.">
+<title>Sus ciclos, su ritmo · Contigo</title>
+<!-- Pieza «Sus ciclos, su ritmo» de Contigo (2026-11-10). Página autocontenida: CSS, JS y dibujos aquí mismo.
+     Vista de adulto (cuidadora). Guarda solo en este celular, en la clave contigo.sus-ciclos: por cada día marcado,
+     sangrado sí/no, dolor 0-10, sentidos (tranquila / más sensible / se desborda fácil), ánimo y si hubo crisis.
+     Nunca guarda nombre, documento, EPS ni diagnóstico: esos campos no existen.
+     Contenido respaldado por investigacion\2026-11-10_CICLOS_neurodivergencia_fuentes.md y la ficha
+     conocimiento\biblioteca\bienestar\ciclos-y-neurodivergencia.md (aval pendiente de Integrar).
+     El «patrón» cuenta lo que la cuidadora anotó; no es una medida ni un diagnóstico.
+     La única carga externa es la fuente Poppins; la política de seguridad impide cualquier llamada de red.
+     Dibujos: propios de Contigo, licencia CC BY 4.0. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común de las piezas de «Recursos». Se copia IDÉNTICO a cada pieza (ver CAPARAZON.md).
+   Trae: tokens de color del manual de Somos Extraordinarios, tema claro/oscuro, modo sensorial bajo
+   (en pantalla se llama «Modo suave»: sin degradados, sin movimiento, colores apagados), cabecera con sello,
+   barra fija «Pausa · Calma · Necesito ayuda · Salir» y sus capas. Letra mínima 17 px, botones mínimo 44 px. */
+:root {
+  /* Pasteles del manual: fondos, pétalos y chips. Encima siempre va texto oscuro (--sobre-pastel). */
+  --menta: #CCEADE; --lavanda: #BDCDFF; --rosa: #EDD5DF; --arena: #F7D4AA;
+  --menta-claro: #EAF6F1; --lavanda-claro: #F4F6FF; --rosa-claro: #FBF1F5; --arena-claro: #FDF6EC;
+  --sobre-pastel: #1E1E2A;          /* sobre cualquier pastel: más de 11:1 */
+  /* Superficies y texto · tema claro */
+  --fondo: #FBFAFD; --superficie: #FFFFFF; --superficie-2: #F4F6FF;
+  --texto: #1E1E2A;                 /* sobre blanco 16,5:1 */
+  --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
+  --borde: #DCDFEE;
+  /* Tonos profundos AA para botones, enlaces y acentos */
+  --principal: #6B3FA0;             /* morado · blanco encima 7,38:1 (la acción nunca va en verde) */
+  --principal-hondo: #5A2F8E;
+  --sobre-principal: #FFFFFF;
+  --hover-suave: #F2ECFA;
+  --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
+  --sobre-acento: #FFFFFF;
+  --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
+  --rotulo-fondo: #F7D4AA; --rotulo-texto: #8A3F14;   /* sello · 5,34:1 */
+  --foco: #3355D6;
+  /* Decoración (nunca para texto) */
+  --fondo-pagina: linear-gradient(165deg, #EAF6F1 0%, #F4F6FF 45%, #FBF1F5 100%);
+  --orbe: radial-gradient(circle at 30% 25%, #FFFFFF 0%, rgba(255,255,255,0) 45%), linear-gradient(150deg, #BDCDFF, #EDD5DF 55%, #F7D4AA);
+  --sombra: 0 1px 2px rgba(42,33,64,.05), 0 12px 32px rgba(42,33,64,.08);
+  --circulo-a: rgba(189,205,255,.55); --circulo-b: rgba(237,213,223,.65);
+  --radio: 24px;
+  --fuente: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --alto-barra: 88px;
+  color-scheme: light;
+}
+:root[data-tema="oscuro"] {
+  --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
+  --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
+  --principal: #C9B2F5; --principal-hondo: #DCCBFA; --sobre-principal: #1A0F2E; --hover-suave: #322A45;
+  --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
+  --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
+  --sombra: 0 12px 32px rgba(0,0,0,.35);
+  --circulo-a: rgba(87,128,255,.16); --circulo-b: rgba(230,29,115,.12);
+  color-scheme: dark;
+}
+/* Modo sensorial bajo («Modo suave»): colores apagados, sin degradados, sin sombras, sin movimiento */
+:root[data-suave="si"] {
+  --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
+  --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
+  --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
+  --principal: #5E4A85; --principal-hondo: #4B3B6B; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
+}
+:root[data-suave="si"][data-tema="oscuro"] {
+  --fondo-pagina: #17161B; --principal: #C3B6DD; --principal-hondo: #D5CCE8; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
+}
+:root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; background: var(--fondo); color: var(--texto); font-family: var(--fuente); font-size: 18px; line-height: 1.55; padding-bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px) + 24px); overflow-x: hidden; }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.015em; }
+p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+.c-solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.c-saltar { position: absolute; left: 12px; top: -90px; z-index: 200; background: var(--texto); color: var(--fondo); padding: 12px 18px; border-radius: 12px; font-size: 17px; }
+.c-saltar:focus { top: 10px; }
+.c-fondo { position: fixed; inset: 0; z-index: -1; background: var(--fondo-pagina); overflow: hidden; pointer-events: none; }
+.c-fondo span { position: absolute; border-radius: 50%; }
+.c-fondo span:first-child { width: 420px; height: 420px; right: -170px; top: -130px; background: var(--circulo-a); }
+.c-fondo span:last-child { width: 340px; height: 340px; right: -30px; top: 70px; background: var(--circulo-b); mix-blend-mode: multiply; }
+:root[data-tema="oscuro"] .c-fondo span:last-child { mix-blend-mode: screen; }
+:root[data-suave="si"] .c-fondo span { display: none; }
+.c-icono { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.c-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; padding: 10px 14px 4px; }
+.c-marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; white-space: nowrap; }
+.c-marca-sub { font-weight: 400; color: var(--texto-suave); }
+@media (max-width: 379px) { .c-marca-sub { display: none; } }
+.c-orbe { width: 30px; height: 30px; border-radius: 50%; background: var(--orbe); position: relative; flex: none; }
+.c-orbe::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--menta); mix-blend-mode: multiply; opacity: .9; }
+.c-ajustes { display: flex; gap: 6px; }
+.c-boton-icono { min-height: 48px; min-width: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 500; cursor: pointer; }
+.c-boton-icono span { white-space: nowrap; }
+@media (max-width: 399px) { .c-cabecera { padding: 10px 10px 4px; } #c-suave .c-icono { display: none; } }
+.c-boton-icono[aria-pressed="true"] { background: var(--menta); color: var(--sobre-pastel); border-color: var(--principal); }
+:root[data-tema="oscuro"] .c-icono-luna, :root[data-tema="claro"] .c-icono-sol { display: none; }
+.c-sello { max-width: 640px; margin: 4px auto 0; padding: 0 14px; }
+.c-sello span { display: inline-flex; align-items: center; gap: 8px; background: var(--rotulo-fondo); color: var(--rotulo-texto); font-size: 17px; font-weight: 600; padding: 4px 14px; border-radius: 999px; }
+.c-boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 24px; border-radius: 999px; border: 2px solid transparent; background: var(--principal); color: var(--sobre-principal); font-size: 18px; font-weight: 600; line-height: 1.25; text-align: center; cursor: pointer; text-decoration: none; transition: background .2s, transform .2s; }
+.c-boton:hover { background: var(--principal-hondo); }
+.c-boton:active { transform: translateY(1px); }
+.c-boton[disabled] { opacity: .45; cursor: not-allowed; }
+.c-boton.secundario { background: var(--superficie); color: var(--principal); border-color: var(--principal); }
+.c-boton.secundario:hover { background: var(--hover-suave); }
+.c-boton.texto { background: transparent; color: var(--principal); min-height: 48px; padding: 6px 12px; text-decoration: underline; text-underline-offset: 4px; }
+.c-boton.texto:hover { background: var(--hover-suave); }
+.c-boton.c-armado { background: var(--acento); color: var(--sobre-acento); text-decoration: none; }
+.c-puerta { position: relative; overflow: hidden; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.c-puerta::before { content: ""; position: absolute; inset: 0; transform-origin: left center; transform: scaleX(var(--progreso, 0)); background: rgba(255,255,255,.32); pointer-events: none; }
+:root[data-tema="oscuro"] .c-puerta::before { background: rgba(13,40,27,.28); }
+.c-puerta > * { position: relative; }
+.c-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 120; background: var(--superficie); border-top: 1px solid var(--borde); box-shadow: 0 -8px 24px rgba(42,33,64,.06); padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.c-barra ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; max-width: 640px; margin: 0 auto; padding: 0; list-style: none; }
+.c-barra button { width: 100%; min-height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 16px; background: transparent; color: var(--texto); font-size: 17px; font-weight: 500; line-height: 1.1; cursor: pointer; padding: 4px 1px; }
+.c-barra button:hover, .c-barra button[aria-expanded="true"] { background: var(--superficie-2); }
+.c-barra .c-boton-ayuda { color: var(--acento); font-weight: 600; }
+.c-capa { position: fixed; left: 0; right: 0; top: 0; bottom: calc(var(--alto-barra) + env(safe-area-inset-bottom, 0px)); z-index: 110; background: var(--fondo); overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 20px; text-align: center; }
+.c-capa h2 { font-size: 30px; }
+.c-capa h2:focus { outline: none; }
+.c-capa p { font-size: 20px; max-width: 32ch; color: var(--texto-suave); }
+.c-respira { width: 190px; height: 190px; border-radius: 50%; background: var(--menta); box-shadow: 0 0 0 18px var(--menta-claro), 0 0 0 36px var(--lavanda-claro); transform: scale(.8); }
+.c-respira.activo { animation: c-respirar 10s ease-in-out infinite; }
+@keyframes c-respirar { 0%, 100% { transform: scale(.62); } 40%, 50% { transform: scale(1); } }
+.c-respira-texto { font-size: 26px !important; font-weight: 600; color: var(--texto) !important; min-height: 1.4em; }
+.c-tarjeta-ayuda { background: var(--superficie); border: 4px solid var(--acento); border-radius: 28px; padding: 26px 20px; width: min(100%, 520px); }
+.c-tarjeta-ayuda .c-grande { font-size: 44px; font-weight: 700; color: var(--texto); line-height: 1.1; }
+.c-tarjeta-ayuda .c-pide { font-size: 24px; color: var(--texto); margin: 12px auto 0; }
+.c-numeros { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; text-align: left; }
+.c-numeros li { background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 10px 14px; font-size: 18px; }
+.c-numeros strong { font-size: 26px; margin-right: 8px; }
+.c-nota-ayuda { font-size: 17px !important; margin-top: 14px !important; }
+/* === FIN CARAPAZON CONTIGO v1 === */
+
+/* ===== Pieza «Sus ciclos, su ritmo» ===== */
+main { max-width: 640px; margin: 0 auto; padding: 12px 14px 0; }
+main:focus { outline: none; }
+.hoja { background: var(--superficie); border-radius: 28px; box-shadow: var(--sombra); padding: 22px 18px; border: 1px solid var(--borde); }
+.hoja + .hoja { margin-top: 14px; }
+.pantalla h1 { font-size: 36px; font-weight: 700; margin-top: 6px; }
+.pantalla h2 { font-size: 27px; font-weight: 700; }
+.pantalla h3 { font-size: 21px; font-weight: 700; }
+.pantalla h1:focus, .pantalla h2:focus, .pantalla h3:focus { outline: none; }
+.bajada { color: var(--texto-suave); margin-top: 10px; }
+.centro { text-align: center; }
+.paso { font-size: 17px; font-weight: 600; color: var(--azul-hondo); margin-bottom: 6px; }
+.pista { font-size: 17px; color: var(--texto-suave); }
+.acciones { display: grid; gap: 12px; margin-top: 20px; }
+.fila-escuchar { display: flex; justify-content: center; margin-top: 10px; }
+.portada { width: 120px; margin: 0 auto 4px; }
+.portada svg { display: block; width: 100%; height: auto; }
+.datos-rapidos { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; padding: 0; list-style: none; }
+.datos-rapidos li { background: var(--lavanda-claro); color: var(--sobre-pastel); border-radius: 999px; padding: 5px 14px; font-size: 17px; font-weight: 500; }
+.rotulo { margin: 14px 0 0; padding: 10px 14px; border-radius: 16px; background: var(--arena-claro); color: var(--sobre-pastel); font-size: 17px; font-weight: 500; text-align: center; }
+.fuentes { margin-top: 14px; font-size: 17px; color: var(--texto-suave); }
+
+/* Menú de inicio: 4 puertas grandes */
+.menu { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 12px; }
+.puerta { width: 100%; min-height: 84px; display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 22px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); text-align: left; cursor: pointer; font-size: 18px; line-height: 1.3; }
+.puerta:hover { border-color: var(--principal); background: var(--hover-suave); }
+.puerta .disco { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--color-claro, var(--lavanda-claro)); }
+.puerta .disco svg { width: 44px; height: 44px; }
+.puerta strong { display: block; font-size: 20px; }
+.puerta span.sub { display: block; color: var(--texto-suave); font-size: 17px; }
+.puerta .flecha { margin-left: auto; width: 24px; height: 24px; flex: none; color: var(--principal); }
+.t-menta { --color-claro: var(--menta-claro); --color-tarjeta: var(--menta); }
+.t-lavanda { --color-claro: var(--lavanda-claro); --color-tarjeta: var(--lavanda); }
+.t-rosa { --color-claro: var(--rosa-claro); --color-tarjeta: var(--rosa); }
+.t-arena { --color-claro: var(--arena-claro); --color-tarjeta: var(--arena); }
+.volver { margin-bottom: 10px; }
+.banda-ejemplo { background: var(--lavanda-claro); color: var(--sobre-pastel); border-radius: 20px; padding: 14px 16px; margin-bottom: 14px; border: 1px solid var(--lavanda); }
+.banda-ejemplo .acciones { margin-top: 10px; }
+.banda-ejemplo .c-boton.texto { color: #5A2F8E; }
+
+/* Prepárala antes: pasos visuales */
+.pasos { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; counter-reset: paso; }
+.pasos li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: start; background: var(--color-claro); color: var(--sobre-pastel); border-radius: 22px; padding: 14px; }
+.pasos .dibujo { width: 64px; height: 64px; border-radius: 50%; background: #FFFFFF; display: grid; place-items: center; position: relative; }
+.pasos .dibujo svg { width: 48px; height: 48px; }
+.pasos .numero { position: absolute; top: -6px; left: -6px; width: 30px; height: 30px; border-radius: 50%; background: var(--principal); color: var(--sobre-principal); font-size: 17px; font-weight: 700; display: grid; place-items: center; }
+.pasos h3 { font-size: 20px; color: var(--sobre-pastel); }
+.pasos p { margin-top: 4px; font-size: 18px; }
+.escala { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; margin-top: 10px; }
+.escala span { height: 28px; border-radius: 8px; display: grid; place-items: center; font-size: 17px; font-weight: 600; color: var(--sobre-pastel); }
+
+/* Calendario */
+.mes-cabeza { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
+.mes-cabeza h2 { font-size: 24px; text-transform: capitalize; text-align: center; flex: 1; }
+.flecha-mes { min-width: 52px; min-height: 52px; border-radius: 50%; border: 1.5px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 24px; font-weight: 600; cursor: pointer; }
+.flecha-mes:hover { border-color: var(--principal); }
+.semana, .grilla { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.semana { margin-top: 12px; }
+.semana span { text-align: center; font-size: 17px; font-weight: 600; color: var(--texto-suave); }
+.grilla { margin-top: 6px; list-style: none; padding: 0; }
+.dia { width: 100%; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 3px; padding: 6px 2px 5px; border-radius: 14px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 600; line-height: 1.1; cursor: pointer; position: relative; }
+.dia:hover { border-color: var(--principal); }
+.dia.fuera { visibility: hidden; }
+.dia.sangre { background: var(--rosa); color: var(--sobre-pastel); }
+.dia.hoy { box-shadow: inset 0 0 0 2px var(--azul-hondo); }
+.dia.futuro { opacity: .5; cursor: default; }
+.dia[aria-pressed="true"] { border: 3px solid var(--principal); }
+.dia .marcas { display: flex; gap: 2px; height: 14px; align-items: center; }
+.dia .marcas svg { width: 14px; height: 14px; }
+.dia .barra-dolor { width: 78%; height: 5px; border-radius: 3px; background: var(--superficie-2); overflow: hidden; }
+.dia .barra-dolor span { display: block; height: 100%; background: var(--acento); }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 17px; color: var(--texto-suave); }
+.leyenda li { display: flex; align-items: center; gap: 6px; }
+.leyenda svg { width: 18px; height: 18px; }
+.muestra-sangre { width: 18px; height: 18px; border-radius: 5px; background: var(--rosa); border: 1px solid var(--borde); display: inline-block; }
+.muestra-dolor { width: 22px; height: 6px; border-radius: 3px; background: var(--acento); display: inline-block; }
+
+/* Editor del día */
+.editor { margin-top: 14px; border: 3px solid var(--principal); }
+.editor h2 { font-size: 24px; }
+.dia-ciclo { margin-top: 4px; color: var(--azul-hondo); font-weight: 600; font-size: 17px; }
+.grupo { margin-top: 18px; border: 0; padding: 0; }
+.grupo legend { font-weight: 600; font-size: 19px; padding: 0; }
+.grupo .pista { margin-top: 2px; }
+.opciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.op { min-height: 52px; padding: 8px 16px; border-radius: 999px; border: 2px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 17px; font-weight: 500; cursor: pointer; }
+.op:hover { border-color: var(--principal); }
+.op[aria-pressed="true"] { background: var(--principal); color: var(--sobre-principal); border-color: var(--principal); font-weight: 600; }
+.dolor-botones { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+.dolor-botones .op { padding: 6px 0; border-radius: 14px; font-size: 19px; font-weight: 600; }
+.dolor-botones .op.sin { grid-column: 1 / -1; font-size: 17px; }
+.extremos { display: flex; justify-content: space-between; font-size: 17px; color: var(--texto-suave); margin-top: 4px; }
+.aviso-dolor { margin-top: 12px; background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 12px 14px; font-size: 17px; }
+.estado-guardado { margin-top: 12px; font-size: 17px; font-weight: 600; color: var(--principal); min-height: 1.5em; text-align: center; }
+.zona-borrar { margin: 22px 0 0; text-align: center; }
+.estado-borrar { font-size: 17px; color: var(--texto-suave); }
+
+/* Lo que se repite */
+.hallazgos { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+.hallazgos li { background: var(--lavanda-claro); color: var(--sobre-pastel); border-radius: 18px; padding: 12px 14px; font-size: 19px; font-weight: 500; line-height: 1.4; }
+.hallazgos li.fuerte { background: var(--rosa-claro); border-left: 8px solid var(--acento); }
+.grafica { margin-top: 16px; }
+.grafica h3 { font-size: 19px; }
+.barras { display: grid; grid-template-columns: repeat(35, minmax(0, 1fr)); gap: 2px; align-items: end; height: 110px; margin-top: 8px; padding: 0 0 2px; border-bottom: 2px solid var(--borde); }
+.barras span { display: block; background: var(--lavanda); border-radius: 3px 3px 0 0; min-height: 2px; }
+.barras span.marcada { background: var(--acento); }
+.calor { display: grid; grid-template-columns: repeat(35, minmax(0, 1fr)); gap: 2px; height: 26px; margin-top: 8px; }
+.calor span { border-radius: 3px; background: var(--superficie-2); }
+.ejes { display: grid; grid-template-columns: repeat(35, minmax(0, 1fr)); margin-top: 4px; font-size: 17px; color: var(--texto-suave); }
+.ejes span { grid-row: 1; white-space: nowrap; }
+.fases { display: grid; gap: 10px; margin-top: 16px; }
+@media (min-width: 560px) { .fases { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fase { border-radius: 18px; padding: 12px 14px; background: var(--color-claro); color: var(--sobre-pastel); }
+.fase h3 { font-size: 18px; }
+.fase p { font-size: 17px; margin-top: 4px; }
+.ritmo { margin-top: 14px; font-size: 18px; }
+.estado-copia { margin-top: 12px; font-weight: 600; color: var(--principal); min-height: 1.5em; text-align: center; }
+.copia-manual textarea { width: 100%; margin-top: 8px; border: 2px solid var(--borde); border-radius: 14px; padding: 10px; background: var(--superficie); font-size: 17px; }
+
+/* Cuándo consultar */
+.consultar { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+.consultar li { display: flex; gap: 12px; align-items: flex-start; background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 18px; padding: 12px 14px; font-size: 18px; font-weight: 500; }
+.consultar li svg { width: 34px; height: 34px; flex: none; }
+.consultar li.urgente { background: var(--superficie); border: 3px solid var(--acento); color: var(--texto); }
+.no-decir { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+</style>
+<script>
+/* === CARAPAZON CONTIGO v1 === */
+/* Caparazón común (JS). Se copia IDÉNTICO a cada pieza. Solo define funciones: nada corre solo,
+   salvo aplicar el tema guardado al cargar (para que no parpadee). Todo lo que toca el navegador
+   va en try/catch: si algo falla, la pieza sigue funcionando (sin guardar o sin voz). */
+var Contigo = (function () {
+  'use strict';
+  var PREFIJO = 'contigo.';
+
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* 1 · Baúl local: localStorage con claves contigo.* (nunca sale del celular) */
+  var baul = {
+    leer: function (clave) {
+      try { var t = window.localStorage.getItem(PREFIJO + clave); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+    },
+    guardar: function (clave, valor) {
+      try { window.localStorage.setItem(PREFIJO + clave, JSON.stringify(valor)); return true; } catch (e) { return false; }
+    },
+    quitar: function (clave) {
+      try { window.localStorage.removeItem(PREFIJO + clave); return true; } catch (e) { return false; }
+    },
+    claves: function () {
+      try {
+        var ls = window.localStorage, r = [];
+        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && k.indexOf(PREFIJO) === 0) r.push(k); }
+        return r;
+      } catch (e) { return []; }
+    },
+    borrarTodo: function () {
+      var lista = baul.claves();
+      try { lista.forEach(function (k) { window.localStorage.removeItem(k); }); return lista.length; } catch (e) { return -1; }
+    }
+  };
+
+  /* 2 · Bytes y base64url: el estado viaja comprimido después del # del enlace (el # no llega al servidor) */
+  function utf8(texto) { return Array.from(new TextEncoder().encode(String(texto == null ? '' : texto))); }
+  function deUtf8(arr) { return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(arr)); }
+  function recortarUtf8(texto, maxBytes) {
+    var r = [], letras = Array.from(String(texto == null ? '' : texto));
+    for (var i = 0; i < letras.length; i++) { var b = utf8(letras[i]); if (r.length + b.length > maxBytes) break; r = r.concat(b); }
+    return r;
+  }
+  function aBase64url(arr) {
+    var s = '';
+    for (var i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 255);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function deBase64url(txt) {
+    if (typeof txt !== 'string' || !/^[A-Za-z0-9_-]*$/.test(txt) || txt.length % 4 === 1) return null;
+    var b = txt.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    try { var s = atob(b), r = []; for (var i = 0; i < s.length; i++) r.push(s.charCodeAt(i)); return r; } catch (e) { return null; }
+  }
+  function Escritor() { this.b = []; }
+  Escritor.prototype.byte = function (n) { this.b.push(n & 255); return this; };
+  Escritor.prototype.texto = function (t, maxBytes) {
+    var u = recortarUtf8(t, Math.min(255, maxBytes || 255));
+    this.byte(u.length); for (var i = 0; i < u.length; i++) this.b.push(u[i]);
+    return this;
+  };
+  Escritor.prototype.bytes = function () { return this.b.slice(); };
+  function Lector(arr) { this.b = arr; this.i = 0; }
+  Lector.prototype.byte = function () { if (this.i >= this.b.length) throw new Error('corto'); return this.b[this.i++]; };
+  Lector.prototype.texto = function () {
+    var n = this.byte();
+    if (this.i + n > this.b.length) throw new Error('corto');
+    var t = deUtf8(this.b.slice(this.i, this.i + n)); this.i += n; return t;
+  };
+  Lector.prototype.fin = function () { return this.i === this.b.length; };
+  var bytes = { utf8: utf8, deUtf8: deUtf8, recortarUtf8: recortarUtf8, aBase64url: aBase64url, deBase64url: deBase64url, Escritor: Escritor, Lector: Lector };
+
+  /* Formato del #: <pieza>.<base64url>. Ej.: #a1.AARMdW5h... (a1 = «Así soy yo», versión 1) */
+  var enlace = {
+    empaquetar: function (pieza, arr) { return pieza + '.' + aBase64url(arr); },
+    desempaquetar: function (pieza, fragmento) {
+      var f = String(fragmento == null ? '' : fragmento);
+      if (f.charAt(0) === '#') f = f.slice(1);
+      if (f.indexOf(pieza + '.') !== 0) return null;
+      var datos = f.slice(pieza.length + 1).match(/^[A-Za-z0-9_-]*/)[0]; // ignora basura pegada al final (un punto, un paréntesis)
+      if (!datos) return null;
+      return deBase64url(datos);
+    }
+  };
+
+  /* 3 · Código QR propio (modo byte, corrección M o L, versiones 1 a 40). Sin librerías ni red.
+     Sigue la norma ISO/IEC 18004; el algoritmo es el de referencia (Reed-Solomon sobre GF(256)). */
+  var qr = (function () {
+    var ECC = {
+      L: [7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30],
+      M: [10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28]
+    };
+    var BLOQUES = {
+      L: [1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8,8,9,9,10,12,12,12,13,14,15,16,17,18,19,19,20,21,22,24,25],
+      M: [1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49]
+    };
+    var FORMATO = { L: 1, M: 0 };
+    function modulosCrudos(v) {
+      var r = (16 * v + 128) * v + 64;
+      if (v >= 2) { var n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; }
+      return r;
+    }
+    function palabrasDatos(v, n) { return Math.floor(modulosCrudos(v) / 8) - ECC[n][v - 1] * BLOQUES[n][v - 1]; }
+    function mul(x, y) {
+      var z = 0;
+      for (var i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; }
+      return z;
+    }
+    function divisor(grado) {
+      var r = [], raiz = 1, i, j;
+      for (i = 0; i < grado - 1; i++) r.push(0);
+      r.push(1);
+      for (i = 0; i < grado; i++) {
+        for (j = 0; j < r.length; j++) { r[j] = mul(r[j], raiz); if (j + 1 < r.length) r[j] ^= r[j + 1]; }
+        raiz = mul(raiz, 0x02);
+      }
+      return r;
+    }
+    function resto(datos, div) {
+      var r = div.map(function () { return 0; });
+      datos.forEach(function (b) {
+        var f = b ^ r.shift(); r.push(0);
+        div.forEach(function (c, i) { r[i] ^= mul(c, f); });
+      });
+      return r;
+    }
+    function alineacion(v, t) {
+      if (v === 1) return [];
+      var n = Math.floor(v / 7) + 2, paso = Math.floor((v * 8 + n * 3 + 5) / (n * 4 - 4)) * 2, r = [6];
+      for (var p = t - 7; r.length < n; p -= paso) r.splice(1, 0, p);
+      return r;
+    }
+    function matriz(texto) {
+      var datos = utf8(texto), nivel = null, v = 0, cc = 8, niveles = ['M', 'L'];
+      for (var a = 0; a < niveles.length && !nivel; a++) {
+        for (v = 1; v <= 40; v++) {
+          cc = v <= 9 ? 8 : 16;
+          if (datos.length < Math.pow(2, cc) && 4 + cc + datos.length * 8 <= palabrasDatos(v, niveles[a]) * 8) { nivel = niveles[a]; break; }
+        }
+      }
+      if (!nivel) return null;
+      // Bits de datos: modo byte (0100) + largo + bytes + terminador + relleno
+      var bb = [];
+      function poner(val, largo) { for (var i = largo - 1; i >= 0; i--) bb.push((val >>> i) & 1); }
+      poner(4, 4); poner(datos.length, cc);
+      datos.forEach(function (b) { poner(b, 8); });
+      var cap = palabrasDatos(v, nivel) * 8;
+      poner(0, Math.min(4, cap - bb.length));
+      poner(0, (8 - bb.length % 8) % 8);
+      for (var pad = 0xEC; bb.length < cap; pad ^= 0xEC ^ 0x11) poner(pad, 8);
+      var cw = [];
+      for (var i = 0; i < bb.length; i += 8) { var x = 0; for (var k = 0; k < 8; k++) x = (x << 1) | bb[i + k]; cw.push(x); }
+      // Bloques con corrección de errores, intercalados
+      var nb = BLOQUES[nivel][v - 1], ecl = ECC[nivel][v - 1], crudas = Math.floor(modulosCrudos(v) / 8);
+      var cortos = nb - crudas % nb, largoCorto = Math.floor(crudas / nb), div = divisor(ecl), bloques = [], pos = 0;
+      for (i = 0; i < nb; i++) {
+        var d = cw.slice(pos, pos + largoCorto - ecl + (i < cortos ? 0 : 1));
+        pos += d.length;
+        var e = resto(d, div);
+        if (i < cortos) d.push(0);
+        bloques.push(d.concat(e));
+      }
+      var final = [];
+      for (i = 0; i < bloques[0].length; i++) {
+        for (var j = 0; j < bloques.length; j++) { if (i !== largoCorto - ecl || j >= cortos) final.push(bloques[j][i]); }
+      }
+      // Matriz: patrones fijos
+      var t = v * 4 + 17, m = [], f = [];
+      for (i = 0; i < t; i++) { m.push(new Array(t).fill(false)); f.push(new Array(t).fill(false)); }
+      function fijo(x, y, osc) { m[y][x] = osc; f[y][x] = true; }
+      for (i = 0; i < t; i++) { fijo(6, i, i % 2 === 0); fijo(i, 6, i % 2 === 0); }
+      [[3, 3], [t - 4, 3], [3, t - 4]].forEach(function (p) {
+        for (var dy = -4; dy <= 4; dy++) for (var dx = -4; dx <= 4; dx++) {
+          var dist = Math.max(Math.abs(dx), Math.abs(dy)), xx = p[0] + dx, yy = p[1] + dy;
+          if (xx >= 0 && xx < t && yy >= 0 && yy < t) fijo(xx, yy, dist !== 2 && dist !== 4);
+        }
+      });
+      var al = alineacion(v, t);
+      for (i = 0; i < al.length; i++) for (j = 0; j < al.length; j++) {
+        if ((i === 0 && j === 0) || (i === 0 && j === al.length - 1) || (i === al.length - 1 && j === 0)) continue;
+        for (var dy2 = -2; dy2 <= 2; dy2++) for (var dx2 = -2; dx2 <= 2; dx2++) fijo(al[i] + dx2, al[j] + dy2, Math.max(Math.abs(dx2), Math.abs(dy2)) !== 1);
+      }
+      function formato(mk) {
+        var dat = (FORMATO[nivel] << 3) | mk, r = dat, q;
+        for (q = 0; q < 10; q++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+        var b = ((dat << 10) | r) ^ 0x5412;
+        function bit(n) { return ((b >>> n) & 1) !== 0; }
+        for (q = 0; q <= 5; q++) fijo(8, q, bit(q));
+        fijo(8, 7, bit(6)); fijo(8, 8, bit(7)); fijo(7, 8, bit(8));
+        for (q = 9; q < 15; q++) fijo(14 - q, 8, bit(q));
+        for (q = 0; q < 8; q++) fijo(t - 1 - q, 8, bit(q));
+        for (q = 8; q < 15; q++) fijo(8, t - 15 + q, bit(q));
+        fijo(8, t - 8, true);
+      }
+      formato(0);
+      if (v >= 7) {
+        var rv = v;
+        for (i = 0; i < 12; i++) rv = (rv << 1) ^ ((rv >>> 11) * 0x1F25);
+        var vb = (v << 12) | rv;
+        for (i = 0; i < 18; i++) { var bt = ((vb >>> i) & 1) !== 0, aa = t - 11 + i % 3, bb2 = Math.floor(i / 3); fijo(aa, bb2, bt); fijo(bb2, aa, bt); }
+      }
+      // Datos en zigzag
+      var idx = 0;
+      for (var der = t - 1; der >= 1; der -= 2) {
+        if (der === 6) der = 5;
+        for (var vert = 0; vert < t; vert++) for (j = 0; j < 2; j++) {
+          var xx2 = der - j, arriba = ((der + 1) & 2) === 0, yy2 = arriba ? t - 1 - vert : vert;
+          if (!f[yy2][xx2] && idx < final.length * 8) { m[yy2][xx2] = ((final[idx >>> 3] >>> (7 - (idx & 7))) & 1) !== 0; idx++; }
+        }
+      }
+      function mascara(mk) {
+        for (var y = 0; y < t; y++) for (var x = 0; x < t; x++) {
+          var inv;
+          switch (mk) {
+            case 0: inv = (x + y) % 2 === 0; break;
+            case 1: inv = y % 2 === 0; break;
+            case 2: inv = x % 3 === 0; break;
+            case 3: inv = (x + y) % 3 === 0; break;
+            case 4: inv = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0; break;
+            case 5: inv = x * y % 2 + x * y % 3 === 0; break;
+            case 6: inv = (x * y % 2 + x * y % 3) % 2 === 0; break;
+            default: inv = ((x + y) % 2 + x * y % 3) % 2 === 0;
+          }
+          if (!f[y][x] && inv) m[y][x] = !m[y][x];
+        }
+      }
+      function celda(dir, a1, b1) { if (b1 < 0 || b1 >= t) return false; return dir ? m[b1][a1] : m[a1][b1]; }
+      function penalidad() {
+        var p = 0, a1, b1, dir, run, q, patron = [1, 0, 1, 1, 1, 0, 1];
+        for (dir = 0; dir < 2; dir++) for (a1 = 0; a1 < t; a1++) {
+          run = 1;
+          for (b1 = 1; b1 < t; b1++) {
+            if (celda(dir, a1, b1) === celda(dir, a1, b1 - 1)) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else run = 1;
+          }
+          for (b1 = 0; b1 <= t - 7; b1++) {
+            var ok = true;
+            for (q = 0; q < 7; q++) if (celda(dir, a1, b1 + q) !== (patron[q] === 1)) { ok = false; break; }
+            if (!ok) continue;
+            var antes = true, despues = true;
+            for (q = 1; q <= 4; q++) { if (celda(dir, a1, b1 - q)) antes = false; if (celda(dir, a1, b1 + 6 + q)) despues = false; }
+            if (antes || despues) p += 40;
+          }
+        }
+        for (var y = 0; y < t - 1; y++) for (var x = 0; x < t - 1; x++) {
+          var c = m[y][x]; if (c === m[y][x + 1] && c === m[y + 1][x] && c === m[y + 1][x + 1]) p += 3;
+        }
+        var osc = 0; m.forEach(function (fila) { fila.forEach(function (cc2) { if (cc2) osc++; }); });
+        var total = t * t; p += (Math.ceil(Math.abs(osc * 20 - total * 10) / total) - 1) * 10;
+        return p;
+      }
+      var mejor = 0, menor = Infinity;
+      for (var mk = 0; mk < 8; mk++) {
+        mascara(mk); formato(mk);
+        var pen = penalidad();
+        if (pen < menor) { menor = pen; mejor = mk; }
+        mascara(mk);
+      }
+      mascara(mejor); formato(mejor);
+      return { version: v, nivel: nivel, tamano: t, modulos: m, mascara: mejor };
+    }
+    function svg(texto, etiqueta) {
+      var q = matriz(texto);
+      if (!q) return '';
+      var borde = 4, n = q.tamano + borde * 2, d = '';
+      q.modulos.forEach(function (fila, y) {
+        var x = 0;
+        while (x < fila.length) {
+          if (!fila[x]) { x++; continue; }
+          var ini = x; while (x < fila.length && fila[x]) x++;
+          d += 'M' + (ini + borde) + ' ' + (y + borde) + 'h' + (x - ini) + 'v1h-' + (x - ini) + 'z';
+        }
+      });
+      return '<svg viewBox="0 0 ' + n + ' ' + n + '" role="img" aria-label="' + esc(etiqueta || 'Código QR') + '" shape-rendering="crispEdges"><rect width="' + n + '" height="' + n + '" fill="#FFFFFF"/><path fill="#1E1E2A" d="' + d + '"/></svg>';
+    }
+    return { matriz: matriz, svg: svg };
+  })();
+
+  /* 4 · Voz opcional («Escuchar»): solo con un toque; si no hay voz en español, el botón se esconde */
+  var voz = {
+    elegida: null,
+    buscar: function () {
+      try {
+        if (!('speechSynthesis' in window)) return null;
+        var vs = window.speechSynthesis.getVoices() || [];
+        var es = vs.filter(function (x) { return /^es([-_]|$)/i.test(x.lang || ''); });
+        if (!es.length) return null;
+        var orden = ['es-co', 'es-419', 'es-us', 'es-mx', 'es-es'];
+        for (var i = 0; i < orden.length; i++) {
+          var hit = es.filter(function (x) { return (x.lang || '').toLowerCase().replace('_', '-') === orden[i]; })[0];
+          if (hit) return hit;
+        }
+        return es[0];
+      } catch (e) { return null; }
+    },
+    actualizar: function () {
+      voz.elegida = voz.buscar();
+      var hay = !!voz.elegida;
+      try { document.querySelectorAll('[data-voz]').forEach(function (el) { el.hidden = !hay; }); } catch (e) {}
+    },
+    iniciar: function () {
+      voz.actualizar();
+      try { if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = voz.actualizar; } catch (e) {}
+    },
+    decir: function (texto) {
+      try {
+        var s = window.speechSynthesis;
+        if (s.speaking) { s.cancel(); return; } // segundo toque = parar
+        if (!voz.elegida || !texto) return;
+        var u = new SpeechSynthesisUtterance(texto);
+        u.voice = voz.elegida; u.lang = voz.elegida.lang; u.rate = 0.9;
+        s.speak(u);
+      } catch (e) {}
+    },
+    callar: function () { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  };
+
+  /* 5 · Ajustes: tema claro/oscuro y modo sensorial bajo («Modo suave»), recordados en contigo.ajustes */
+  function leerAjustes() { var a = baul.leer('ajustes'); return (a && typeof a === 'object') ? a : {}; }
+  function aplicarAjustes() {
+    try {
+      var a = leerAjustes(), raiz = document.documentElement, oscuroSistema = false;
+      try { oscuroSistema = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) {}
+      var tema = (a.tema === 'oscuro' || a.tema === 'claro') ? a.tema : (oscuroSistema ? 'oscuro' : 'claro');
+      raiz.setAttribute('data-tema', tema);
+      raiz.setAttribute('data-suave', a.suave ? 'si' : 'no');
+      var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+      if (bs) bs.setAttribute('aria-pressed', a.suave ? 'true' : 'false');
+      if (bt) bt.setAttribute('aria-pressed', tema === 'oscuro' ? 'true' : 'false');
+    } catch (e) {}
+  }
+  function cambiarAjuste(clave, valor) { var a = leerAjustes(); a[clave] = valor; baul.guardar('ajustes', a); aplicarAjustes(); }
+  function suave() {
+    try { return document.documentElement.getAttribute('data-suave') === 'si' || window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* 6 · Anuncios para lector de pantalla */
+  function anunciar(msg) {
+    var el = document.getElementById('c-anuncio');
+    if (!el) return;
+    el.textContent = '';
+    setTimeout(function () { el.textContent = msg; }, 60);
+  }
+
+  /* 7 · Capas de la barra: Pausa, Calma (respiración), Necesito ayuda (tarjeta para mostrar), Salir */
+  var capaAbierta = null, focoPrevio = null, relojRespira = 0;
+  function marcarInerte(si) {
+    ['principal', 'c-cabecera', 'c-sello'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.inert = si;
+      if (si) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    });
+  }
+  function empezarRespiracion() {
+    var txt = document.getElementById('c-respira-texto'), circulo = document.getElementById('c-respira');
+    var frases = ['Toma aire despacio…', 'Suéltalo despacio…'], tiempos = [4000, 6000], fase = 0;
+    if (circulo) { circulo.classList.remove('activo'); void circulo.offsetWidth; circulo.classList.add('activo'); }
+    (function ciclo() {
+      if (txt) txt.textContent = frases[fase];
+      relojRespira = setTimeout(function () { fase = 1 - fase; ciclo(); }, tiempos[fase]);
+    })();
+  }
+  function pararRespiracion() {
+    clearTimeout(relojRespira);
+    var c = document.getElementById('c-respira'); if (c) c.classList.remove('activo');
+  }
+  function botonesBarra(abierta) {
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      if (b.hasAttribute('aria-expanded')) b.setAttribute('aria-expanded', b.getAttribute('data-c-capa') === abierta ? 'true' : 'false');
+    });
+  }
+  function cerrarCapa(sinFoco) {
+    if (!capaAbierta) return;
+    capaAbierta.hidden = true;
+    if (capaAbierta.id === 'c-capa-calma') pararRespiracion();
+    capaAbierta = null;
+    marcarInerte(false); botonesBarra(null);
+    if (!sinFoco && focoPrevio && focoPrevio.focus) { try { focoPrevio.focus(); } catch (e) {} }
+  }
+  function abrirCapa(id) {
+    var yaEstaba = capaAbierta && capaAbierta.id === id;
+    if (capaAbierta) { var previo = focoPrevio; cerrarCapa(true); focoPrevio = previo; } else { focoPrevio = document.activeElement; }
+    if (yaEstaba) { if (focoPrevio && focoPrevio.focus) focoPrevio.focus(); return; } // segundo toque en el mismo botón = cerrar
+    var capa = document.getElementById(id);
+    if (!capa) return;
+    voz.callar();
+    capa.hidden = false; capaAbierta = capa;
+    marcarInerte(true); botonesBarra(id);
+    if (id === 'c-capa-calma') empezarRespiracion();
+    var destino = capa.querySelector('[data-foco]') || capa.querySelector('button');
+    if (destino) destino.focus();
+  }
+  function salir() {
+    voz.callar();
+    var enSitio = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
+    if (enSitio) location.assign('/'); else abrirCapa('c-capa-salir');
+  }
+
+  /* 8 · Puerta de adulto: mantener presionado 3 segundos (sin sumas, para que la abuela pueda) */
+  function puertaAdulto(boton, alAbrir, ms, alSoltar) {
+    ms = ms || 3000;
+    var t0 = 0, raf = 0, activo = false, abiertaHace = 0;
+    function paso() {
+      var p = Math.min(1, (performance.now() - t0) / ms);
+      boton.style.setProperty('--progreso', String(p));
+      if (p >= 1) { terminar(true); return; }
+      raf = requestAnimationFrame(paso);
+    }
+    function empezar(e) {
+      if (activo) return;
+      if (e && e.cancelable) e.preventDefault();
+      activo = true; t0 = performance.now();
+      boton.classList.add('c-presionando');
+      raf = requestAnimationFrame(paso);
+    }
+    function terminar(ok) {
+      if (!activo) return;
+      cancelAnimationFrame(raf); activo = false;
+      boton.classList.remove('c-presionando');
+      boton.style.setProperty('--progreso', '0');
+      if (ok) { abiertaHace = Date.now(); alAbrir(); } else if (alSoltar) alSoltar();
+    }
+    boton.addEventListener('pointerdown', function (e) { if (e.button === 0 || e.pointerType !== 'mouse') empezar(e); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { boton.addEventListener(ev, function () { terminar(false); }); });
+    boton.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) empezar(e); else if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+    boton.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') terminar(false); });
+    boton.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    boton.addEventListener('click', function (e) { e.preventDefault(); if (!activo && Date.now() - abiertaHace > 800 && alSoltar) alSoltar(); });
+  }
+
+  /* 9 · Doble toque para lo que no tiene reversa (p. ej., «Borrar todo lo de este celular») */
+  function dobleToque(boton, op) {
+    var armado = false, desde = 0, reloj = 0, original = boton.innerHTML;
+    function desarmar() { armado = false; boton.innerHTML = original; boton.classList.remove('c-armado'); }
+    boton.addEventListener('click', function () {
+      if (!armado) {
+        armado = true; desde = Date.now();
+        boton.textContent = op.confirmar; boton.classList.add('c-armado');
+        anunciar(op.confirmar);
+        reloj = setTimeout(desarmar, 6000);
+        return;
+      }
+      if (Date.now() - desde < 350) return; // un doble clic accidental no borra
+      clearTimeout(reloj); desarmar(); op.alConfirmar();
+    });
+  }
+
+  /* 10 · Copiar al portapapeles (con plan B si el navegador no deja) */
+  function copiar(texto) {
+    return new Promise(function (listo) {
+      function planB() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = texto; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          var ok = document.execCommand('copy'); ta.remove(); listo(!!ok);
+        } catch (e) { listo(false); }
+      }
+      try {
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(function () { listo(true); }, planB);
+        else planB();
+      } catch (e) { planB(); }
+    });
+  }
+
+  /* 11 · Arranque: lo llama cada pieza cuando la página cargó */
+  function iniciar(op) {
+    op = op || {};
+    aplicarAjustes();
+    var bs = document.getElementById('c-suave'), bt = document.getElementById('c-tema');
+    if (bs) bs.addEventListener('click', function () { cambiarAjuste('suave', !leerAjustes().suave); anunciar(leerAjustes().suave ? 'Modo suave activado' : 'Modo suave apagado'); if (op.alCambiarAjustes) op.alCambiarAjustes(); });
+    if (bt) bt.addEventListener('click', function () { cambiarAjuste('tema', document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro'); });
+    document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var acc = b.getAttribute('data-c-accion');
+        if (acc === 'salir') salir(); else abrirCapa(b.getAttribute('data-c-capa'));
+      });
+    });
+    document.querySelectorAll('[data-c-cerrar]').forEach(function (b) { b.addEventListener('click', function () { cerrarCapa(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && capaAbierta) cerrarCapa(false); });
+    var adulto = document.getElementById('c-ayuda-adulto');
+    if (adulto) adulto.hidden = op.vistaAdulto === false;
+    voz.iniciar();
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.c-escuchar') : null;
+      if (b) voz.decir(op.textoEscuchar ? op.textoEscuchar() : '');
+    });
+    try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', aplicarAjustes); } catch (e) {}
+  }
+
+  return {
+    version: 1, PREFIJO: PREFIJO, esc: esc, baul: baul, bytes: bytes, enlace: enlace, qr: qr, voz: voz,
+    aplicarAjustes: aplicarAjustes, cambiarAjuste: cambiarAjuste, suave: suave, anunciar: anunciar,
+    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar
+  };
+})();
+if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado antes de pintar
+/* === FIN CARAPAZON CONTIGO v1 === */
+</script>
+</head>
+<body>
+<!-- === CARAPAZON CONTIGO v1 · HTML (fondo, cabecera, sello) === -->
+<a class="c-saltar" href="#principal">Saltar al contenido</a>
+<div class="c-fondo" aria-hidden="true"><span></span><span></span></div>
+<header class="c-cabecera" id="c-cabecera">
+  <div class="c-marca"><span class="c-orbe" aria-hidden="true"></span><span>Contigo<span class="c-marca-sub"> · Recursos</span></span></div>
+  <div class="c-ajustes">
+    <button type="button" class="c-boton-icono" id="c-suave" aria-pressed="false" aria-describedby="c-suave-desc"><svg class="c-icono" aria-hidden="true"><use href="#i-suave"/></svg><span>Modo suave</span></button>
+    <button type="button" class="c-boton-icono" id="c-tema" aria-pressed="false" aria-label="Pantalla oscura"><svg class="c-icono c-icono-luna" aria-hidden="true"><use href="#i-luna"/></svg><svg class="c-icono c-icono-sol" aria-hidden="true"><use href="#i-sol"/></svg></button>
+  </div>
+  <span id="c-suave-desc" class="c-solo-lector">Sin movimiento y con colores más quietos. Se recuerda en este celular.</span>
+</header>
+<p class="c-sello" id="c-sello"><span>Prototipo · datos de ejemplo</span></p>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (arriba) === -->
+
+<!-- Dibujos propios de Contigo (CC BY 4.0). Planos, redondeados, con los pasteles del manual. -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">
+<!-- Iconos de la interfaz (trazo del color del texto) -->
+<symbol id="i-pausa" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+<symbol id="i-calma" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></symbol>
+<symbol id="i-ayuda" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></symbol>
+<symbol id="i-salir" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/></symbol>
+<symbol id="i-voz" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4zM15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<symbol id="i-suave" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l6.5-6.5"/></symbol>
+<symbol id="i-luna" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+<symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+<symbol id="i-copiar" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-compartir" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+<symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-flecha" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+<!-- Dibujos de la pieza -->
+<symbol id="s-luna" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="17" fill="#EDD5DF"/><path d="M29 11a13 13 0 1 0 8 19a10.5 10.5 0 0 1-8-19z" fill="#FFFFFF"/><path d="M12 9v4M10 11h4M39 34v3M37.5 35.5h3" stroke="#B8125C"/></g></symbol>
+<symbol id="s-hablar" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8h26a4 4 0 0 1 4 4v13a4 4 0 0 1-4 4H20l-7 6v-6H8a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="#BDCDFF"/><path d="M11 16h18M11 21h11"/><path d="M41 22v12a3 3 0 0 1-3 3h-2v5l-6-5h-6" fill="#EDD5DF"/></g></symbol>
+<symbol id="s-calendario" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="36" height="32" rx="5" fill="#FFFFFF"/><path d="M6 18h36M15 5v8M33 5v8"/><rect x="11" y="23" width="7" height="6" rx="2" fill="#EDD5DF"/><rect x="20.5" y="23" width="7" height="6" rx="2" fill="#EDD5DF"/><rect x="30" y="23" width="7" height="6" rx="2" fill="#CCEADE"/><rect x="11" y="32" width="7" height="5" rx="2" fill="#BDCDFF"/></g></symbol>
+<symbol id="s-pasos" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="30" width="12" height="12" rx="3" fill="#CCEADE"/><rect x="18" y="20" width="12" height="22" rx="3" fill="#BDCDFF"/><rect x="32" y="9" width="12" height="33" rx="3" fill="#EDD5DF"/><path d="M8 24l4-4M22 14l4-4"/></g></symbol>
+<symbol id="s-textura" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="12" width="17" height="24" rx="6" fill="#F7D4AA"/><path d="M9 18q4 3 9 0M9 24q4 3 9 0M9 30q4 3 9 0"/><rect x="26" y="12" width="17" height="24" rx="6" fill="#CCEADE"/><circle cx="31" cy="19" r="1.4" fill="#2A2140" stroke="none"/><circle cx="37" cy="19" r="1.4" fill="#2A2140" stroke="none"/><circle cx="34" cy="25" r="1.4" fill="#2A2140" stroke="none"/><circle cx="31" cy="31" r="1.4" fill="#2A2140" stroke="none"/><circle cx="37" cy="31" r="1.4" fill="#2A2140" stroke="none"/></g></symbol>
+<symbol id="s-escala" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="17" r="8" fill="#CCEADE"/><path d="M9 19q3 3 6 0"/><circle cx="36" cy="17" r="8" fill="#EDD5DF"/><path d="M33 21q3-3 6 0"/><path d="M5 36h38"/><path d="M8 33v6M18 33v6M28 33v6M38 33v6" stroke="#B8125C"/></g></symbol>
+<symbol id="s-patron" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 41h36"/><rect x="9" y="28" width="6" height="13" rx="2" fill="#BDCDFF"/><rect x="18" y="31" width="6" height="10" rx="2" fill="#BDCDFF"/><rect x="27" y="14" width="6" height="27" rx="2" fill="#EDD5DF"/><rect x="36" y="20" width="6" height="21" rx="2" fill="#EDD5DF"/><path d="M25 8h10" stroke="#B8125C"/></g></symbol>
+<symbol id="s-consulta" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="7" width="30" height="36" rx="4" fill="#FFFFFF"/><rect x="17" y="4" width="14" height="7" rx="2" fill="#BDCDFF"/><path d="M24 18v12M18 24h12" stroke="#B8125C"/><path d="M15 36h18"/></g></symbol>
+<symbol id="s-gota" viewBox="0 0 24 24"><path d="M12 3c3 4.5 6 8 6 11.2A6 6 0 0 1 6 14.2C6 11 9 7.5 12 3z" fill="#B8125C"/></symbol>
+<symbol id="s-rayo" viewBox="0 0 24 24"><path d="M13.5 2L5 13.5h6L9.5 22 19 9.5h-6.2z" fill="#3355D6"/></symbol>
+<symbol id="s-sentidos" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#F7D4AA" stroke="#8A3F14" stroke-width="2"/><path d="M8 12h8" stroke="#8A3F14" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="s-alerta" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6l19 33H5z" fill="#EDD5DF"/><path d="M24 19v9"/><circle cx="24" cy="33" r="1.6" fill="#2A2140" stroke="none"/></g></symbol>
+<symbol id="s-corazon" viewBox="0 0 48 48"><g fill="none" stroke="#2A2140" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 40s-15-9-15-20a8 8 0 0 1 15-4 8 8 0 0 1 15 4c0 11-15 20-15 20z" fill="#EDD5DF"/></g></symbol>
+</svg>
+
+<main id="principal" tabindex="-1">
+  <!-- Inicio -->
+  <section class="pantalla" data-pantalla="inicio" id="pantalla-inicio" aria-labelledby="t-inicio">
+    <div class="hoja">
+      <div class="portada" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#s-luna"/></svg></div>
+      <h1 id="t-inicio" class="centro" tabindex="-1" data-leer>Sus ciclos, su ritmo</h1>
+      <p class="bajada" data-leer>Con el ciclo pueden llegar más sensibilidad a ruidos y luces, más dolor y más crisis. Anticípale lo que viene y anota su ritmo para ver qué se repite.</p>
+      <ul class="datos-rapidos" data-leer aria-label="Cómo es"><li>Para la cuidadora</li><li>1 minuto al día</li><li>Sin cuenta</li></ul>
+      <ul class="menu">
+        <li><button type="button" class="puerta t-lavanda" data-ir="prepara"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#s-hablar"/></svg></span><span><strong>Prepárala antes</strong><span class="sub">Para la primera menstruación</span></span><svg class="c-icono flecha" aria-hidden="true"><use href="#i-flecha"/></svg></button></li>
+        <li><button type="button" class="puerta t-rosa" data-ir="calendario"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#s-calendario"/></svg></span><span><strong>Su calendario</strong><span class="sub">Marca días, dolor, sentidos y ánimo</span></span><svg class="c-icono flecha" aria-hidden="true"><use href="#i-flecha"/></svg></button></li>
+        <li><button type="button" class="puerta t-menta" data-ir="patron"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#s-patron"/></svg></span><span><strong>Lo que se repite</strong><span class="sub">Los días del ciclo con más crisis o dolor</span></span><svg class="c-icono flecha" aria-hidden="true"><use href="#i-flecha"/></svg></button></li>
+        <li><button type="button" class="puerta t-arena" data-ir="consultar"><span class="disco" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#s-consulta"/></svg></span><span><strong>Cuándo consultar</strong><span class="sub">Señales para no esperar</span></span><svg class="c-icono flecha" aria-hidden="true"><use href="#i-flecha"/></svg></button></li>
+      </ul>
+      <div class="acciones"><button type="button" class="c-boton secundario" id="b-ejemplo">Ver un ejemplo con 3 ciclos</button></div>
+      <p class="pista centro" style="margin-top:12px" data-leer>Lo que anotes se queda en este celular. No pedimos nombre, documento ni diagnóstico.</p>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+  <!-- FIN pantalla-inicio -->
+
+  <!-- (a) Prepárala antes -->
+  <section class="pantalla" data-pantalla="prepara" aria-labelledby="t-prepara" hidden>
+    <button type="button" class="c-boton texto volver" data-ir="inicio">‹ Volver</button>
+    <div class="hoja">
+      <p class="paso">Antes de la primera menstruación</p>
+      <h2 id="t-prepara" tabindex="-1" data-leer>Prepárala antes</h2>
+      <p class="bajada" data-leer>Lo que más ayuda es saber qué va a pasar. Cinco pasos sencillos, a su ritmo.</p>
+      <ol class="pasos">
+        <li class="t-lavanda"><span class="dibujo" aria-hidden="true"><span class="numero">1</span><svg viewBox="0 0 48 48"><use href="#s-hablar"/></svg></span><div><h3 data-leer>Cuéntale antes, con tiempo</h3><p data-leer>Antes de que llegue, explícale con palabras simples y concretas qué es, que puede llegar en cualquier momento y qué va a hacer ella cuando pase.</p></div></li>
+        <li class="t-rosa"><span class="dibujo" aria-hidden="true"><span class="numero">2</span><svg viewBox="0 0 48 48"><use href="#s-calendario"/></svg></span><div><h3 data-leer>Muéstraselo con dibujos</h3><p data-leer>Un calendario visual, dibujos o un cuento corto de lo que va a pasar. Si encuentras materiales hechos con personas dentro del espectro autista, mejor.</p></div></li>
+        <li class="t-menta"><span class="dibujo" aria-hidden="true"><span class="numero">3</span><svg viewBox="0 0 48 48"><use href="#s-pasos"/></svg></span><div><h3 data-leer>Un paso a la vez</h3><p data-leer>Parte el cambio de toalla o de producto en pasos cortos y practíquenlos juntas antes de necesitarlo.</p></div></li>
+        <li class="t-arena"><span class="dibujo" aria-hidden="true"><span class="numero">4</span><svg viewBox="0 0 48 48"><use href="#s-textura"/></svg></span><div><h3 data-leer>Que elija por cómo se siente</h3><p data-leer>Toallas de tela o desechables, ropa interior absorbente u otros: prueben textura, ruido, olor y ajuste en casa. No hay uno «mejor»: se decide con ella.</p></div></li>
+        <li class="t-lavanda"><span class="dibujo" aria-hidden="true"><span class="numero">5</span><svg viewBox="0 0 48 48"><use href="#s-escala"/></svg></span><div><h3 data-leer>Una forma de decir cuánto duele</h3><p data-leer>Enséñale la escala del 1 al 10 antes de necesitarla. Si no lo dice, no significa que no le duela.</p>
+          <div class="escala" aria-hidden="true"><span style="background:#CCEADE">1</span><span style="background:#D5E8E0">2</span><span style="background:#DDE3EA">3</span><span style="background:#E3DDEF">4</span><span style="background:#E6D8EC">5</span><span style="background:#EBD3E3">6</span><span style="background:#EDC9DA">7</span><span style="background:#EDBCD0">8</span><span style="background:#ECAEC6">9</span><span style="background:#EAA0BD">10</span></div></div></li>
+      </ol>
+      <p class="rotulo" data-leer>Son ideas que se usan con frecuencia. Ninguna funciona seguro con todas: tú conoces a quien acompañas.</p>
+      <p class="fuentes">De dónde sale: Ellis y colegas, 2025 · Skommer y Gunesh, 2025 · Child Mind Institute, 2026. Pendiente de validación por Integrar.</p>
+      <div class="acciones"><button type="button" class="c-boton" data-ir="calendario">Ir a su calendario</button></div>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+
+  <!-- (b) Calendario -->
+  <section class="pantalla" data-pantalla="calendario" aria-labelledby="t-calendario" hidden>
+    <button type="button" class="c-boton texto volver" data-ir="inicio">‹ Volver</button>
+    <div class="banda-ejemplo" data-banda-ejemplo hidden>
+      <p><strong>Esto es un ejemplo.</strong> Son datos inventados y aquí no se guarda nada.</p>
+      <div class="acciones"><button type="button" class="c-boton texto" data-salir-ejemplo>Salir del ejemplo y anotar el mío</button></div>
+    </div>
+    <div class="hoja">
+      <p class="paso">Su calendario</p>
+      <h2 id="t-calendario" class="c-solo-lector" tabindex="-1">Su calendario</h2>
+      <p class="pista" data-leer>Toca un día para anotar. El primer día con sangrado marca el inicio de cada ciclo.</p>
+      <div class="acciones" style="margin-top:12px"><button type="button" class="c-boton" id="b-hoy">Anotar hoy</button></div>
+      <div class="mes-cabeza">
+        <button type="button" class="flecha-mes" id="b-mes-antes" aria-label="Mes anterior">‹</button>
+        <h2 id="t-mes" aria-live="polite"></h2>
+        <button type="button" class="flecha-mes" id="b-mes-despues" aria-label="Mes siguiente">›</button>
+      </div>
+      <div class="semana" aria-hidden="true"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+      <ul class="grilla" id="grilla" aria-labelledby="t-mes"></ul>
+      <ul class="leyenda" aria-label="Qué significa cada marca">
+        <li><span class="muestra-sangre"></span>Sangrado</li>
+        <li><span class="muestra-dolor"></span>Dolor</li>
+        <li><svg aria-hidden="true"><use href="#s-rayo"/></svg>Crisis</li>
+        <li><svg aria-hidden="true"><use href="#s-sentidos"/></svg>Se desborda fácil</li>
+      </ul>
+    </div>
+
+    <div class="hoja editor" id="editor" hidden>
+      <h2 id="t-editor" tabindex="-1"></h2>
+      <p class="dia-ciclo" id="editor-ciclo"></p>
+      <fieldset class="grupo">
+        <legend>¿Hubo sangrado?</legend>
+        <div class="opciones" data-campo="s">
+          <button type="button" class="op" data-valor="1">Sí</button>
+          <button type="button" class="op" data-valor="0">No</button>
+        </div>
+      </fieldset>
+      <fieldset class="grupo">
+        <legend>Dolor, del 1 al 10</legend>
+        <p class="pista">Pregúntale o usa lo que ella señale. 1 es poquito, 10 es el peor dolor.</p>
+        <div class="dolor-botones" data-campo="d">
+          <button type="button" class="op sin" data-valor="0">Sin dolor</button>
+          <button type="button" class="op" data-valor="1">1</button><button type="button" class="op" data-valor="2">2</button><button type="button" class="op" data-valor="3">3</button><button type="button" class="op" data-valor="4">4</button><button type="button" class="op" data-valor="5">5</button>
+          <button type="button" class="op" data-valor="6">6</button><button type="button" class="op" data-valor="7">7</button><button type="button" class="op" data-valor="8">8</button><button type="button" class="op" data-valor="9">9</button><button type="button" class="op" data-valor="10">10</button>
+        </div>
+        <p class="aviso-dolor" id="aviso-dolor" hidden>Un dolor así de fuerte no hay que aguantarlo. Si se repite, consúltalo. <button type="button" class="c-boton texto" data-ir="consultar">Cuándo consultar</button></p>
+      </fieldset>
+      <fieldset class="grupo">
+        <legend>Sentidos: ruidos, luces, ropa</legend>
+        <div class="opciones" data-campo="n">
+          <button type="button" class="op" data-valor="bajo">Tranquila</button>
+          <button type="button" class="op" data-valor="medio">Más sensible</button>
+          <button type="button" class="op" data-valor="alto">Se desborda fácil</button>
+        </div>
+      </fieldset>
+      <fieldset class="grupo">
+        <legend>Ánimo</legend>
+        <div class="opciones" data-campo="a">
+          <button type="button" class="op" data-valor="tranquila">Tranquila</button>
+          <button type="button" class="op" data-valor="sensible">Sensible</button>
+          <button type="button" class="op" data-valor="irritable">Irritable</button>
+          <button type="button" class="op" data-valor="triste">Triste</button>
+        </div>
+      </fieldset>
+      <fieldset class="grupo">
+        <legend>¿Hubo una crisis o un desborde?</legend>
+        <div class="opciones" data-campo="c">
+          <button type="button" class="op" data-valor="1">Sí</button>
+          <button type="button" class="op" data-valor="0">No</button>
+        </div>
+      </fieldset>
+      <p class="estado-guardado" id="estado-guardado" aria-live="polite"></p>
+      <div class="acciones">
+        <button type="button" class="c-boton" id="b-listo">Listo</button>
+        <button type="button" class="c-boton texto" id="b-borrar-dia">Borrar lo anotado este día</button>
+      </div>
+    </div>
+
+    <div class="hoja">
+      <div class="acciones" style="margin-top:0">
+        <button type="button" class="c-boton secundario" data-ir="patron">Ver lo que se repite</button>
+      </div>
+      <div class="zona-borrar" id="zona-borrar">
+        <button type="button" class="c-boton texto" id="b-borrar-todo">Borrar todo el registro de ciclos</button>
+        <p class="estado-borrar">Toca dos veces para borrar. Lo demás de Contigo no se borra.</p>
+        <p class="estado-borrar" id="estado-borrar" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- (c) Lo que se repite -->
+  <section class="pantalla" data-pantalla="patron" aria-labelledby="t-patron" hidden>
+    <button type="button" class="c-boton texto volver" data-ir="inicio">‹ Volver</button>
+    <div class="banda-ejemplo" data-banda-ejemplo hidden>
+      <p><strong>Esto es un ejemplo.</strong> Son datos inventados y aquí no se guarda nada.</p>
+      <div class="acciones"><button type="button" class="c-boton texto" data-salir-ejemplo>Salir del ejemplo y anotar el mío</button></div>
+    </div>
+    <div class="hoja">
+      <p class="paso">Lo que se repite</p>
+      <h2 id="t-patron" tabindex="-1" data-leer>Su ritmo, según lo que anotaste</h2>
+      <ul class="hallazgos" id="hallazgos" aria-live="polite"></ul>
+      <p class="ritmo" id="ritmo"></p>
+      <div class="grafica" id="grafica" hidden>
+        <h3>Crisis por día del ciclo</h3>
+        <div class="barras" id="barras" role="img"></div>
+        <h3 style="margin-top:14px">Dolor por día del ciclo</h3>
+        <div class="calor" id="calor" role="img"></div>
+        <div class="ejes" aria-hidden="true"><span style="grid-column:1/span 4">Día 1</span><span style="grid-column:14/span 4">14</span><span style="grid-column:28/span 4">28</span><span style="grid-column:34/span 2">35</span></div>
+      </div>
+      <div class="fases" id="fases"></div>
+      <p class="rotulo">Es lo que tú anotaste, no una medida ni un diagnóstico. Llévalo a la consulta.</p>
+      <div class="acciones">
+        <button type="button" class="c-boton" id="b-copiar"><svg class="c-icono" aria-hidden="true"><use href="#i-copiar"/></svg>Copiar resumen para la consulta</button>
+        <button type="button" class="c-boton secundario" data-ir="calendario">Ir al calendario</button>
+      </div>
+      <p class="estado-copia" id="estado-copia" aria-live="polite"></p>
+      <div class="copia-manual" id="copia-manual" hidden>
+        <label for="texto-manual" class="pista">No se pudo copiar solo. Mantén presionado este texto y elige «Copiar»:</label>
+        <textarea id="texto-manual" readonly rows="8"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- (d) Cuándo consultar -->
+  <section class="pantalla" data-pantalla="consultar" aria-labelledby="t-consultar" hidden>
+    <button type="button" class="c-boton texto volver" data-ir="inicio">‹ Volver</button>
+    <div class="hoja">
+      <p class="paso">Cuándo consultar</p>
+      <h2 id="t-consultar" tabindex="-1" data-leer>Señales para no esperar</h2>
+      <p class="bajada" data-leer>Consulta con medicina general o ginecología por la EPS si ves alguna de estas señales. Lleva el resumen de su calendario.</p>
+      <ul class="consultar">
+        <li><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#s-alerta"/></svg><span data-leer>Dolor o sangrado muy fuertes.</span></li>
+        <li><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#s-alerta"/></svg><span data-leer>Dolor que ella no logra describir, o que en casa se está volviendo «normal». El dolor no se normaliza.</span></li>
+        <li><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#s-alerta"/></svg><span data-leer>Cambios de ánimo o de conducta muy marcados que se repiten con el ciclo.</span></li>
+        <li class="urgente"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#s-corazon"/></svg><span data-leer><strong>Cualquier señal de que se quiere hacer daño:</strong> no esperes la consulta. Busca ayuda ya.</span></li>
+      </ul>
+      <div class="acciones"><button type="button" class="c-boton" id="b-ayuda-ya">Ver las líneas de ayuda</button></div>
+      <h3 style="margin-top:22px" data-leer>Lo que no ayuda decir</h3>
+      <ul class="no-decir">
+        <li data-leer>«El dolor de la regla es normal, ya pasará».</li>
+        <li data-leer>«Si no lo dice, no le duele».</li>
+        <li data-leer>«Está así por la regla», como explicación de toda crisis.</li>
+      </ul>
+      <p class="rotulo" data-leer>Contigo no diagnostica ni da medicamentos ni dosis: eso lo decide el profesional de salud.</p>
+      <div class="acciones"><a class="c-boton secundario" href="/#chat">Conversar con Contigo</a></div>
+      <div class="fila-escuchar"><button type="button" class="c-boton texto c-escuchar" data-voz hidden><svg class="c-icono" aria-hidden="true"><use href="#i-voz"/></svg>Escuchar</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- === CARAPAZON CONTIGO v1 · HTML (barra fija y capas) === -->
+<nav class="c-barra" aria-label="Ayuda rápida">
+  <ul>
+    <li><button type="button" data-c-accion="pausa" data-c-capa="c-capa-pausa" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-pausa"/></svg>Pausa</button></li>
+    <li><button type="button" data-c-accion="calma" data-c-capa="c-capa-calma" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-calma"/></svg>Calma</button></li>
+    <li><button type="button" class="c-boton-ayuda" data-c-accion="ayuda" data-c-capa="c-capa-ayuda" aria-expanded="false"><svg class="c-icono" aria-hidden="true"><use href="#i-ayuda"/></svg>Necesito ayuda</button></li>
+    <li><button type="button" data-c-accion="salir"><svg class="c-icono" aria-hidden="true"><use href="#i-salir"/></svg>Salir</button></li>
+  </ul>
+</nav>
+<div class="c-capa" id="c-capa-pausa" role="dialog" aria-modal="true" aria-labelledby="c-t-pausa" hidden>
+  <h2 id="c-t-pausa" tabindex="-1" data-foco>En pausa</h2>
+  <p>Tómate el tiempo que necesites. Cuando quieras, sigues donde ibas.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Seguir</button>
+</div>
+<div class="c-capa" id="c-capa-calma" role="dialog" aria-modal="true" aria-labelledby="c-t-calma" hidden>
+  <h2 id="c-t-calma" tabindex="-1" data-foco>Respira conmigo</h2>
+  <div class="c-respira" id="c-respira" aria-hidden="true"></div>
+  <p class="c-respira-texto" id="c-respira-texto" aria-hidden="true">Toma aire despacio…</p>
+  <p>Toma aire en 4 segundos y suéltalo en 6. Las veces que necesites.</p>
+  <button type="button" class="c-boton" data-c-cerrar>Ya estoy mejor</button>
+</div>
+<div class="c-capa" id="c-capa-ayuda" role="dialog" aria-modal="true" aria-labelledby="c-t-ayuda" hidden>
+  <div class="c-tarjeta-ayuda">
+    <h2 id="c-t-ayuda" class="c-grande" tabindex="-1" data-foco>Necesito ayuda</h2>
+    <p class="c-pide">Por favor, quédate cerca y háblame despacio.</p>
+    <div id="c-ayuda-adulto">
+      <ul class="c-numeros">
+        <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
+        <li><strong>106</strong> Línea 106, para hablar con alguien</li>
+        <li><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</li>
+      </ul>
+      <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
+    </div>
+  </div>
+  <button type="button" class="c-boton" data-c-cerrar>Cerrar</button>
+</div>
+<div class="c-capa" id="c-capa-salir" role="dialog" aria-modal="true" aria-labelledby="c-t-salir" hidden>
+  <h2 id="c-t-salir" tabindex="-1" data-foco>Listo</h2>
+  <p>Ya puedes cerrar esta pestaña. Lo que guardaste sigue en este celular.</p>
+  <button type="button" class="c-boton secundario" data-c-cerrar>Volver</button>
+</div>
+<div id="c-anuncio" class="c-solo-lector" aria-live="polite"></div>
+<!-- === FIN CARAPAZON CONTIGO v1 · HTML (abajo) === -->
+
+<script>
+/* === SUS CICLOS · DATOS === */
+/* Parte pura (sin pantalla): fechas, limpieza de lo guardado, inicios de ciclo, el patrón, el resumen y el ejemplo.
+   Se prueba con node. Fechas siempre como texto AAAA-MM-DD (hora local del celular); las cuentas de días van en UTC. */
+var SusCiclos = (function () {
+  'use strict';
+  var CLAVE = 'sus-ciclos', VERSION = 1, MAX_DIAS = 500;
+  var SIN_SANGRE_ANTES = 7;   // un día con sangrado inicia ciclo si los 7 días anteriores no tuvieron sangrado
+  var MAX_DIA_CICLO = 45;     // más allá de 45 días desde el último inicio, el día no se cuenta en ningún ciclo
+  var DIAS_GRAFICA = 35;
+  var SENTIDOS = [{ id: 'bajo', texto: 'Tranquila' }, { id: 'medio', texto: 'Más sensible' }, { id: 'alto', texto: 'Se desborda fácil' }];
+  var ANIMOS = [{ id: 'tranquila', texto: 'Tranquila' }, { id: 'sensible', texto: 'Sensible' }, { id: 'irritable', texto: 'Irritable' }, { id: 'triste', texto: 'Triste' }];
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  var SEMANA = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+  function dos(n) { return (n < 10 ? '0' : '') + n; }
+  function clave(anio, mes0, dia) { return anio + '-' + dos(mes0 + 1) + '-' + dos(dia); }
+  function deFechaLocal(d) { return clave(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function esFecha(k) {
+    if (typeof k !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(k)) return false;
+    var p = k.split('-').map(Number), t = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    return p[0] >= 2000 && p[0] <= 2100 && t.getUTCFullYear() === p[0] && t.getUTCMonth() === p[1] - 1 && t.getUTCDate() === p[2];
+  }
+  function aNumero(k) { var p = k.split('-').map(Number); return Math.round(Date.UTC(p[0], p[1] - 1, p[2]) / 86400000); }
+  function deNumero(n) { var t = new Date(n * 86400000); return clave(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate()); }
+  function sumar(k, n) { return deNumero(aNumero(k) + n); }
+  function entre(a, b) { return aNumero(b) - aNumero(a); }
+  function bonita(k) { // «martes 12 de noviembre»
+    var p = k.split('-').map(Number), t = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    return SEMANA[t.getUTCDay()] + ' ' + p[2] + ' de ' + MESES[p[1] - 1];
+  }
+  function corta(k) { var p = k.split('-').map(Number); return p[2] + ' de ' + MESES[p[1] - 1]; }
+  function esId(lista, v) { return lista.some(function (x) { return x.id === v; }); }
+  function texto(lista, v) { var x = lista.filter(function (o) { return o.id === v; })[0]; return x ? x.texto : ''; }
+
+  /* Limpieza: lo que venga del celular (o de un cambio a mano) se reduce a lo permitido; nunca revienta */
+  function limpiarDia(r) {
+    if (!r || typeof r !== 'object' || Array.isArray(r)) return null;
+    var o = {};
+    if (r.s === 1 || r.s === true) o.s = 1; else if (r.s === 0 || r.s === false) o.s = 0;
+    if (typeof r.d === 'number' && isFinite(r.d) && Math.floor(r.d) === r.d && r.d >= 0 && r.d <= 10) o.d = r.d;
+    if (esId(SENTIDOS, r.n)) o.n = r.n;
+    if (esId(ANIMOS, r.a)) o.a = r.a;
+    if (r.c === 1 || r.c === true) o.c = 1; else if (r.c === 0 || r.c === false) o.c = 0;
+    return Object.keys(o).length ? o : null;
+  }
+  function vacio() { return { v: VERSION, dias: {} }; }
+  function normalizar(raw) {
+    var r = vacio();
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return r;
+    var dias = raw.dias;
+    if (!dias || typeof dias !== 'object' || Array.isArray(dias)) return r;
+    var claves = Object.keys(dias).filter(esFecha).sort();
+    if (claves.length > MAX_DIAS) claves = claves.slice(claves.length - MAX_DIAS);
+    claves.forEach(function (k) { var d = limpiarDia(dias[k]); if (d) r.dias[k] = d; });
+    return r;
+  }
+  /* Marca un campo de un día (valor null = quitarlo). Devuelve datos nuevos, ya limpios. */
+  function marcar(datos, k, campo, valor) {
+    var n = normalizar(datos);
+    if (!esFecha(k) || ['s', 'd', 'n', 'a', 'c'].indexOf(campo) === -1) return n;
+    var dia = {}, previo = n.dias[k] || {};
+    Object.keys(previo).forEach(function (c) { dia[c] = previo[c]; });
+    if (valor === null || valor === undefined) delete dia[campo]; else dia[campo] = valor;
+    var limpio = limpiarDia(dia);
+    if (limpio) n.dias[k] = limpio; else delete n.dias[k];
+    return normalizar(n);
+  }
+  function quitarDia(datos, k) { var n = normalizar(datos); delete n.dias[k]; return n; }
+
+  /* Ciclos: el primer día con sangrado (sin sangrado en los 7 días anteriores) inicia un ciclo */
+  function inicios(dias) {
+    var conSangre = Object.keys(dias).filter(function (k) { return dias[k].s === 1; }).sort(), hay = {};
+    conSangre.forEach(function (k) { hay[aNumero(k)] = true; });
+    return conSangre.filter(function (k) {
+      var n = aNumero(k);
+      for (var i = 1; i <= SIN_SANGRE_ANTES; i++) if (hay[n - i]) return false;
+      return true;
+    });
+  }
+  function diaDelCiclo(k, ini) {
+    var ultimo = null;
+    for (var i = 0; i < ini.length; i++) if (ini[i] <= k) ultimo = ini[i];
+    if (!ultimo) return null;
+    var n = entre(ultimo, k) + 1;
+    return n <= MAX_DIA_CICLO ? n : null;
+  }
+  function semanaAntes(k, ini) {
+    return ini.some(function (s) { var d = entre(k, s); return d >= 1 && d <= 7; });
+  }
+  function fase(k, dias, ini) {
+    if (dias[k] && dias[k].s === 1) return 'regla';
+    if (semanaAntes(k, ini)) return 'antes';
+    if (diaDelCiclo(k, ini) !== null) return 'resto';
+    return null;
+  }
+  function duracion(ini) {
+    var largos = [];
+    for (var i = 1; i < ini.length; i++) { var d = entre(ini[i - 1], ini[i]); if (d >= 15 && d <= 60) largos.push(d); }
+    if (!largos.length) return null;
+    return Math.round(largos.reduce(function (a, b) { return a + b; }, 0) / largos.length);
+  }
+  function proxima(ini) { var d = duracion(ini); return d && ini.length ? sumar(ini[ini.length - 1], d) : null; }
+  function uno(n) { return (Math.round(n * 10) / 10).toString().replace('.', ','); }
+
+  /* El patrón: cuenta lo anotado por día del ciclo y por fase (regla, semana antes, resto) */
+  function patron(datos) {
+    var dias = normalizar(datos).dias, ini = inicios(dias), porDia = [], i;
+    for (i = 0; i < DIAS_GRAFICA; i++) porDia.push({ crisis: 0, dolorSuma: 0, dolorN: 0 });
+    function f0() { return { dias: 0, crisis: 0, dolorSuma: 0, dolorN: 0, altos: 0 }; }
+    var fases = { regla: f0(), antes: f0(), resto: f0() }, crisisTotal = 0, crisisCiclo = 0, maximo = null;
+    Object.keys(dias).sort().forEach(function (k) {
+      var r = dias[k], dc = diaDelCiclo(k, ini), f = fase(k, dias, ini);
+      if (r.c === 1) crisisTotal++;
+      if (typeof r.d === 'number' && r.d > 0 && (!maximo || r.d > maximo.dolor)) maximo = { fecha: k, dolor: r.d, dia: dc };
+      if (f) {
+        var F = fases[f]; F.dias++;
+        if (r.c === 1) F.crisis++;
+        if (typeof r.d === 'number') { F.dolorSuma += r.d; F.dolorN++; }
+        if (r.n === 'alto') F.altos++;
+      }
+      if (dc !== null && dc <= DIAS_GRAFICA) {
+        var P = porDia[dc - 1];
+        if (r.c === 1) { P.crisis++; crisisCiclo++; }
+        if (typeof r.d === 'number') { P.dolorSuma += r.d; P.dolorN++; }
+      }
+    });
+    var suficiente = ini.length >= 2 && crisisCiclo >= 3;
+    var ventana = null;
+    if (suficiente) {
+      var mejor = -1, desde = 0;
+      for (i = 0; i <= DIAS_GRAFICA - 5; i++) {
+        var suma = 0;
+        for (var j = i; j < i + 5; j++) suma += porDia[j].crisis;
+        if (suma > mejor) { mejor = suma; desde = i; }
+      }
+      var hasta = desde + 4;
+      while (desde < hasta && porDia[desde].crisis === 0) desde++;
+      while (hasta > desde && porDia[hasta].crisis === 0) hasta--;
+      if (mejor >= 2 && mejor * 2 >= crisisCiclo) ventana = { desde: desde + 1, hasta: hasta + 1, n: mejor, de: crisisCiclo };
+    }
+    return { inicios: ini, duracion: duracion(ini), proxima: proxima(ini), porDia: porDia, fases: fases, crisisTotal: crisisTotal, crisisCiclo: crisisCiclo, maximo: maximo, suficiente: suficiente, ventana: ventana, diasAnotados: Object.keys(dias).length };
+  }
+  function promedio(F) { return F.dolorN ? F.dolorSuma / F.dolorN : null; }
+  /* Frases claras para la cuidadora (sin porcentajes ni palabras clínicas) */
+  function frases(p) {
+    var r = [];
+    if (!p.diasAnotados) return [{ texto: 'Todavía no hay días anotados. Empieza por el calendario: un toque por día basta.', fuerte: false }];
+    if (!p.suficiente) {
+      r.push({ texto: 'Todavía hay pocos registros para ver un patrón. Con dos ciclos anotados (dos primeros días de sangrado) y algunas crisis marcadas, aquí aparece lo que se repite.', fuerte: false });
+    } else if (p.ventana) {
+      var dias = p.ventana.desde === p.ventana.hasta ? 'el día ' + p.ventana.desde : 'los días ' + p.ventana.desde + ' a ' + p.ventana.hasta;
+      r.push({ texto: 'Las crisis se repiten más en ' + dias + ' del ciclo: ' + p.ventana.n + ' de las ' + p.ventana.de + ' crisis anotadas.', fuerte: true });
+    } else {
+      r.push({ texto: 'Por ahora las crisis no se concentran en unos mismos días del ciclo.', fuerte: false });
+    }
+    var F = p.fases, totalF = F.regla.crisis + F.antes.crisis + F.resto.crisis;
+    if (p.suficiente && totalF >= 3) {
+      if (F.antes.crisis >= 2 && F.antes.crisis * 2 >= totalF) r.push({ texto: F.antes.crisis + ' de ' + totalF + ' crisis fueron en la semana antes de la regla.', fuerte: true });
+      else if (F.regla.crisis >= 2 && F.regla.crisis * 2 >= totalF) r.push({ texto: F.regla.crisis + ' de ' + totalF + ' crisis fueron durante la regla.', fuerte: true });
+    }
+    var pr = promedio(F.regla), po = F.antes.dolorN + F.resto.dolorN ? (F.antes.dolorSuma + F.resto.dolorSuma) / (F.antes.dolorN + F.resto.dolorN) : null;
+    if (pr !== null && po !== null && pr - po >= 2) r.push({ texto: 'El dolor anotado es más alto durante la regla (en promedio ' + uno(pr) + ' de 10) que el resto del ciclo (' + uno(po) + ' de 10).', fuerte: false });
+    var cerca = F.regla.altos + F.antes.altos, diasCerca = F.regla.dias + F.antes.dias;
+    if (cerca >= 2 && diasCerca && (!F.resto.dias || cerca / diasCerca >= 2 * (F.resto.altos / F.resto.dias))) r.push({ texto: 'Los días en que se desborda fácil con ruidos, luces o ropa se juntan alrededor de la regla.', fuerte: false });
+    if (p.maximo && p.maximo.dolor >= 8) r.push({ texto: 'El dolor más alto que anotaste fue ' + p.maximo.dolor + ' de 10 (' + corta(p.maximo.fecha) + '). Un dolor así no hay que aguantarlo: si se repite, consúltalo.', fuerte: false });
+    return r;
+  }
+  function textoRitmo(p) {
+    if (p.inicios.length < 2 || !p.duracion) return '';
+    return 'Según lo anotado, su ciclo dura unos ' + p.duracion + ' días. Si se mantiene, la próxima regla podría llegar alrededor del ' + corta(p.proxima) + '. Es solo una estimación.';
+  }
+  /* Resumen en texto para llevar a la consulta (lo copia la cuidadora; no sale solo del celular) */
+  function resumen(datos, hoy) {
+    var p = patron(datos), L = [];
+    L.push('Registro de ciclos · anotado por la cuidadora en Contigo · ' + corta(hoy));
+    L.push('Es un registro de casa, no un diagnóstico.');
+    L.push('Días anotados: ' + p.diasAnotados + ' · Inicios de ciclo: ' + (p.inicios.length ? p.inicios.map(corta).join(', ') : 'ninguno todavía'));
+    if (p.duracion) L.push('Duración aproximada del ciclo: ' + p.duracion + ' días');
+    L.push('Crisis anotadas: ' + p.crisisTotal);
+    var F = p.fases;
+    L.push('Durante la regla: ' + F.regla.crisis + ' crisis en ' + F.regla.dias + ' días' + (promedio(F.regla) !== null ? ' · dolor promedio ' + uno(promedio(F.regla)) + '/10' : ''));
+    L.push('Semana antes de la regla: ' + F.antes.crisis + ' crisis en ' + F.antes.dias + ' días' + (promedio(F.antes) !== null ? ' · dolor promedio ' + uno(promedio(F.antes)) + '/10' : ''));
+    L.push('Resto del ciclo: ' + F.resto.crisis + ' crisis en ' + F.resto.dias + ' días' + (promedio(F.resto) !== null ? ' · dolor promedio ' + uno(promedio(F.resto)) + '/10' : ''));
+    if (p.maximo) L.push('Dolor más alto: ' + p.maximo.dolor + '/10 el ' + corta(p.maximo.fecha) + (p.maximo.dia ? ' (día ' + p.maximo.dia + ' del ciclo)' : ''));
+    frases(p).forEach(function (f) { L.push('· ' + f.texto); });
+    return L.join('\n');
+  }
+  /* Ejemplo: 3 ciclos de 28 días que terminan hoy (datos inventados, nunca se guardan) */
+  function ejemplo(hoy) {
+    var dias = {}, comienzos = [-70, -42, -14], dolorRegla = [8, 6, 4, 2, 1];
+    comienzos.forEach(function (c, ciclo) {
+      for (var d = 1; d <= 28; d++) {
+        var desfase = c + d - 1;
+        if (desfase > 0) break; // nada en el futuro
+        var k = sumar(hoy, desfase), r = null;
+        if (d <= 5) r = { s: 1, d: dolorRegla[d - 1], n: d <= 2 ? 'alto' : 'medio', a: d <= 2 ? 'sensible' : 'tranquila', c: d === 1 ? 1 : 0 };
+        else if (d >= 22) r = { s: 0, d: d >= 25 ? 3 : 2, n: d >= 23 && d <= 27 ? 'alto' : 'medio', a: 'irritable', c: ciclo < 2 && (d === 23 || d === 25 || d === 26) ? 1 : 0 };
+        else if (d % 3 === 0) r = { s: 0, d: 0, n: 'bajo', a: 'tranquila', c: 0 };
+        if (r) dias[k] = r;
+      }
+    });
+    return normalizar({ v: VERSION, dias: dias });
+  }
+  return {
+    CLAVE: CLAVE, VERSION: VERSION, MAX_DIAS: MAX_DIAS, SENTIDOS: SENTIDOS, ANIMOS: ANIMOS, MESES: MESES,
+    clave: clave, deFechaLocal: deFechaLocal, esFecha: esFecha, sumar: sumar, entre: entre, bonita: bonita, corta: corta, texto: texto,
+    vacio: vacio, normalizar: normalizar, limpiarDia: limpiarDia, marcar: marcar, quitarDia: quitarDia,
+    inicios: inicios, diaDelCiclo: diaDelCiclo, fase: fase, duracion: duracion, proxima: proxima,
+    patron: patron, frases: frases, textoRitmo: textoRitmo, resumen: resumen, ejemplo: ejemplo
+  };
+})();
+/* === FIN SUS CICLOS · DATOS === */
+</script>
+<script>
+/* === SUS CICLOS · PANTALLA === */
+(function (C, S) {
+  'use strict';
+  function $(s) { return document.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  var hoy = S.deFechaLocal(new Date());
+  var estado = { pantalla: 'inicio', ejemplo: false, datos: S.normalizar(C.baul.leer(S.CLAVE)), mes: null, dia: null };
+  var partes = hoy.split('-').map(Number);
+  estado.mes = { a: partes[0], m: partes[1] - 1 };
+
+  function datos() { return estado.ejemplo ? estado.datosEjemplo : estado.datos; }
+  function guardar(nuevos) {
+    if (estado.ejemplo) { estado.datosEjemplo = nuevos; return true; }
+    estado.datos = nuevos;
+    return C.baul.guardar(S.CLAVE, nuevos);
+  }
+
+  /* Navegación entre pantallas */
+  function ir(nombre) {
+    estado.pantalla = nombre;
+    $$('.pantalla').forEach(function (s) { s.hidden = s.getAttribute('data-pantalla') !== nombre; });
+    $$('[data-banda-ejemplo]').forEach(function (b) { b.hidden = !estado.ejemplo; });
+    if (nombre === 'calendario') pintarCalendario();
+    if (nombre === 'patron') pintarPatron();
+    if (nombre !== 'calendario') cerrarEditor(true);
+    window.scrollTo(0, 0);
+    var h = document.querySelector('[data-pantalla="' + nombre + '"] h1, [data-pantalla="' + nombre + '"] h2');
+    if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
+  }
+
+  /* Calendario del mes */
+  function etiquetaDia(k, r, dc) {
+    var t = S.bonita(k);
+    if (dc) t += ', día ' + dc + ' del ciclo';
+    if (!r) return t + ', sin anotar';
+    var p = [];
+    if (r.s === 1) p.push('sangrado');
+    if (typeof r.d === 'number') p.push(r.d === 0 ? 'sin dolor' : 'dolor ' + r.d + ' de 10');
+    if (r.n) p.push('sentidos: ' + S.texto(S.SENTIDOS, r.n).toLowerCase());
+    if (r.a) p.push('ánimo: ' + S.texto(S.ANIMOS, r.a).toLowerCase());
+    if (r.c === 1) p.push('hubo crisis');
+    return t + (p.length ? ', ' + p.join(', ') : '');
+  }
+  function pintarCalendario() {
+    var a = estado.mes.a, m = estado.mes.m, d = datos(), ini = S.inicios(d.dias);
+    $('#t-mes').textContent = S.MESES[m] + ' ' + a;
+    var primero = new Date(a, m, 1), hueco = (primero.getDay() + 6) % 7, total = new Date(a, m + 1, 0).getDate(), html = '';
+    for (var i = 0; i < hueco; i++) html += '<li aria-hidden="true"><span class="dia fuera"></span></li>';
+    for (var n = 1; n <= total; n++) {
+      var k = S.clave(a, m, n), r = d.dias[k], dc = S.diaDelCiclo(k, ini), futuro = k > hoy, cls = 'dia';
+      if (r && r.s === 1) cls += ' sangre';
+      if (k === hoy) cls += ' hoy';
+      if (futuro) cls += ' futuro';
+      var marcas = '';
+      if (r && r.c === 1) marcas += '<svg aria-hidden="true"><use href="#s-rayo"/></svg>';
+      if (r && r.n === 'alto') marcas += '<svg aria-hidden="true"><use href="#s-sentidos"/></svg>';
+      var dolor = r && typeof r.d === 'number' && r.d > 0 ? '<span class="barra-dolor" aria-hidden="true"><span style="width:' + (r.d * 10) + '%"></span></span>' : '';
+      html += '<li><button type="button" class="' + cls + '" data-dia="' + k + '" aria-pressed="' + (estado.dia === k ? 'true' : 'false') + '"' + (futuro ? ' aria-disabled="true"' : '') + ' aria-label="' + C.esc(etiquetaDia(k, r, dc) + (futuro ? ', todavía no llega' : '')) + '">' + n + '<span class="marcas">' + marcas + '</span>' + dolor + '</button></li>';
+    }
+    $('#grilla').innerHTML = html;
+    $('#b-mes-despues').disabled = S.clave(a, m, total) >= hoy; // no hay meses futuros que anotar
+  }
+  function moverMes(delta) {
+    var m = estado.mes.m + delta, a = estado.mes.a;
+    if (m < 0) { m = 11; a--; } if (m > 11) { m = 0; a++; }
+    estado.mes = { a: a, m: m };
+    pintarCalendario();
+  }
+
+  /* Editor del día */
+  function abrirEditor(k) {
+    if (!S.esFecha(k) || k > hoy) return;
+    estado.dia = k;
+    var p = k.split('-').map(Number);
+    if (p[0] !== estado.mes.a || p[1] - 1 !== estado.mes.m) estado.mes = { a: p[0], m: p[1] - 1 };
+    pintarCalendario();
+    pintarEditor();
+    var ed = $('#editor'); ed.hidden = false;
+    $('#estado-guardado').textContent = '';
+    try { ed.scrollIntoView({ behavior: C.suave() ? 'auto' : 'smooth', block: 'start' }); } catch (e) {}
+    var h = $('#t-editor'); try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+  }
+  function pintarEditor() {
+    var k = estado.dia; if (!k) return;
+    var d = datos(), r = d.dias[k] || {}, dc = S.diaDelCiclo(k, S.inicios(d.dias));
+    $('#t-editor').textContent = (k === hoy ? 'Hoy, ' : '') + S.bonita(k);
+    $('#editor-ciclo').textContent = dc ? 'Día ' + dc + ' del ciclo' : 'Todavía sin ciclo: marca el primer día de sangrado';
+    $$('#editor [data-campo]').forEach(function (g) {
+      var campo = g.getAttribute('data-campo');
+      g.querySelectorAll('.op').forEach(function (b) {
+        var v = b.getAttribute('data-valor'), actual = r[campo];
+        b.setAttribute('aria-pressed', actual !== undefined && String(actual) === v ? 'true' : 'false');
+      });
+    });
+    $('#aviso-dolor').hidden = !(typeof r.d === 'number' && r.d >= 8);
+  }
+  function cerrarEditor(sinFoco) {
+    var k = estado.dia;
+    estado.dia = null;
+    $('#editor').hidden = true;
+    if (estado.pantalla === 'calendario') pintarCalendario();
+    if (!sinFoco && k) { var b = document.querySelector('[data-dia="' + k + '"]'); if (b) b.focus(); }
+  }
+  function tocarOpcion(b) {
+    var g = b.closest('[data-campo]'), campo = g.getAttribute('data-campo'), v = b.getAttribute('data-valor');
+    var valor = (campo === 's' || campo === 'c' || campo === 'd') ? Number(v) : v;
+    var r = datos().dias[estado.dia] || {};
+    if (r[campo] === valor) valor = null; // segundo toque = quitar
+    var ok = guardar(S.marcar(datos(), estado.dia, campo, valor));
+    pintarEditor(); pintarCalendario();
+    var msg = estado.ejemplo ? 'Ejemplo: no se guarda.' : ok ? 'Guardado en este celular.' : 'No se pudo guardar en este celular (puede estar en modo privado).';
+    $('#estado-guardado').textContent = msg;
+  }
+
+  /* Lo que se repite */
+  function pintarPatron() {
+    var p = S.patron(datos()), fr = S.frases(p);
+    $('#hallazgos').innerHTML = fr.map(function (f) { return '<li' + (f.fuerte ? ' class="fuerte"' : '') + '>' + C.esc(f.texto) + '</li>'; }).join('');
+    $('#ritmo').textContent = S.textoRitmo(p);
+    var hayGrafica = p.inicios.length >= 1 && p.diasAnotados > 0;
+    $('#grafica').hidden = !hayGrafica;
+    if (hayGrafica) {
+      var maxC = Math.max.apply(null, p.porDia.map(function (x) { return x.crisis; }).concat([1]));
+      $('#barras').innerHTML = p.porDia.map(function (x, i) {
+        var marcada = p.ventana && i + 1 >= p.ventana.desde && i + 1 <= p.ventana.hasta;
+        return '<span' + (marcada ? ' class="marcada"' : '') + ' style="height:' + Math.round(x.crisis / maxC * 100) + '%"></span>';
+      }).join('');
+      $('#barras').setAttribute('aria-label', 'Crisis por día del ciclo: ' + p.porDia.map(function (x, i) { return x.crisis ? 'día ' + (i + 1) + ', ' + x.crisis : ''; }).filter(Boolean).join('; ') + '.');
+      $('#calor').innerHTML = p.porDia.map(function (x) {
+        if (!x.dolorN) return '<span></span>';
+        var prom = x.dolorSuma / x.dolorN;
+        return '<span style="background:rgba(184,18,92,' + (0.12 + prom / 10 * 0.78).toFixed(2) + ')"></span>';
+      }).join('');
+      $('#calor').setAttribute('aria-label', 'Dolor promedio por día del ciclo: ' + p.porDia.map(function (x, i) { return x.dolorN ? 'día ' + (i + 1) + ', ' + Math.round(x.dolorSuma / x.dolorN) : ''; }).filter(Boolean).join('; ') + '.');
+    }
+    var F = p.fases;
+    function tarjeta(clase, titulo, f) {
+      var prom = f.dolorN ? (Math.round(f.dolorSuma / f.dolorN * 10) / 10).toString().replace('.', ',') : '—';
+      return '<div class="fase ' + clase + '"><h3>' + titulo + '</h3><p>' + f.crisis + ' crisis en ' + f.dias + ' días anotados</p><p>Dolor promedio: ' + prom + (f.dolorN ? ' de 10' : '') + '</p><p>Se desborda fácil: ' + f.altos + ' días</p></div>';
+    }
+    $('#fases').innerHTML = p.diasAnotados ? tarjeta('t-rosa', 'Durante la regla', F.regla) + tarjeta('t-arena', 'La semana antes', F.antes) + tarjeta('t-menta', 'El resto del ciclo', F.resto) : '';
+    $('#estado-copia').textContent = ''; $('#copia-manual').hidden = true;
+  }
+
+  /* Ejemplo */
+  function entrarEjemplo() {
+    estado.ejemplo = true;
+    estado.datosEjemplo = S.ejemplo(hoy);
+    ir('patron');
+  }
+  function salirEjemplo() {
+    estado.ejemplo = false; estado.datosEjemplo = null;
+    ir('calendario');
+  }
+
+  /* Eventos */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : null; if (!t) return;
+    var irA = t.closest('[data-ir]'); if (irA) { ir(irA.getAttribute('data-ir')); return; }
+    var dia = t.closest('[data-dia]'); if (dia) { if (dia.getAttribute('aria-disabled') !== 'true') abrirEditor(dia.getAttribute('data-dia')); return; }
+    var op = t.closest('#editor .op'); if (op) { tocarOpcion(op); return; }
+    if (t.closest('[data-salir-ejemplo]')) { salirEjemplo(); return; }
+  });
+  $('#b-ejemplo').addEventListener('click', entrarEjemplo);
+  $('#b-hoy').addEventListener('click', function () { abrirEditor(hoy); });
+  $('#b-mes-antes').addEventListener('click', function () { moverMes(-1); });
+  $('#b-mes-despues').addEventListener('click', function () { moverMes(1); });
+  $('#b-listo').addEventListener('click', function () { cerrarEditor(false); });
+  $('#b-borrar-dia').addEventListener('click', function () {
+    if (!estado.dia) return;
+    guardar(S.quitarDia(datos(), estado.dia));
+    pintarEditor(); pintarCalendario();
+    $('#estado-guardado').textContent = 'Se borró lo anotado este día.';
+  });
+  C.dobleToque($('#b-borrar-todo'), {
+    confirmar: 'Toca otra vez para borrar todo el registro',
+    alConfirmar: function () {
+      if (estado.ejemplo) { $('#estado-borrar').textContent = 'Es un ejemplo: no hay nada guardado.'; return; }
+      C.baul.quitar(S.CLAVE);
+      estado.datos = S.vacio();
+      cerrarEditor(true); pintarCalendario();
+      $('#estado-borrar').textContent = 'Listo. El registro de ciclos se borró de este celular.';
+      C.anunciar('El registro de ciclos se borró de este celular.');
+    }
+  });
+  $('#b-copiar').addEventListener('click', function () {
+    var txt = S.resumen(datos(), hoy);
+    C.copiar(txt).then(function (ok) {
+      $('#estado-copia').textContent = ok ? 'Copiado. Pégalo en tus notas o en WhatsApp para la consulta.' : '';
+      if (!ok) { $('#texto-manual').value = txt; $('#copia-manual').hidden = false; }
+    });
+  });
+  $('#b-ayuda-ya').addEventListener('click', function () { C.abrirCapa('c-capa-ayuda'); });
+
+  function textoEscuchar() {
+    var s = document.querySelector('[data-pantalla="' + estado.pantalla + '"]');
+    return Array.prototype.map.call(s.querySelectorAll('[data-leer]'), function (el) { return (el.innerText || el.textContent).replace(/\s*\n\s*/g, ', ').trim(); }).join('. ');
+  }
+  C.iniciar({ vistaAdulto: true, textoEscuchar: textoEscuchar });
+})(Contigo, SusCiclos);
+/* === FIN SUS CICLOS · PANTALLA === */
+</script>
+</body>
+</html>

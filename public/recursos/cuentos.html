@@ -35,10 +35,10 @@
   --texto-suave: #4A4A5E;           /* sobre blanco 8,6:1 */
   --borde: #DCDFEE;
   /* Tonos profundos AA para botones, enlaces y acentos */
-  --principal: #1F7A55;             /* blanco encima 5,29:1 */
-  --principal-hondo: #176446;
+  --principal: #6B3FA0;             /* morado · blanco encima 7,38:1 (la acción nunca va en verde) */
+  --principal-hondo: #5A2F8E;
   --sobre-principal: #FFFFFF;
-  --hover-suave: #EAF6F1;
+  --hover-suave: #F2ECFA;
   --acento: #B8125C;                /* magenta hondo · sobre blanco 6,40:1 */
   --sobre-acento: #FFFFFF;
   --azul-hondo: #3355D6;            /* sobre blanco 6,16:1 */
@@ -57,7 +57,7 @@
 :root[data-tema="oscuro"] {
   --fondo: #15131D; --superficie: #211E2D; --superficie-2: #2A2639;
   --texto: #F3F1F8; --texto-suave: #CBC7D8; --borde: #3D3852;
-  --principal: #7FD8AE; --principal-hondo: #A6E7C8; --sobre-principal: #0D281B; --hover-suave: #2B3B34;
+  --principal: #C9B2F5; --principal-hondo: #DCCBFA; --sobre-principal: #1A0F2E; --hover-suave: #322A45;
   --acento: #FF9CC8; --sobre-acento: #2A0A1A; --azul-hondo: #AFC0FF; --foco: #AFC0FF;
   --fondo-pagina: linear-gradient(165deg, #16191F 0%, #1A1729 50%, #211726 100%);
   --sombra: 0 12px 32px rgba(0,0,0,.35);
@@ -69,11 +69,11 @@
   --menta: #DCE6E1; --lavanda: #DADEEA; --rosa: #E8E0E3; --arena: #ECE3D7;
   --menta-claro: #F1F4F2; --lavanda-claro: #F2F3F7; --rosa-claro: #F5F2F3; --arena-claro: #F6F3EE;
   --fondo-pagina: #F4F4F2; --orbe: #E8E4EA; --sombra: none;
-  --principal: #2E6650; --principal-hondo: #24513F; --acento: #8C2C55; --azul-hondo: #3A4F9C;
+  --principal: #5E4A85; --principal-hondo: #4B3B6B; --acento: #8C2C55; --azul-hondo: #3A4F9C;
   --rotulo-fondo: #ECE3D7; --rotulo-texto: #6B4326;
 }
 :root[data-suave="si"][data-tema="oscuro"] {
-  --fondo-pagina: #17161B; --principal: #9CC9B3; --principal-hondo: #B5D8C6; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
+  --fondo-pagina: #17161B; --principal: #C3B6DD; --principal-hondo: #D5CCE8; --acento: #E3AFC4; --azul-hondo: #B9C3E6;
   --rotulo-fondo: #3A3542; --rotulo-texto: #EADFD2;
 }
 :root[data-suave="si"] *, :root[data-suave="si"] *::before, :root[data-suave="si"] *::after { animation: none !important; transition: none !important; }
@@ -1055,7 +1055,7 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
       <ul class="c-numeros">
         <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
         <li><strong>106</strong> Línea 106, para hablar con alguien</li>
-        <li><strong>141</strong> ICBF, si una niña o un niño sufre maltrato</li>
+        <li><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</li>
       </ul>
       <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
     </div>

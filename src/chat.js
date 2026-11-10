@@ -20,7 +20,7 @@ function mostrar(r) {
 }
 
 const info = recargar();
-console.log("Acompañante de la cuidadora · v0.1 (prueba en terminal)");
+console.log("Contigo · chat de prueba en la terminal (aquí no se exige el perfil sensorial; en la web sí)");
 console.log(`Modelo: ${MODELO} · biblioteca: ${info.documentos} documentos, ${info.fragmentos} fragmentos`);
 if (!hayClave()) console.log("AVISO: falta SMART_ROUTER_ANTHROPIC_KEY en app\\.env.local; solo funcionarán los candados y el chequeo.");
 console.log("Comandos: /chequeo · /resumen · /fuentes · /salir · para el diario escribe «diario: ...»\n");

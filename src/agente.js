@@ -36,9 +36,20 @@ import {
   RESPUESTA_DIAGNOSTICO_SEGURA,
   RESPUESTA_RECHAZO,
   RESPUESTA_ERROR,
+  SALUDO_SIN_PERFIL,
+  respuestaSinPerfil,
   respuestaSinFuente,
   construirTurno,
 } from "./prompt.js";
+
+// 2026-11-10 · Perfil sensorial (Natalia / Integrar: «no generalizamos»).
+// - El perfil vive SOLO en el navegador. Llega en cada mensaje como {nina, cuidadora}
+//   (dos resúmenes cortos en texto), se limpia y se recorta aquí y va al modelo dentro
+//   de <perfil_sensorial> (prompt.js). No se guarda en la sesión, ni en la guardia, ni en logs.
+// - Los candados de crisis y maltrato corren ANTES y no dependen del perfil.
+// - En la web (opciones.exigirPerfil), sin perfil completo no hay orientación general:
+//   respuesta fija que invita a hacerlo (sin modelo). El chat de terminal no lo exige.
+// Versión anterior: agente.js.bak_2026-11-10.
 import { normalizar } from "./texto.js";
 
 const MAX_TURNOS = 20; // turnos (pregunta + respuesta) que se recuerdan por sesión
@@ -110,7 +121,7 @@ export async function responder(sesionId, mensaje, opciones = {}) {
 
 async function responderEn(s, sesionId, mensaje, opciones = {}) {
   const texto = String(mensaje ?? "").trim();
-  if (!texto) return resultado(s, "No me llegó tu mensaje. ¿Me cuentas otra vez?");
+  if (!texto) return resultado(s, "No nos llegó tu mensaje. ¿Nos cuentas otra vez?");
 
   // 1 · crisis (también revisa la respuesta al ítem 9 del PHQ-9)
   const enItem9 = Boolean(s.chequeo && s.chequeo.fase === "phq" && s.chequeo.indice === 8);
@@ -139,7 +150,7 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
   const n = normalizar(texto).replace(/[^a-z ]/g, "").trim();
   if (n === "persona" || n === "quiero hablar con una persona") {
     const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide hablar con una persona" });
-    return resultado(s, "Listo. Dejé registrada tu solicitud para que el equipo la revise; en este piloto la respuesta de una persona puede tardar. Si necesitas hablar ya con alguien: *Línea 106* (apoyo emocional) o *123* (emergencias).", { otros: { guardia: aviso(linea) } });
+    return resultado(s, "Listo. Dejamos registrada tu solicitud para que el equipo la revise; la respuesta de una persona puede tardar. Si necesitas hablar ya con alguien: *Línea 106* (apoyo emocional) o *123* (emergencias).", { otros: { guardia: aviso(linea) } });
   }
   if (n === "resumen") return resumenEn(s);
 
@@ -149,16 +160,25 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
     const fecha = (diario && diario[1]) || opciones.fecha || hoy();
     const nota = diario ? diario[2].trim() : texto;
     s.diario.push({ fecha, texto: nota });
-    return resultado(s, `Anotado en tu diario (${fecha}). Cuando quieras, escribe «resumen» y armo el resumen para la consulta.`);
+    return resultado(s, `Anotado en tu bitácora (${fecha}). Cuando quieras, escribe «resumen» y armamos el resumen para la consulta.`);
+  }
+
+  // Perfil sensorial: sin perfil completo no hay orientación general (solo en la web).
+  const perfil = opciones.perfil || null;
+  const infoPerfil = { nina: Boolean(perfil && perfil.nina), cuidadora: Boolean(perfil && perfil.cuidadora), caracteres: perfil ? (perfil.nina || "").length + (perfil.cuidadora || "").length : 0 };
+  if (opciones.exigirPerfil && !(infoPerfil.nina && infoPerfil.cuidadora)) {
+    const respuesta = esSaludo(texto) && !infoPerfil.nina && !infoPerfil.cuidadora ? SALUDO_SIN_PERFIL : respuestaSinPerfil({ nina: !infoPerfil.nina, cuidadora: !infoPerfil.cuidadora });
+    guardarTurno(s, texto, respuesta);
+    return resultado(s, respuesta, { candado: "sin-perfil", otros: { perfil: infoPerfil } });
   }
 
   // 3 · bibliotecario
   const fragmentos = buscar(texto, K_FRAGMENTOS);
   const recuperados = fragmentos.map((f) => ({ id_fuente: f.id_fuente, seccion: f.seccion, puntaje: f.puntaje }));
 
-  // 4 · modelo
+  // 4 · modelo (el perfil va en el turno, delimitado; la sesión guarda solo el mensaje)
   const uso = usoCero();
-  const mensajes = [...s.historial, { role: "user", content: construirTurno(texto, fragmentos) }];
+  const mensajes = [...s.historial, { role: "user", content: construirTurno(texto, fragmentos, perfil) }];
   let candado = null;
   let respuestaFinal;
   try {
@@ -178,7 +198,7 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
       const filtro2 = filtrarDiagnostico(r2.texto);
       if (filtro2.bloqueado) {
         guardarTurno(s, texto, RESPUESTA_DIAGNOSTICO_SEGURA);
-        return resultado(s, RESPUESTA_DIAGNOSTICO_SEGURA, { candado, uso, otros: { motivo_candado: `${motivoDiagnostico} · reintento: ${filtro2.motivo}`, fragmentos: recuperados } });
+        return resultado(s, RESPUESTA_DIAGNOSTICO_SEGURA, { candado, uso, otros: { motivo_candado: `${motivoDiagnostico} · reintento: ${filtro2.motivo}`, fragmentos: recuperados, perfil: infoPerfil } });
       }
       r = r2;
     }
@@ -204,17 +224,17 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
       respuestaFinal = respuestaSinFuente(texto);
       candado = "sin-fuente";
       guardarTurno(s, texto, respuestaFinal);
-      return resultado(s, respuestaFinal, { candado, uso, otros: { motivo_candado: textoModelo ? v.motivo : "respuesta vacía", falla_citas: textoModelo ? v.falla : "respuesta-vacia", fragmentos: recuperados } });
+      return resultado(s, respuestaFinal, { candado, uso, otros: { motivo_candado: textoModelo ? v.motivo : "respuesta vacía", falla_citas: textoModelo ? v.falla : "respuesta-vacia", fragmentos: recuperados, perfil: infoPerfil } });
     }
     respuestaFinal = textoModelo;
     guardarTurno(s, texto, respuestaFinal);
-    const otros = { motivo_candado: motivoDiagnostico, fragmentos: recuperados };
+    const otros = { motivo_candado: motivoDiagnostico, fragmentos: recuperados, perfil: infoPerfil };
     if (citasQuitadas.length) otros.citas_quitadas = citasQuitadas;
     return resultado(s, respuestaFinal, { candado, uso, fuentes_usadas: [...new Set(v.citas)], otros });
   } catch (error) {
     if (!(error instanceof ErrorModelo)) throw error;
     console.error(`[agente] ${error.tipo}: ${error.message}`);
-    return resultado(s, RESPUESTA_ERROR, { candado: "error", uso, otros: { error: error.tipo, fragmentos: recuperados } });
+    return resultado(s, RESPUESTA_ERROR, { candado: "error", uso, otros: { error: error.tipo, fragmentos: recuperados, perfil: infoPerfil } });
   }
 }
 
@@ -281,7 +301,7 @@ function avanzarChequeo(sesionId, s, texto) {
 
   if (/^(salir|cancelar|parar|ya no)\b/.test(n)) {
     s.chequeo = null;
-    return resultado(s, "Listo, dejamos el chequeo aquí. Cuando quieras retomarlo, me dices.");
+    return resultado(s, "Listo, dejamos el chequeo aquí. Cuando quieras retomarlo, nos dices.");
   }
 
   // Ofertas después del PHQ-2 / GAD-2 (sí, no o persona).
@@ -289,7 +309,7 @@ function avanzarChequeo(sesionId, s, texto) {
     if (/\bpersona\b/.test(n)) {
       s.chequeo = null;
       const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide contacto humano tras el chequeo", motivo: `PHQ-2=${suma(c.phq.slice(0, 2))} GAD-2=${suma(c.gad)}` });
-      return resultado(s, "Listo. Dejé registrada tu solicitud para que el equipo la revise; en este piloto la respuesta puede tardar. Si necesitas hablar ya con alguien: *Línea 106*. No estás sola.", { otros: { puntajes: puntajes(c), guardia: aviso(linea) } });
+      return resultado(s, "Listo. Dejamos registrada tu solicitud para que el equipo la revise; la respuesta puede tardar. Si necesitas hablar ya con alguien: *Línea 106*. No estás sola.", { otros: { puntajes: puntajes(c), guardia: aviso(linea) } });
     }
     if (c.ofrecePHQ9 && /^(si|sí|bueno|dale|ok|listo|claro)\b/.test(n)) {
       c.fase = "phq";
@@ -299,14 +319,14 @@ function avanzarChequeo(sesionId, s, texto) {
     }
     if (/^no\b/.test(n) || !c.ofrecePHQ9) {
       s.chequeo = null;
-      return resultado(s, "Está bien. Si en algún momento quieres hablar con alguien del equipo, escribe *persona*. Aquí sigo para lo que necesites.", { otros: { puntajes: puntajes(c) } });
+      return resultado(s, "Está bien. Si en algún momento quieres hablar con alguien del equipo, escribe *persona*. Aquí seguimos para lo que necesites.", { otros: { puntajes: puntajes(c) } });
     }
-    return resultado(s, "No te entendí. Responde *sí* para seguir con más preguntas, *no* para terminar, o *persona* para que alguien del equipo te escriba.");
+    return resultado(s, "No te entendimos. Responde *sí* para seguir con más preguntas, *no* para terminar, o *persona* para que alguien del equipo te escriba.");
   }
 
   const valor = valorRespuestaEscala(texto);
   if (valor === null) {
-    return resultado(s, `No te entendí. ${preguntaActual(c)}\n(O escribe «salir» para dejarlo aquí.)`);
+    return resultado(s, `No te entendimos. ${preguntaActual(c)}\n(O escribe «salir» para dejarlo aquí.)`);
   }
 
   if (c.fase === "phq") {
@@ -361,7 +381,7 @@ function cerrarCribado(s, c) {
     );
   }
   s.chequeo = null;
-  return resultado(s, "Gracias por darte este momento. Por ahora tus respuestas no muestran una carga alta. Cuidarte también es cuidar a la niña. Puedes repetir el chequeo cuando quieras.", { otros: { puntajes: p } });
+  return resultado(s, "Gracias por darte este momento. Por ahora tus respuestas no muestran una carga alta. Cuidarte también es cuidar a la niña o adolescente que acompañas. Puedes repetir el chequeo cuando quieras.", { otros: { puntajes: p } });
 }
 
 function cerrarPHQ9(sesionId, s, c) {
@@ -372,12 +392,12 @@ function cerrarPHQ9(sesionId, s, c) {
     const linea = avisarGuardia({ sesion: sesionId, tipo: "bienestar-alto", texto: "chequeo PHQ-9 con carga alta", motivo: `PHQ-9=${p.phq9}` });
     return resultado(
       s,
-      "Gracias por responder todo. Tus respuestas muestran que necesitas apoyo, y pedirlo está bien. Esto no es un diagnóstico.\nTe recomiendo pedir una cita con psicología en tu EPS. Si quieres dejar una solicitud para el equipo, escribe *persona*; y si necesitas hablar ya con alguien, la *Línea 106* atiende a cualquier hora.",
+      "Gracias por responder todo. Tus respuestas muestran que necesitas apoyo, y pedirlo está bien. Esto no es un diagnóstico.\nTe recomendamos pedir una cita con psicología en tu EPS. Si quieres dejar una solicitud para el equipo, escribe *persona*; y si necesitas hablar ya con alguien, la *Línea 106* atiende a cualquier hora.",
       { otros: { puntajes: p, guardia: aviso(linea) } },
     );
   }
   s.chequeo = null;
-  return resultado(s, "Gracias por responder todo. Sigue dándote estos momentos para ti. Si algo cambia o te sientes peor, escríbeme o escribe *persona*.", { otros: { puntajes: p } });
+  return resultado(s, "Gracias por responder todo. Sigue dándote estos momentos para ti. Si algo cambia o te sientes peor, escríbenos o escribe *persona*.", { otros: { puntajes: p } });
 }
 
 // ---------------------------------------------------------------- resumen para la consulta (CA3)
@@ -394,7 +414,7 @@ export async function resumenConsulta(sesionId) {
 async function resumenEn(s) {
   const entradas = [...s.diario].sort((a, b) => a.fecha.localeCompare(b.fecha));
   if (!entradas.length) {
-    return resultado(s, "Todavía no tienes notas en tu diario. Escribe «diario:» y lo que observaste hoy (por ejemplo: «diario: hoy no quiso entrar al parque por el ruido»).", { otros: { origen: "sin-notas" } });
+    return resultado(s, "Todavía no tienes notas en tu bitácora. Escribe «diario:» y lo que observaste hoy (por ejemplo: «diario: hoy no quiso entrar al parque por el ruido»).", { otros: { origen: "sin-notas" } });
   }
   const notas = entradas.map((e) => `- ${e.fecha}: ${e.texto}`).join("\n");
   const mensajes = [{ role: "user", content: `<notas_del_diario>\n${notas}\n</notas_del_diario>\n\nArma el resumen para la consulta.` }];
@@ -488,10 +508,43 @@ export function validarEstado(estado) {
   return { id, historial: historialLimpio, enCrisis: estado.enCrisis === true, diario: diarioLimpio, chequeo: validarChequeo(estado.chequeo) };
 }
 
+// ---------------------------------------------------------------- perfil sensorial (2026-11-10)
+// Tope por parte (caracteres). Un perfil completo de «Así soy yo» con notas cabe en ~600.
+export const LIMITE_PERFIL_PARTE = 700;
+
+// Limpia una parte del perfil: sin caracteres de control, sin < > [ ] { } ` (no puede
+// cerrar el bloque <perfil_sensorial> ni imitar una cita), espacios simples y tope de largo.
+function limpiarParte(x) {
+  if (typeof x !== "string") return "";
+  const limpio = x
+    .replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g, " ")
+    .replace(/[<>\[\]{}`]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return Array.from(limpio).slice(0, LIMITE_PERFIL_PARTE).join("").trim();
+}
+
+// perfil (lo que mandó el navegador) -> { nina, cuidadora } limpio, o null si no sirve.
+// Nunca lanza error: un perfil dañado se trata como ausente (así nunca frena una crisis).
+export function validarPerfil(perfil) {
+  if (!esObjeto(perfil)) return null;
+  const limpio = { nina: limpiarParte(perfil.nina), cuidadora: limpiarParte(perfil.cuidadora) };
+  return limpio.nina || limpio.cuidadora ? limpio : null;
+}
+
+// ¿El mensaje es solo un saludo? (para responder cálido aunque no haya perfil)
+function esSaludo(texto) {
+  const n = normalizar(texto).replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
+  return /^(hola|holi|ola|hey|buenas|buenos dias|buenas tardes|buenas noches|buen dia|saludos|que tal)( (contigo|como estas|como estan|como vas|que tal|buenas|buenos dias|buenas tardes|buenas noches))*$/.test(n);
+}
+
 // Las tres entradas de la web: reciben la sesión y devuelven {estado, respuesta}.
+// En la web el perfil es obligatorio para la orientación (exigirPerfil). El perfil no
+// entra en la sesión: viaja aparte en cada petición y no vuelve al navegador.
 export async function responderConEstado(estado, mensaje, opciones = {}) {
   const s = validarEstado(estado);
-  const respuesta = await responderEn(s, s.id, mensaje, opciones);
+  const perfil = validarPerfil(opciones.perfil);
+  const respuesta = await responderEn(s, s.id, mensaje, { ...opciones, perfil, exigirPerfil: opciones.exigirPerfil !== false });
   return { estado: s, respuesta };
 }
 
