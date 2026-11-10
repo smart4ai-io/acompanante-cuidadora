@@ -88,7 +88,10 @@ function pruebasComunes(nombre, h) {
       if (h.startsWith('http-equiv="Content-Security-Policy"', i)) continue;
       assert.match(h.slice(i, i + 40), /^https:\/\/fonts\.(googleapis|gstatic)\.com/, `dirección no permitida: ${h.slice(i, i + 60)}`);
     }
-    assert.doesNotMatch(h, /["'=]\s*(tel|mailto|sms|whatsapp):/i, "sin enlaces que llamen, escriban o abran apps");
+    // 2026-11-10 (auditoría H-08): la única excepción son los enlaces tel: 123, 106 y 141 de la tarjeta
+    // «Necesito ayuda» del caparazón (vista adulta). Fuera del caparazón, nada que llame, escriba o abra apps.
+    assert.doesNotMatch(sinCaparazon(h), /["'=]\s*(tel|mailto|sms|whatsapp):/i, "sin enlaces que llamen, escriban o abran apps");
+    assert.deepEqual([...h.matchAll(/["'=]\s*(tel|mailto|sms|whatsapp):([^"']*)/gi)].map((m) => m[1] + ":" + m[2]), ["tel:123", "tel:106", "tel:141"]);
     assert.doesNotMatch(h, /wa\.me|api\.whatsapp/i);
   });
 

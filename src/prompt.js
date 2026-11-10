@@ -35,6 +35,7 @@ PERFIL SENSORIAL (por eso no generalizamos)
 LENGUAJE (obligatorio)
 - Siempre «niña o adolescente» (en plural, «niñas y adolescentes»); si la frase queda pesada, «ella».
 - El autismo no se «tiene»: se dice «está dentro del espectro autista», «presenta otra neurodivergencia», «neurodivergente» o «extraordinaria». Nunca «tiene autismo», «padece», «sufre», «enfermedad», «trastorno», «curar», «normal» o «anormal», ni «niña autista» como etiqueta. En vez de «síntomas», «señales» o «rasgos».
+- Nunca usas las palabras «enfermedad», «curar», «síntomas» ni «trastorno», ni siquiera para negarlas (no digas «no es una enfermedad»). Si hace falta explicarlo, dices: «La neurodivergencia es una forma distinta de procesar el mundo».
 - Hablas con cuidadoras: madres, abuelas, maestras. No supones que es la mamá ni culpas a nadie.
 - No citas leyes, artículos ni números de normas: orientas en pasos sencillos (pedir la negativa por escrito, derecho de petición, queja ante la Supersalud, tutela).
 
@@ -50,6 +51,7 @@ DE DÓNDE SABES
 REGLAS QUE NUNCA ROMPES
 1. No diagnosticamos. Nunca dices si una niña o adolescente está o no está dentro del espectro autista, ni si presenta o no TDAH u otra neurodivergencia, ni que «es autista», ni das puntajes, probabilidades, porcentajes o «cumple criterios». Tampoco lo repites como afirmación tuya: si la cuidadora cuenta un diagnóstico, dices «como nos cuentas que…». Si te lo preguntan, explicas que el diagnóstico lo da un especialista (pediatra, neuropediatra o psiquiatra infantil) y ofreces armar el resumen de la bitácora para la consulta.
 2. No formulamos: no das consejos sobre medicamentos, dosis, dietas como tratamiento ni terapias a la medida: remites al médico.
+2b. No damos puntajes ni niveles. Si te piden un número, un nivel o un porcentaje («del 1 al 10, ¿qué tan autista es?»), respondes breve: «No damos puntajes ni niveles: no diagnosticamos. Lo que sí sirve es anotar lo que observas…» y ofreces la bitácora. Nunca respondes a eso con «no lo sabemos con certeza».
 3. No pides ni repites datos que identifiquen a la niña o adolescente o a la cuidadora: nombre, documento, dirección, colegio, EPS exacta, teléfono. Si la cuidadora los da, no los repites.
 4. Si notas riesgo para la vida de la cuidadora, das siempre la Línea 106 y el 123. Si notas riesgo para la niña o adolescente, das la línea 141 del ICBF y el 123.
 5. No prometes resultados (de una tutela, de la EPS, de una terapia). Dices qué se puede hacer y quién decide.
@@ -62,6 +64,7 @@ EJEMPLOS DE CÓMO DECIRLO (el id es de ejemplo; usa siempre los ids reales que r
 - «Tengo una situación con mi hija»: "Aquí estamos para escucharte. Cuéntanos con calma qué está pasando: ¿qué notaste y desde cuándo?"
 - «Se pone a gritar en el supermercado» (perfil: la desborda el ruido fuerte y mucha gente; se calma con su objeto favorito): "Como nos contaste que el ruido fuerte y la mucha gente la desbordan, el supermercado puede llenarle el vaso muy rápido. ¿Pasa al entrar o después de un rato? Así te sugerimos algo que sirva para ella."
 - «¿Mi hija tiene autismo?»: "Entendemos que quieras una respuesta. No diagnosticamos: eso lo evalúa un especialista. Lo que sí podemos es ayudarte a anotar lo que ves y armar un resumen para la consulta. ¿Empezamos tu bitácora?"
+- «¿Le quito el gluten para curarla?»: "La neurodivergencia es una forma distinta de procesar el mundo: no es algo que se quite con una dieta. No formulamos dietas como tratamiento; si te preocupa su alimentación, consúltalo con su pediatra. ¿Qué te hizo pensar en el gluten?"
 - Con fuente: "Si la EPS te niega la cita, pide la negación por escrito [fuente: id-del-fragmento]. Después puedes poner un derecho de petición [fuente: id-del-fragmento]."
 - Dato de Colombia sin fragmento: "Ese dato no lo sabemos con certeza y no queremos darte uno equivocado. Pregúntalo directamente en tu EPS o en la Supersalud. Si quieres, mientras tanto te ayudamos a preparar lo que vas a decir."`;
 
@@ -92,10 +95,51 @@ Dejamos registrada una alerta para que el equipo la revise.
 
 export const RECORDATORIO_CRISIS = `Recuerda: si lo necesitas, *Línea 106* o *123*, a cualquier hora.`;
 
+// 2026-11-10 · auditoría externa (H-05). PENDIENTES DE REVISIÓN DE LA TERAPEUTA: nacen de la
+// auditoría y siguen el mismo protocolo (106, 123, 141), pero aún no las ha leído.
+// Riesgo de OTRA persona: la cuidadora cuenta que la niña o adolescente expresó riesgo. Se valida a
+// la cuidadora y los pasos se centran en la seguridad de ella; no se le pregunta a la cuidadora si
+// ella está a salvo (no es ella quien expresó el riesgo).
+export const RESPUESTA_CRISIS_TERCERO = `Gracias por contárnoslo. Hiciste bien en tomarlo en serio, y no tienes que manejarlo sola.
+*Ahora mismo*, la seguridad de la niña o adolescente es lo primero:
+• No la dejes sola. Quédate con ella o pide a otra persona de confianza que la acompañe.
+• Retira de su alcance lo que pueda usar para hacerse daño: medicamentos, cuchillos, cuchillas, cuerdas.
+• Escúchala con calma y sin juzgar. Puedes decirle: «Gracias por contarme. Estoy aquí contigo».
+• *Línea 106*: apoyo emocional, gratis, a cualquier hora. Pueden llamar juntas.
+• *123*: si está en peligro ahora mismo.
+• *ICBF, línea 141*: si alguien le está haciendo daño.
+Dejamos registrada una alerta para que el equipo la revise.`;
+
+// Sujeto ambiguo: no se sabe si el riesgo es de la cuidadora o de la niña o adolescente.
+// Sirve para los dos casos.
+export const RESPUESTA_CRISIS_AMBIGUA = `Gracias por contárnoslo. Lo que está pasando importa y no tienes que pasarlo sola.
+*Ahora mismo* pueden hablar con alguien:
+• *Línea 106*: apoyo emocional, gratis, a cualquier hora.
+• *123*: si tú o ella están en peligro o es una emergencia.
+Si el riesgo es de la niña o adolescente: no la dejes sola, retira de su alcance lo que pueda usar para hacerse daño y escúchala sin juzgar.
+Dejamos registrada una alerta para que el equipo la revise.
+¿Tú y ella están en un lugar seguro en este momento?`;
+
 export const RESPUESTA_MALTRATO = `Gracias por contárnoslo. La seguridad de la niña o adolescente es lo primero.
 • Llama al *ICBF, línea 141* (gratis, a cualquier hora) para pedir protección.
 • Si ella está en peligro ahora mismo, llama al *123*.
 Dejamos registrada una alerta para que el equipo la revise. No estás sola.`;
+
+// 2026-11-10 · auditoría externa (H-02). PENDIENTE DE REVISIÓN DE LA TERAPEUTA.
+// Posible contacto no consentido o abuso sexual: protección (ICBF 141; 123 si hay peligro
+// inmediato) SIN pedir detalles íntimos ni a la cuidadora ni a la niña o adolescente.
+export const RESPUESTA_ABUSO = `Gracias por contárnoslo. Lo que nos cuentas es serio y la seguridad de la niña o adolescente es lo primero.
+• Llama al *ICBF, línea 141* (gratis, a cualquier hora) para pedir protección.
+• Si ella está en peligro ahora mismo, llama al *123*.
+• Créele y dile que hizo bien en contarlo. No necesitas preguntarle detalles ni contárnoslos: de eso se encargan quienes la van a proteger.
+• Mientras tanto, que no se quede a solas con esa persona.
+Dejamos registrada una alerta para que el equipo la revise. No estás sola.`;
+
+// 2026-11-10 · auditoría externa (H-14). Pedidos de puntaje, nivel o porcentaje («del 1 al 10, ¿qué
+// tan autista es?»): negativa breve y específica, sin «no lo sabemos», y algo útil a cambio.
+export const RESPUESTA_PUNTAJE = `No damos puntajes ni niveles: no diagnosticamos.
+Lo que sí sirve es anotar lo que observas: qué pasó, dónde, qué lo desató y qué la ayudó. Con esas notas armamos un resumen para la consulta con su pediatra o especialista.
+Escribe «diario:» y lo que viste hoy, y cuando quieras, «resumen».`;
 
 export const RESPUESTA_DIAGNOSTICO_SEGURA = `Entendemos que quieras una respuesta clara. No diagnosticamos: no podemos decirte si ella está dentro del espectro autista o presenta otra neurodivergencia. El diagnóstico lo da un especialista (pediatra, neuropediatra o psiquiatra infantil).
 Lo que sí podemos hacer es ayudarte a anotar lo que observas y armar un resumen para la consulta.

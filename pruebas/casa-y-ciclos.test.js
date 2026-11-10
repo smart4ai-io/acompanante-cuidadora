@@ -70,6 +70,8 @@ describe("Casa Contigo · la página", () => {
     const archivos = new Set();
     for (const h of hrefs) {
       if (/^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(h)) continue; // la fuente, igual que en las piezas
+      // 2026-11-10 (auditoría H-08): en la vista adulta, las líneas 123, 106 y 141 son enlaces tel: (y solo esas).
+      if (/^tel:(106|123|141)$/.test(h)) continue;
       assert.doesNotMatch(h, /^(https?:|\/\/|mailto:|tel:|javascript:)/i, `enlace externo o raro: ${h}`);
       if (h.startsWith("#")) {
         const id = h.slice(1);
@@ -156,8 +158,10 @@ describe("Casa Contigo · la página", () => {
   test("lugar seguro: plan de tormenta y las líneas 123, 106 y 141 con el MISMO texto de la barra del caparazón", () => {
     const s = tramo(casa, 'id="sala-seguro"', "</section>");
     assert.ok(s.includes('href="recursos/plan-de-tormenta.html"'));
-    const deCap = lineas(tramo(asy, ...ABAJO), /<li><strong>\d{3}<\/strong>/).map((l) => l.trim());
-    const deCasa = lineas(tramo(s, '<ul class="lineas">', "</ul>"), /<li><strong>\d{3}<\/strong>/).map((l) => l.trim());
+    // 2026-11-10 (auditoría H-08): cada línea ahora es un enlace tel: con el número escrito visible.
+    const LINEA = /<li><a class="c-tel" href="tel:(\d{3})"[^>]*><strong>\1<\/strong>/;
+    const deCap = lineas(tramo(asy, ...ABAJO), LINEA).map((l) => l.trim());
+    const deCasa = lineas(tramo(s, '<ul class="lineas">', "</ul>"), LINEA).map((l) => l.trim());
     assert.equal(deCap.length, 3);
     assert.deepEqual(deCasa, deCap);
     assert.match(s, /Reglas fijas, no la inteligencia artificial/);
@@ -273,6 +277,29 @@ describe("Sus ciclos, su ritmo · la pieza", () => {
     assert.match(r, /no un diagnóstico/);
     assert.match(r, /Inicios de ciclo: 1 de septiembre, 29 de septiembre, 27 de octubre/);
     assert.doesNotMatch(sinT(r + fr.join(" ")), /tdpm|trastorno|autis|sintoma|%/);
+  });
+
+  // 2026-11-10 (auditoría H-10): el resumen de dolor decía «el resto del ciclo (1,2 de 10)» y la tarjeta
+  // «El resto del ciclo» decía 0 de 10, porque el 1,2 junta la semana antes y el resto. Cada etiqueta debe
+  // nombrar el mismo grupo de días que se calcula.
+  test("H-10 · la etiqueta del resumen de dolor corresponde al grupo calculado (fuera de los días con sangrado)", () => {
+    const { S } = cargarCiclos();
+    const d = S.ejemplo("2026-11-10");
+    const p = S.patron(d);
+    const F = p.fases;
+    const frase = plano(S.frases(p)).map((f) => f.texto).find((t) => /dolor anotado es más alto durante la regla/.test(t));
+    assert.ok(frase, "el ejemplo debe traer la frase del dolor");
+    assert.match(frase, /que fuera de los días con sangrado \(/);
+    assert.doesNotMatch(frase, /resto del ciclo/);
+    // La cifra de la frase = promedio de TODOS los días sin sangrado (semana antes + resto).
+    const uno = (n) => (Math.round(n * 10) / 10).toString().replace(".", ",");
+    const fuera = (F.antes.dolorSuma + F.resto.dolorSuma) / (F.antes.dolorN + F.resto.dolorN);
+    const enRegla = F.regla.dolorSuma / F.regla.dolorN;
+    assert.ok(frase.includes(`(en promedio ${uno(enRegla)} de 10)`), frase);
+    assert.ok(frase.includes(`sangrado (${uno(fuera)} de 10)`), frase);
+    // Las tres tarjetas siguen siendo tres fases distintas, con sus propias etiquetas.
+    assert.match(ciclos, /tarjeta\('t-rosa', 'Durante la regla', F\.regla\) \+ tarjeta\('t-arena', 'La semana antes', F\.antes\) \+ tarjeta\('t-menta', 'El resto del ciclo', F\.resto\)/);
+    assert.match(S.resumen(d, "2026-11-10"), /Resto del ciclo: \d+ crisis en \d+ días/);
   });
 
   test("con pocos datos no inventa un patrón; los ciclos se cuentan bien", () => {

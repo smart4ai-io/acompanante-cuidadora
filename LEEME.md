@@ -50,12 +50,12 @@ La misma Acompañante, en una página web con la pantalla tipo WhatsApp y el pan
 |---|---|---|
 | (ninguna) | — | En Vercel el Gateway se autentica solo con el token OIDC del proyecto (cabecera `x-vercel-oidc-token`). |
 | `AI_GATEWAY_API_KEY` | Opcional | Si se prefiere una clave del Gateway con presupuesto propio (como el proyecto `copiloto`). Si existe, gana sobre el OIDC. |
-| `GUARDIA_WEBHOOK` | Opcional | URL https que recibe un POST con `{hora, tipo, extracto}` (80 caracteres) en cada aviso a la guardia. |
+| `GUARDIA_WEBHOOK` | Opcional | URL https que recibe un POST con `{hora, tipo, motivo}` en cada aviso a la guardia (desde 2026-11-10 sin texto del mensaje). |
 | `MODELO` | Opcional | Cambia el modelo. En el Gateway, con el formato `proveedor/modelo` de https://ai-gateway.vercel.sh/v1/models (por ejemplo `anthropic/claude-haiku-5.5`). |
 | `LIMITE_POR_HORA` · `LIMITE_IP_POR_HORA` | Opcional | Cambian los límites (40 y 120). |
 | `PROVEEDOR` | Opcional | `gateway` o `anthropic` para forzar el proveedor. |
 
-**Cómo se ve la guardia en los logs:** en Vercel → proyecto → *Logs*, busca `[GUARDIA]`. Cada aviso es una línea como `[GUARDIA] {"hora":"…","sesion":"…","tipo":"crisis","motivo":"quiero morir","extracto":"(primeros 80 caracteres)"}`. Los tipos: `crisis`, `maltrato`, `pide-persona`, `bienestar-alto`, `rechazo-del-modelo`. Cada llamada al modelo deja además una línea `[uso]` con tokens y costo estimado (sin texto de la conversación); el costo real está en el panel de AI Gateway.
+**Cómo se ve la guardia en los logs:** en Vercel → proyecto → *Logs*, busca `[GUARDIA]`. Cada aviso es una línea como `[GUARDIA] {"hora":"…","tipo":"crisis","motivo":"quiero morir"}` (desde 2026-11-10, auditoría H-06: sin extracto del mensaje ni identificador de sesión; el motivo es la etiqueta fija de la regla). Los tipos: `crisis`, `maltrato`, `pide-persona`, `bienestar-alto`, `rechazo-del-modelo`. Cada llamada al modelo deja además una línea `[uso]` con tokens y costo estimado (sin texto de la conversación); el costo real está en el panel de AI Gateway.
 
 **Cambiar el modelo:** variable `MODELO` en el proyecto de Vercel (por ejemplo `anthropic/claude-haiku-5.5`, más barato) y volver a desplegar. El código del modelo vive solo en `src\modelo.js`.
 
@@ -70,7 +70,7 @@ La misma Acompañante, en una página web con la pantalla tipo WhatsApp y el pan
 - `src\agente.js` el corazón · `src\candados.js` reglas fijas · `src\biblioteca.js` el bibliotecario
 - `src\prompt.js` instrucciones y respuestas fijas · `src\modelo.js` el único archivo que habla con Claude
 - `src\chat.js` chat de prueba · `src\banco.js` banco de precisión · `src\guardia.js` aviso a la guardia
-- `pruebas\ca.test.js` las pruebas · `alertas.log` registro de alertas (solo hora y 80 caracteres)
+- `pruebas\ca.test.js` las pruebas · `alertas.log` registro de alertas (solo hora, tipo y motivo)
 - Piloto web: `api\chat.js` (función de Vercel) · `src\web.js` (su lógica) · `src\limite.js` (límite por hora) · `public\index.html` (la página) · `src\servidor_local.js` (`npm run web`) · `src\generar_biblioteca.js` (`npm run biblioteca` → `biblioteca.json`) · `vercel.json` · `.vercelignore` · `pruebas\api.test.js`
 - La clave va en `.env.local` como `SMART_ROUTER_ANTHROPIC_KEY` (nunca en el chat). El modelo se cambia con `MODELO=`.
 

@@ -90,7 +90,7 @@
     /* Medidas: esquinas más redondas, como las formas del manual */
     --radio: 24px;
     --radio-grande: 34px;
-    --alto-franja: 44px;
+    --alto-franja: 52px; /* 2026-11-10 (auditoría H-11): enlaces de 44 px de alto + aire; todo lo de arriba usa esta variable */
     --alto-nav: 64px;
     --ancho: 1280px;
   }
@@ -137,7 +137,7 @@
   .franja-ayuda { position: fixed; top: 0; left: 0; right: 0; z-index: 80; height: var(--alto-franja); display: flex; align-items: center; justify-content: center; gap: 10px; padding: 0 12px; background: rgba(255, 255, 255, 0.95); border-bottom: 1px solid var(--borde); font-size: 15px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .franja-ayuda .pregunta { color: var(--magenta-hondo); font-weight: 600; white-space: nowrap; }
   .franja-ayuda .numeros { display: flex; gap: 6px; }
-  .franja-ayuda a { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 2px 11px; border-radius: 999px; background: var(--rosa-claro); border: 1px solid var(--rosa); color: var(--tinta); font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; }
+  .franja-ayuda a { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; min-width: 44px; padding: 2px 12px; border-radius: 999px; background: var(--rosa-claro); border: 1px solid var(--rosa); color: var(--tinta); font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; }
   .franja-ayuda a:hover { border-color: var(--magenta-hondo); }
   .franja-ayuda .detalle { display: none; font-weight: 400; color: var(--tinta-suave); font-size: 13px; }
   @media (min-width: 760px) { .franja-ayuda .detalle { display: inline; } }
@@ -883,7 +883,7 @@
           <span><svg class="icono"><use href="#i-documento"/></svg>Resumen para la consulta</span>
           <span><svg class="icono"><use href="#i-libro"/></svg>Fuentes</span>
         </div>
-        <p class="privacidad-corta"><svg class="icono"><use href="#i-candado"/></svg><span>Tu conversación y tu perfil se guardan solo en tu celular. No escribas el nombre ni los datos de la niña o adolescente: para acompañarte no los necesitamos.</span></p>
+        <p class="privacidad-corta"><svg class="icono"><use href="#i-candado"/></svg><span>Tu conversación y tu perfil se guardan solo en este celular. Para responderte, se envían en cada mensaje y no los guardamos. Si escribes algo de riesgo, queda una alerta sin tu nombre. No escribas el nombre ni los datos de la niña o adolescente: para acompañarte no los necesitamos.</span></p>
         <button type="button" class="boton abrir-chat-movil" data-abrir-chat><span class="texto-cta">Conversar ahora</span><svg class="icono"><use href="#i-flecha"/></svg></button>
       </div>
 
@@ -911,9 +911,9 @@
                 <p class="tp-texto">Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).</p>
                 <ol class="pasos-perfil">
                   <li class="paso-perfil" id="pasoCuidadora"><span class="pp-num">1</span><span class="pp-texto"><b>Tu perfil</b><span class="pp-estado" id="estadoCuidadora">2 minutos</span></span><button type="button" class="boton-perfil" data-perfil-cuidadora>Empezar</button></li>
-                  <li class="paso-perfil" id="pasoNina"><span class="pp-num">2</span><span class="pp-texto"><b>El de ella · «Así soy yo»</b><span class="pp-estado" id="estadoNina">90 segundos</span></span><a class="boton-perfil" href="/recursos/asi-soy-yo.html" id="enlaceNina">Hacer</a></li>
+                  <li class="paso-perfil" id="pasoNina"><span class="pp-num">2</span><span class="pp-texto"><b>El de ella · «Así soy yo»</b><span class="pp-estado" id="estadoNina">90 segundos</span></span><a class="boton-perfil" href="/recursos/asi-soy-yo.html?desde=chat" id="enlaceNina">Hacer</a></li>
                 </ol>
-                <p class="tp-nota"><svg class="icono" aria-hidden="true"><use href="#i-candado"/></svg><span>Queda solo en tu celular. Contigo lo usa para responderte sin que lo guardemos en un servidor.</span></p>
+                <p class="tp-nota" id="avisoPrivacidad"><svg class="icono" aria-hidden="true"><use href="#i-candado"/></svg><span>Tu conversación y tu perfil se guardan solo en este celular. Para responderte, se envían en cada mensaje y no los guardamos. Si escribes algo de riesgo, queda una alerta sin tu nombre.</span></p>
                 <div class="tp-acciones" id="accionesPerfil" hidden>
                   <button type="button" class="enlace-boton morado" data-ver-perfil>Ver o borrar mi perfil</button>
                 </div>
@@ -1231,7 +1231,7 @@
           </article>
           <article class="etica revelar d1">
             <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-candado"/></svg></span><h3>Tu perfil y tu conversación, solo en tu celular</h3></div>
-            <p>El perfil sensorial (el tuyo y el de ella) queda en tu celular. Contigo lo usa para responderte sin que lo guardemos en un servidor: viaja con cada mensaje y no queda registrado. Lo puedes ver y borrar cuando quieras. Si hay una alerta de crisis, queda registrada la hora y un fragmento corto del mensaje para que el equipo pueda revisar.</p>
+            <p>Tu conversación y tu perfil sensorial (el tuyo y el de ella) se guardan solo en este celular. Para responderte, se envían en cada mensaje y no los guardamos. Si escribes algo de riesgo, queda una alerta sin tu nombre: solo la hora, el tipo de alerta y el motivo, sin nada de lo que escribiste, para que el equipo pueda revisar. Lo puedes ver y borrar cuando quieras: «Borrar conversación» en el chat, o «Borrar todo lo de Contigo en este celular» en herramientas como «Así estoy», que quita también la conversación y los perfiles.</p>
           </article>
           <article class="etica revelar">
             <div class="cabeza"><span class="escudo"><svg class="icono"><use href="#i-persona"/></svg></span><h3>No pedimos datos que la identifiquen</h3></div>
@@ -1465,10 +1465,33 @@
     const cuidadora = resumenCuidadora();
     return nina || cuidadora ? { nina, cuidadora } : null;
   }
+  // 2026-11-10 (auditoría H-07): cuántas partes tiene cada perfil, para no decir «listo» como si
+  // estuviera completo cuando solo tiene una respuesta. «completo» sigue siendo «hay algo de las dos
+  // partes» (lo que pide el servidor); «lleno» = las 6 tarjetas de ella y los 5 pasos de la cuidadora.
+  function contarNina() {
+    const p = leerJson(CLAVE_PERFIL_NINA);
+    if (!p || !p.tarjetas || typeof p.tarjetas !== "object") return 0;
+    let n = 0;
+    for (const [id, , etiquetas] of TARJETAS_NINA) {
+      const t = p.tarjetas[id];
+      if (t && typeof t === "object" && ((Array.isArray(t.opciones) && t.opciones.some((o) => etiquetas[o])) || limpio(t.nota, 60))) n++;
+    }
+    return n;
+  }
+  function contarCuidadora() {
+    const p = leerCuidadora();
+    return PASOS_CUIDADORA.filter((paso) => p[paso.id].length).length;
+  }
   function estadoPerfil() {
     const nina = Boolean(resumenNina());
     const cuidadora = Boolean(resumenCuidadora());
-    return { nina, cuidadora, completo: nina && cuidadora };
+    const nN = contarNina();
+    const nC = contarCuidadora();
+    const completo = nina && cuidadora;
+    return { nina, cuidadora, completo, nN, nC, lleno: completo && nN >= TARJETAS_NINA.length && nC >= PASOS_CUIDADORA.length };
+  }
+  function textoListo(e) {
+    return e.lleno ? "Tu perfil está listo." : "Tu perfil está listo (puedes completarlo cuando quieras).";
   }
   function borrarClave(clave) {
     try {
@@ -1487,16 +1510,18 @@
     pasoN.classList.toggle("listo", e.nina);
     pasoC.querySelector(".pp-num").textContent = e.cuidadora ? "✓" : "1";
     pasoN.querySelector(".pp-num").textContent = e.nina ? "✓" : "2";
-    $("estadoCuidadora").textContent = e.cuidadora ? "Listo · en tu celular" : "2 minutos";
-    $("estadoNina").textContent = e.nina ? "Listo · en tu celular" : "90 segundos";
+    $("estadoCuidadora").textContent = e.cuidadora ? `Listo · ${e.nC} de ${PASOS_CUIDADORA.length} respuestas` : "2 minutos";
+    $("estadoNina").textContent = e.nina ? `Listo · ${e.nN} de ${TARJETAS_NINA.length} tarjetas` : "90 segundos";
     pasoC.querySelector("[data-perfil-cuidadora]").textContent = e.cuidadora ? "Editar" : "Empezar";
     $("enlaceNina").textContent = e.nina ? "Editar" : "Hacer";
     $("tarjetaPerfil").classList.toggle("completo", e.completo);
     $("accionesPerfil").hidden = !(e.nina || e.cuidadora);
-    $("titulitoEjemplos").textContent = e.completo ? "Tu perfil está listo. Escribe o prueba un ejemplo:" : "Con tu perfil listo, prueba un ejemplo:";
+    $("titulitoEjemplos").textContent = e.completo ? `${textoListo(e)} Escribe o prueba un ejemplo:` : "Con tu perfil listo, prueba un ejemplo:";
     if (e.completo) {
-      $("tarjetaPerfil").querySelector(".tp-titulo").textContent = "Tu perfil está listo.";
-      $("tarjetaPerfil").querySelector(".tp-texto").textContent = "Ya conocemos su perfil sensorial y el tuyo. Escríbenos con tus palabras y te acompañamos a partir de lo que nos contaste.";
+      $("tarjetaPerfil").querySelector(".tp-titulo").textContent = textoListo(e);
+      $("tarjetaPerfil").querySelector(".tp-texto").textContent = e.lleno
+        ? "Ya conocemos su perfil sensorial y el tuyo. Escríbenos con tus palabras y te acompañamos a partir de lo que nos contaste."
+        : `Tenemos ${e.nN} de ${TARJETAS_NINA.length} tarjetas de ella y ${e.nC} de ${PASOS_CUIDADORA.length} respuestas tuyas. Ya puedes escribirnos: te acompañamos con lo que nos contaste, y entre más completes, mejor te orientamos.`;
     } else {
       $("tarjetaPerfil").querySelector(".tp-titulo").textContent = "Cada ser extraordinario es único.";
       $("tarjetaPerfil").querySelector(".tp-texto").textContent = "Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos).";
@@ -1574,19 +1599,19 @@
   function pintarResumen() {
     const nina = resumenNina();
     const cuidadora = resumenCuidadora();
-    const e = { nina: Boolean(nina), cuidadora: Boolean(cuidadora) };
-    const completo = e.nina && e.cuidadora;
+    const e = estadoPerfil();
+    const completo = e.completo;
     const parte = (titulo, texto, acciones) =>
       `<section><h4>${titulo}</h4>${texto ? `<p>${escaparHtml(texto)}</p>` : '<p class="vacio">Todavía no está.</p>'}<div class="acciones-parte">${acciones}</div></section>`;
     const accionesC = `<button type="button" class="boton-perfil" data-perfil-cuidadora>${e.cuidadora ? "Editar" : "Hacer mi perfil · 2 min"}</button>` + (e.cuidadora ? '<button type="button" class="enlace-boton peligro" data-borrar="cuidadora">Borrar mi perfil</button>' : "");
-    const accionesN = `<a class="boton-perfil" href="/recursos/asi-soy-yo.html">${e.nina ? "Editar en «Así soy yo»" : "Hacer el de ella · 90 s"}</a>` + (e.nina ? '<button type="button" class="enlace-boton peligro" data-borrar="nina">Borrar el de ella</button>' : "");
+    const accionesN = `<a class="boton-perfil" href="/recursos/asi-soy-yo.html?desde=chat">${e.nina ? "Editar en «Así soy yo»" : "Hacer el de ella · 90 s"}</a>` + (e.nina ? '<button type="button" class="enlace-boton peligro" data-borrar="nina">Borrar el de ella</button>' : "");
     const panel = $("panelPerfil");
     panel.innerHTML =
       `<p class="pp-paso">Perfil sensorial</p>` +
-      `<h3 tabindex="-1">${completo ? "Tu perfil está listo" : "Cada ser extraordinario es único"}</h3>` +
-      `<p class="pp-ayuda">${completo ? "Esto es lo que viaja con cada mensaje para que te respondamos a partir de ustedes. Queda en tu celular y no lo guardamos en un servidor." : "Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos). Queda solo en tu celular."}</p>` +
+      `<h3 tabindex="-1">${completo ? escaparHtml(textoListo(e)) : "Cada ser extraordinario es único"}</h3>` +
+      `<p class="pp-ayuda">${completo ? `${e.lleno ? "" : `Tienes ${e.nC} de ${PASOS_CUIDADORA.length} respuestas tuyas y ${e.nN} de ${TARJETAS_NINA.length} tarjetas de ella. `}Esto es lo que viaja con cada mensaje para que te respondamos a partir de ustedes. Queda en tu celular y no lo guardamos.` : "Para comenzar, queremos conocer tu perfil sensorial y el de la persona que tienes a tu cuidado (te toma 4 minutos). Queda solo en tu celular."}</p>` +
       `<div class="resumen-perfil">${parte("Tu perfil", cuidadora, accionesC)}${parte("El de ella · «Así soy yo»", nina, accionesN)}</div>` +
-      `<div class="pp-botones">${completo ? '<button type="button" class="boton" data-pp="conversar">Listo, a conversar</button>' : !e.cuidadora ? '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><button type="button" class="boton" data-perfil-cuidadora>Empezar con el mío</button>' : '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><a class="boton" href="/recursos/asi-soy-yo.html">Seguir con el de ella</a>'}</div>`;
+      `<div class="pp-botones">${completo ? '<button type="button" class="boton" data-pp="conversar">Listo, a conversar</button>' : !e.cuidadora ? '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><button type="button" class="boton" data-perfil-cuidadora>Empezar con el mío</button>' : '<button type="button" class="boton claro" data-pp="cerrar">Volver</button><a class="boton" href="/recursos/asi-soy-yo.html?desde=chat">Seguir con el de ella</a>'}</div>`;
     abrirPanel();
     enfocarTitulo();
   }
@@ -1937,9 +1962,11 @@
   }
 
   // ---------------- guardado local (la sesión vive en este navegador) ----------------
+  let huboGuardado = false; // true cuando esta página guardó o leyó la conversación del celular
   function guardar() {
     try {
       localStorage.setItem(CLAVE_GUARDADO, JSON.stringify({ v: 2, estado: estadoServidor, conversacion, porDentro, registro, proveedor }));
+      huboGuardado = true;
     } catch (e) {
       /* el navegador no deja guardar (modo privado, lleno): la conversación sigue mientras la página esté abierta */
     }
@@ -1948,6 +1975,7 @@
     try {
       const d = JSON.parse(localStorage.getItem(CLAVE_GUARDADO) || "null");
       if (!d || d.v !== 2) return;
+      huboGuardado = true;
       estadoServidor = d.estado && typeof d.estado === "object" ? d.estado : null;
       conversacion = Array.isArray(d.conversacion) ? d.conversacion : [];
       porDentro = Array.isArray(d.porDentro) ? d.porDentro : [];
@@ -2177,9 +2205,37 @@
     pintarTarjetaPerfil();
     if (!$("panelPerfil").hidden && !$("panelPerfil").querySelector("[data-op]")) pintarResumen();
   }
-  window.addEventListener("pageshow", refrescarPerfil);
-  window.addEventListener("storage", refrescarPerfil);
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) refrescarPerfil(); });
+  // 2026-11-10 (auditoría H-04): si la conversación se borró desde otra página («Borrar todo lo de Contigo
+  // en este celular» en una herramienta) o desde otra pestaña, esta página no la vuelve a mostrar ni a guardar.
+  function sincronizarConversacion() {
+    if (!huboGuardado || ocupado) return; // nada guardado todavía, o hay una respuesta en camino
+    let guardada = null;
+    try {
+      guardada = localStorage.getItem(CLAVE_GUARDADO);
+    } catch (e) {
+      return; /* sin almacenamiento: no hay nada que sincronizar */
+    }
+    if (guardada === null && (conversacion.length || estadoServidor || registro.length)) {
+      huboGuardado = false;
+      estadoServidor = null;
+      conversacion = [];
+      porDentro = [];
+      registro = [];
+      $("franjaGuardia").hidden = true;
+      $("notaTexto").textContent = NOTA_NORMAL;
+      pintarConversacion();
+      pintarPorDentro();
+      pintarRegistro();
+      pintarCta();
+    }
+  }
+  function alVolver() {
+    sincronizarConversacion();
+    refrescarPerfil();
+  }
+  window.addEventListener("pageshow", alVolver);
+  window.addEventListener("storage", alVolver);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) alVolver(); });
   for (const b of document.querySelectorAll("[data-accion]")) b.addEventListener("click", () => accionRapida(b.dataset.accion));
   $("btnFuentes").addEventListener("click", () => ejecutar("fuentes", { accion: "fuentes" }));
   $("btnReiniciar").addEventListener("click", reiniciar);

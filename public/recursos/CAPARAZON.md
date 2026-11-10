@@ -7,7 +7,8 @@
 - **Color de acción: morado** (`--principal` #6B3FA0, blanco encima 7,38:1; oscuro #C9B2F5; modo suave #5E4A85 / #C3B6DD). Nunca verde para la acción (guía de lenguaje, regla 8; cambio del 2026-11-10).
 - **Modo sensorial bajo**, en pantalla «Modo suave»: colores apagados, sin degradados, sin sombras, sin movimiento. También se apaga todo movimiento con «reducir movimiento» del celular.
 - **Cabecera** con «Modo suave», tema y el sello «Prototipo · datos de ejemplo».
-- **Barra fija** «Pausa · Calma · Necesito ayuda · Salir». Calma = respiración 4-6 s. Necesito ayuda = tarjeta grande para mostrar; en vistas de adulto muestra 123, 106 y 141 («ante un posible maltrato a una niña, niño o adolescente») **escritos** (no llama ni envía). Salir = va al inicio del sitio (fuera del sitio, «puedes cerrar»).
+- **Barra fija** «Pausa · Calma · Necesito ayuda · Salir». Calma = respiración 4-6 s. Necesito ayuda = tarjeta grande para mostrar; en vistas de adulto muestra 123, 106 y 141 («ante un posible maltrato a una niña, niño o adolescente») **escritos y como enlaces `tel:`** (desde 2026-11-10, auditoría H-08: la página no llama sola; la persona toca el número). La parte infantil («Por favor, quédate cerca y háblame despacio») no lleva números. Salir = va al inicio del sitio (fuera del sitio, «puedes cerrar»); si la página se abrió con `?desde=chat`, el botón dice «Volver al chat» y lleva a `/#chat` (`Contigo.desdeChat()`, auditoría H-07).
+- **Cabecera hasta 479 px:** solo «Contigo» (sin « · Recursos»), para que «Modo suave» y el tema quepan sin ensanchar la página (auditoría H-03, 2026-11-10).
 - **Voz** opcional (`Contigo.voz`): solo con un toque; si no hay voz en español, los botones con `data-voz` se esconden.
 - **Baúl** (`Contigo.baul`): localStorage con claves `contigo.*`, todo en try/catch.
 - **Puerta de adulto** (`Contigo.puertaAdulto`): mantener presionado 3 s (también con teclado).
@@ -43,7 +44,10 @@
 | `contigo.calma` | «Mi rincón de calma» (solo vista adulto) | `{ v, piel, opciones[], sirven[] }` · enlace `#k1.` (lista de ideas) |
 | `contigo.cuentos` | «Lo que va a pasar» (solo vista adulto) | `{ v:1, apodo, historias: { <id>: { quitadas, textos, ayudas } } }` · enlace `#h1.` |
 
-«Borrar todo lo de este celular» quita **todas** las claves `contigo.*` (también los ajustes).
+| `acompanante-cuidadora-web-v2` | el chat (index) | la conversación, la sesión del agente, la bitácora y el registro de alertas |
+| `acompanante-cuidadora-demo` · `acompanante-cuidadora-avisos` | el chat (index) | modo demostración · recursos que pidió que le avisemos |
+
+«Borrar todo lo de este celular» quita **todas** las claves del sitio: las que empiezan por `contigo.` (también los ajustes) y por `acompanante-cuidadora` (la conversación del chat). Lista en `Contigo.PREFIJOS_SITIO` (2026-11-10, auditoría H-04). Si una pieza nueva guarda algo, que empiece por `contigo.`.
 Nunca se guarda nombre, documento, EPS ni diagnóstico: esos campos no existen.
 
 ## Formato del # (enlace sin servidor)

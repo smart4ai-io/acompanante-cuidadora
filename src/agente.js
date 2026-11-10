@@ -5,6 +5,8 @@
 //   1. candado de crisis      -> respuesta fija (106 y 123) + aviso a guardia. No llama al modelo.
 //   2. candado de maltrato    -> respuesta fija (ICBF 141) + aviso a guardia. No llama al modelo.
 //   (chequeo de bienestar en curso, «persona», «diario:» y «resumen» se atienden sin modelo)
+//   (2026-11-10, auditoría H-14: un pedido de puntaje o nivel recibe RESPUESTA_PUNTAJE, sin modelo,
+//    antes de la puerta del perfil. H-02 y H-05: abuso sexual y riesgo de otra persona tienen su respuesta fija.)
 //   3. bibliotecario          -> fragmentos de la biblioteca
 //   4. modelo                 -> conversa como experta (v2); cita [fuente: id] cuando usa la biblioteca
 //   5. filtro de diagnóstico  -> si bloquea, un reintento; si vuelve a bloquear, plantilla segura
@@ -23,7 +25,7 @@
 
 import crypto from "node:crypto";
 import { buscar, fuentes } from "./biblioteca.js";
-import { detectarCrisis, detectarMaltrato, filtrarDiagnostico, verificarCitas, extraerCitas, valorRespuestaEscala } from "./candados.js";
+import { detectarCrisis, detectarMaltrato, filtrarDiagnostico, verificarCitas, extraerCitas, valorRespuestaEscala, pidePuntaje } from "./candados.js";
 import { avisarGuardia } from "./guardia.js";
 import { completar, ErrorModelo } from "./modelo.js";
 import {
@@ -31,8 +33,12 @@ import {
   SYSTEM_RESUMEN,
   INSTRUCCION_REINTENTO_DIAGNOSTICO,
   RESPUESTA_CRISIS,
+  RESPUESTA_CRISIS_TERCERO,
+  RESPUESTA_CRISIS_AMBIGUA,
   RECORDATORIO_CRISIS,
   RESPUESTA_MALTRATO,
+  RESPUESTA_ABUSO,
+  RESPUESTA_PUNTAJE,
   RESPUESTA_DIAGNOSTICO_SEGURA,
   RESPUESTA_RECHAZO,
   RESPUESTA_ERROR,
@@ -125,21 +131,26 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
 
   // 1 · crisis (también revisa la respuesta al ítem 9 del PHQ-9)
   const enItem9 = Boolean(s.chequeo && s.chequeo.fase === "phq" && s.chequeo.indice === 8);
+  // 2026-11-10 (H-05): la respuesta depende de quién expresó el riesgo: la cuidadora (primera),
+  // la niña o adolescente contado por la cuidadora (tercera) o no se sabe (ambigua: sirve para las dos).
   const crisis = detectarCrisis(texto, { enItemPHQ9: enItem9 });
   if (crisis.detectado) {
     s.enCrisis = true;
     s.chequeo = null;
-    const linea = avisarGuardia({ sesion: sesionId, tipo: "crisis", texto, motivo: crisis.motivo });
-    const { texto: respuesta, ids } = conFuentesFijas(RESPUESTA_CRISIS, FUENTES_CRISIS);
+    const sujeto = crisis.sujeto || "primera";
+    const fija = sujeto === "tercera" ? RESPUESTA_CRISIS_TERCERO : sujeto === "ambigua" ? RESPUESTA_CRISIS_AMBIGUA : RESPUESTA_CRISIS;
+    const motivo = sujeto === "primera" ? crisis.motivo : `${crisis.motivo} · sujeto: ${sujeto}`;
+    const linea = avisarGuardia({ sesion: sesionId, tipo: "crisis", texto, motivo });
+    const { texto: respuesta, ids } = conFuentesFijas(fija, FUENTES_CRISIS);
     guardarTurno(s, texto, respuesta);
-    return resultado(s, respuesta, { candado: "crisis", fuentes_usadas: ids, otros: { motivo_candado: crisis.motivo, guardia: aviso(linea) } });
+    return resultado(s, respuesta, { candado: "crisis", fuentes_usadas: ids, otros: { motivo_candado: crisis.motivo, sujeto_crisis: sujeto, guardia: aviso(linea) } });
   }
 
-  // 2 · maltrato
+  // 2 · maltrato (2026-11-10, H-02: si es posible abuso sexual, respuesta de protección sin pedir detalles)
   const maltrato = detectarMaltrato(texto);
   if (maltrato.detectado) {
     const linea = avisarGuardia({ sesion: sesionId, tipo: "maltrato", texto, motivo: maltrato.motivo });
-    const { texto: respuesta, ids } = conFuentesFijas(RESPUESTA_MALTRATO, FUENTES_MALTRATO);
+    const { texto: respuesta, ids } = conFuentesFijas(maltrato.tipo === "sexual" ? RESPUESTA_ABUSO : RESPUESTA_MALTRATO, FUENTES_MALTRATO);
     guardarTurno(s, texto, respuesta);
     return resultado(s, respuesta, { candado: "maltrato", fuentes_usadas: ids, otros: { motivo_candado: maltrato.motivo, guardia: aviso(linea) } });
   }
@@ -149,7 +160,7 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
 
   const n = normalizar(texto).replace(/[^a-z ]/g, "").trim();
   if (n === "persona" || n === "quiero hablar con una persona") {
-    const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide hablar con una persona" });
+    const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", motivo: "pide hablar con una persona" });
     return resultado(s, "Listo. Dejamos registrada tu solicitud para que el equipo la revise; la respuesta de una persona puede tardar. Si necesitas hablar ya con alguien: *Línea 106* (apoyo emocional) o *123* (emergencias).", { otros: { guardia: aviso(linea) } });
   }
   if (n === "resumen") return resumenEn(s);
@@ -161,6 +172,13 @@ async function responderEn(s, sesionId, mensaje, opciones = {}) {
     const nota = diario ? diario[2].trim() : texto;
     s.diario.push({ fecha, texto: nota });
     return resultado(s, `Anotado en tu bitácora (${fecha}). Cuando quieras, escribe «resumen» y armamos el resumen para la consulta.`);
+  }
+
+  // Pedido de puntaje, nivel o porcentaje sobre la neurodivergencia (H-14): negativa fija, sin modelo,
+  // con o sin perfil.
+  if (pidePuntaje(texto)) {
+    guardarTurno(s, texto, RESPUESTA_PUNTAJE);
+    return resultado(s, RESPUESTA_PUNTAJE, { candado: "puntaje" });
   }
 
   // Perfil sensorial: sin perfil completo no hay orientación general (solo en la web).
@@ -253,7 +271,7 @@ function quitarCitas(texto, ids) {
 }
 
 function rechazo(sesionId, s, texto, uso, recuperados) {
-  const linea = avisarGuardia({ sesion: sesionId, tipo: "rechazo-del-modelo", texto });
+  const linea = avisarGuardia({ sesion: sesionId, tipo: "rechazo-del-modelo", motivo: "el modelo se negó a responder" });
   guardarTurno(s, texto, RESPUESTA_RECHAZO);
   return resultado(s, RESPUESTA_RECHAZO, { candado: "rechazo", uso, otros: { fragmentos: recuperados, guardia: aviso(linea) } });
 }
@@ -308,7 +326,7 @@ function avanzarChequeo(sesionId, s, texto) {
   if (c.fase === "oferta") {
     if (/\bpersona\b/.test(n)) {
       s.chequeo = null;
-      const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", texto: "pide contacto humano tras el chequeo", motivo: `PHQ-2=${suma(c.phq.slice(0, 2))} GAD-2=${suma(c.gad)}` });
+      const linea = avisarGuardia({ sesion: sesionId, tipo: "pide-persona", motivo: `pide contacto humano tras el chequeo · PHQ-2=${suma(c.phq.slice(0, 2))} GAD-2=${suma(c.gad)}` });
       return resultado(s, "Listo. Dejamos registrada tu solicitud para que el equipo la revise; la respuesta puede tardar. Si necesitas hablar ya con alguien: *Línea 106*. No estás sola.", { otros: { puntajes: puntajes(c), guardia: aviso(linea) } });
     }
     if (c.ofrecePHQ9 && /^(si|sí|bueno|dale|ok|listo|claro)\b/.test(n)) {
@@ -389,7 +407,7 @@ function cerrarPHQ9(sesionId, s, c) {
   if (p.phq9 >= 10) {
     c.fase = "oferta";
     c.ofrecePHQ9 = false;
-    const linea = avisarGuardia({ sesion: sesionId, tipo: "bienestar-alto", texto: "chequeo PHQ-9 con carga alta", motivo: `PHQ-9=${p.phq9}` });
+    const linea = avisarGuardia({ sesion: sesionId, tipo: "bienestar-alto", motivo: `chequeo PHQ-9 con carga alta · PHQ-9=${p.phq9}` });
     return resultado(
       s,
       "Gracias por responder todo. Tus respuestas muestran que necesitas apoyo, y pedirlo está bien. Esto no es un diagnóstico.\nTe recomendamos pedir una cita con psicología en tu EPS. Si quieres dejar una solicitud para el equipo, escribe *persona*; y si necesitas hablar ya con alguien, la *Línea 106* atiende a cualquier hora.",

@@ -390,7 +390,9 @@ describe("el-vaso", () => {
     assert.equal(V.vistaDeHash("maestra"), "maestra");
     for (const malo of ["", "#", "#principal", "#a1.AAAA", "#constructor", "#__proto__", "#toString", null, undefined]) assert.equal(V.vistaDeHash(malo), null, `debió ignorar ${malo}`);
     assert.ok(hv.includes('data-vista="maestra"') && hv.includes("Soy maestra"));
-    assert.ok(hv.includes('data-vista="familia"') && hv.includes("Soy papá / familia"));
+    // 2026-11-10 (auditoría H-13): «Soy papá / familia» → «Soy de su familia».
+    assert.ok(hv.includes('data-vista="familia"') && hv.includes("Soy de su familia"));
+    assert.ok(!hv.includes("Soy papá"));
   });
 
   test("vista colegio: timbre, filas, descanso, cambio de salón, luces y trabajo en grupo; vista 5 p. m.: viaje, ruido, preguntas, comida y tarea", () => {
@@ -635,5 +637,135 @@ describe("asi-estoy", () => {
   test("no contiene «tiene autismo», «síntoma» ni «diagnóstico»", () => {
     const t = sinT(visible(ae));
     for (const prohibida of ["tiene autismo", "sintoma", "diagnostico"]) assert.ok(!t.includes(prohibida), `contiene «${prohibida}»`);
+  });
+});
+
+// =====================================================================
+// Auditoría externa 2026-11-10 (H-03, H-04, H-06, H-07, H-08, H-09, H-11, H-13) · sin navegador.
+// El recorrido en Chrome (320, 375 y 412 px) se hace aparte; aquí van las reglas que se pueden fijar.
+// =====================================================================
+describe("Auditoría 2026-11-10 · caparazón, chat y textos", () => {
+  const PUB = path.join(APP, "public");
+  const PIEZAS = ["asi-soy-yo", "asi-estoy", "calma", "cuentos", "el-vaso", "mi-dia", "plan-de-tormenta", "ruta-eps", "sus-ciclos"].map((p) => path.join(PUB, "recursos", p + ".html"));
+  PIEZAS.push(path.join(PUB, "casa-contigo.html"));
+  const index = fs.readFileSync(path.join(PUB, "index.html"), "utf8");
+  // Un celular de mentira: localStorage en memoria, con la interfaz que usa el baúl.
+  function celular(inicial) {
+    const m = new Map(Object.entries(inicial));
+    return { m, localStorage: { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k), key: (i) => [...m.keys()][i] ?? null, get length() { return m.size; } } };
+  }
+  function caparazonCon(h, extra) {
+    const s = [...h.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((x) => x[1]).find((x) => x.includes(INI));
+    const cajita = vm.createContext({ TextEncoder, TextDecoder, btoa, atob, ...extra });
+    vm.runInContext(bloque(s, INI, FIN) + "\n;globalThis.__C = Contigo;", cajita);
+    return cajita.__C;
+  }
+
+  test("H-04 · inventario: toda clave que index.html guarda empieza por contigo. o acompanante-cuidadora", () => {
+    const claves = [...index.matchAll(/const CLAVE_[A-Z_]+ = "([^"]+)"/g)].map((x) => x[1]);
+    assert.ok(claves.includes("acompanante-cuidadora-web-v2"), "falta la clave de la conversación en el inventario");
+    assert.ok(claves.length >= 6, claves.join(", "));
+    assert.deepEqual(plano(C.PREFIJOS_SITIO), ["contigo.", "acompanante-cuidadora"]);
+    for (const k of claves) assert.ok(C.PREFIJOS_SITIO.some((p) => k.startsWith(p)), `clave fuera del borrado total: ${k}`);
+    // Las piezas solo guardan por el baúl (contigo.*); ninguna escribe con otra clave.
+    for (const ruta of PIEZAS) {
+      const h = fs.readFileSync(ruta, "utf8");
+      for (const lit of h.matchAll(/localStorage\.setItem\(\s*["']([^"']+)["']/g)) assert.ok(C.PREFIJOS_SITIO.some((p) => lit[1].startsWith(p)), `${path.basename(ruta)} guarda ${lit[1]}`);
+    }
+  });
+
+  test("H-04 · «Borrar todo» de CADA pieza quita la conversación del chat, los perfiles y lo demás de Contigo (y nada ajeno)", () => {
+    const sitio = {
+      "acompanante-cuidadora-web-v2": JSON.stringify({ v: 2, conversacion: [{ rol: "yo", texto: "nota ficticia" }] }),
+      "acompanante-cuidadora-demo": "1",
+      "acompanante-cuidadora-avisos": "[]",
+      "contigo.perfil": "{}",
+      "contigo.mi-perfil": "{}",
+      "contigo.asi-soy-yo": "{}",
+      "contigo.ajustes": "{}",
+      "contigo.sus-ciclos": "{}",
+    };
+    for (const ruta of PIEZAS) {
+      const cel = celular({ ...sitio, "otra-app.preferencias": "x" });
+      const Cx = caparazonCon(fs.readFileSync(ruta, "utf8"), { window: { localStorage: cel.localStorage } });
+      assert.equal(Cx.baul.borrarTodo(), Object.keys(sitio).length, path.basename(ruta));
+      assert.deepEqual([...cel.m.keys()], ["otra-app.preferencias"], `${path.basename(ruta)} dejó claves de Contigo`);
+    }
+  });
+
+  test("H-04 · el chat, al volver a la página, no muestra ni vuelve a guardar una conversación borrada en otra página", () => {
+    assert.match(index, /function sincronizarConversacion\(\)/);
+    assert.match(index, /window\.addEventListener\("pageshow", alVolver\)/);
+    assert.match(index, /window\.addEventListener\("storage", alVolver\)/);
+  });
+
+  test("H-08 · vista adulta: la tarjeta «Necesito ayuda» tiene tel:123, tel:106 y tel:141 con el número escrito; la petición infantil queda igual", () => {
+    for (const ruta of PIEZAS) {
+      const h = fs.readFileSync(ruta, "utf8");
+      const adulto = bloque(h, '<div id="c-ayuda-adulto">', "</div>");
+      for (const n of ["123", "106", "141"]) assert.match(adulto, new RegExp(`<a class="c-tel" href="tel:${n}"[^>]*><strong>${n}</strong>`), `${path.basename(ruta)} sin tel:${n}`);
+      const tarjeta = bloque(h, '<div class="c-tarjeta-ayuda">', '<div id="c-ayuda-adulto">');
+      assert.match(tarjeta, /<p class="c-pide">Por favor, quédate cerca y háblame despacio\.<\/p>/);
+      assert.doesNotMatch(tarjeta, /tel:/, "la parte infantil no lleva números ni enlaces");
+    }
+    // En «Así estoy», la vista de niña o adolescente sigue escondiendo los números.
+    const ae = fs.readFileSync(path.join(PUB, "recursos", "asi-estoy.html"), "utf8");
+    assert.match(ae, /numeros\.hidden = n === 'nina'/);
+    assert.match(ae, /vistaAdulto: false/);
+  });
+
+  test("H-07 · ?desde=chat: el caparazón lo reconoce, «Salir» lleva a /#chat y la flor muestra «Volver al chat»", () => {
+    assert.equal(caparazonCon(html, { location: { search: "?desde=chat" } }).desdeChat(), true);
+    assert.equal(caparazonCon(html, { location: { search: "?x=1&desde=chat" } }).desdeChat(), true);
+    for (const s of ["", "?desde=chatx", "?desde=casa"]) assert.equal(caparazonCon(html, { location: { search: s } }).desdeChat(), false, s);
+    assert.match(jsCaparazon, /location\.assign\(desdeChat\(\) \? '\/#chat' : '\/'\)/);
+    assert.match(html, /<a class="c-boton" id="b-volver-chat" href="\/#chat" hidden>Volver al chat<\/a>/);
+    assert.match(html, /\$\('#b-volver-chat'\)\.hidden = estado\.ejemplo \|\| !C\.desdeChat\(\);/);
+    // El chat enlaza «Así soy yo» con ?desde=chat (y ningún enlace del chat a «Así soy yo» queda sin él).
+    const delChat = [...index.matchAll(/href="\/recursos\/asi-soy-yo\.html([^"]*)"/g)].map((x) => x[1]);
+    assert.ok(delChat.length >= 3, delChat.join(" | "));
+    for (const q of delChat) assert.equal(q, "?desde=chat");
+  });
+
+  test("H-07 · el chat dice cuántas respuestas tiene el perfil cuando no está lleno", () => {
+    assert.match(index, /Tu perfil está listo \(puedes completarlo cuando quieras\)\./);
+    assert.match(index, /Listo · \$\{e\.nC\} de \$\{PASOS_CUIDADORA\.length\} respuestas/);
+    assert.match(index, /Listo · \$\{e\.nN\} de \$\{TARJETAS_NINA\.length\} tarjetas/);
+  });
+
+  test("H-06 · aviso exacto antes del primer mensaje y la sección Seguridad dice lo mismo", () => {
+    const AVISO = "Tu conversación y tu perfil se guardan solo en este celular. Para responderte, se envían en cada mensaje y no los guardamos. Si escribes algo de riesgo, queda una alerta sin tu nombre.";
+    const bienvenida = bloque(index, '<div class="bienvenida" id="ejemplos">', '<p class="titulito">');
+    assert.ok(bienvenida.includes(AVISO), "el aviso no está en la bienvenida del chat");
+    assert.match(bienvenida, /<p class="tp-nota" id="avisoPrivacidad">/, "el aviso no debe esconderse con el perfil");
+    const seg = bloque(index, 'id="seguridad"', "</section>");
+    assert.match(seg, /se guardan solo en este celular\. Para responderte, se envían en cada mensaje y no los guardamos\. Si escribes algo de riesgo, queda una alerta sin tu nombre/);
+    assert.doesNotMatch(index, /fragmento corto del mensaje|se guardan solo en tu celular\./);
+  });
+
+  test("H-09 · la Biblioteca dice exactamente cuándo cita", () => {
+    const casa = fs.readFileSync(path.join(PUB, "casa-contigo.html"), "utf8");
+    assert.ok(casa.includes("Cuando Contigo da un dato de Colombia o de una escala, lo saca de estas fichas y cita la fuente; lo demás es orientación general."));
+    assert.ok(!casa.includes("responde solo desde estas fichas"));
+  });
+
+  test("H-11 · franja de ayuda del inicio: enlaces de 44 px de alto y la franja deja aire (todo lo de arriba usa --alto-franja)", () => {
+    assert.match(index, /\.franja-ayuda a \{[^}]*min-height: 44px;/);
+    const alto = Number(index.match(/--alto-franja: (\d+)px/)[1]);
+    assert.ok(alto >= 48, `la franja mide ${alto} px`);
+    for (const regla of [/\.cabecera \{[^}]*top: var\(--alto-franja\)/, /body \{[^}]*padding-top: var\(--alto-franja\)/, /\.cajon \{[^}]*top: calc\(var\(--alto-franja\)/, /body\.en-chat \.app-chat \{[^}]*top: var\(--alto-franja\)/]) assert.match(index, regla);
+  });
+
+  test("H-03 · el titular de «Así soy yo» se achica y puede partirse (sin ensanchar la página)", () => {
+    assert.match(estilos, /\.pantalla h1 \{ font-size: clamp\(26px, 7\.2vw, 38px\);[^}]*overflow-wrap: anywhere;/);
+    assert.match(html, /extra&shy;ordinaria&shy;mente/);
+  });
+
+  test("H-13 · textos para la cuidadora sin suponer «mi hija» ni «papá»", () => {
+    assert.match(html, /id="b-crear-propia">Crear su perfil</);
+    for (const ruta of PIEZAS) {
+      const v = sinTildes(visible(fs.readFileSync(ruta, "utf8")));
+      for (const f of ["crear la de mi hija", "armar la de mi hija", "soy papa / familia", "soy su papa o familiar", "de tu hija"]) assert.ok(!v.includes(f), `${path.basename(ruta)} dice «${f}»`);
+    }
   });
 });

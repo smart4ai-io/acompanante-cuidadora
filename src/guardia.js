@@ -5,8 +5,12 @@
 // - En la web (Vercel, sin disco donde escribir): no hay archivo. La alerta sale
 //   en console.error con el prefijo [GUARDIA] y queda en los logs del proyecto.
 // - En los dos casos, si existe GUARDIA_WEBHOOK (una URL https), se hace un POST
-//   con {hora, tipo, extracto} (extracto = primeros 80 caracteres). Nada más.
-// Privacidad: nunca guarda ni envía el mensaje completo; solo 80 caracteres y la hora.
+//   con {hora, tipo, motivo}. Nada más.
+// Privacidad (2026-11-10, auditoría H-06): la alerta NO guarda ni envía nada del mensaje
+// (ni extracto, ni el mensaje completo, ni el identificador de la sesión): solo la hora, el tipo
+// de alerta y el motivo (la etiqueta fija de la regla que saltó, p. ej. «quiero morir»).
+// Así cumple lo que dice el chat: «queda una alerta sin tu nombre».
+// Antes guardaba los primeros 80 caracteres (versión en git, commit 190a5b9).
 // Fail-open: si algo falla (archivo, webhook), se registra el error y la
 // conversación sigue igual.
 // Versión anterior (solo archivo): guardia.js.bak_2026-11-02_antes-web.
@@ -14,7 +18,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { recortar } from "./texto.js";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const LOG_POR_DEFECTO = path.resolve(AQUI, "..", "alertas.log");
@@ -49,7 +52,7 @@ function urlWebhook() {
 }
 
 function enviarWebhook(url, linea) {
-  const cuerpo = JSON.stringify({ hora: linea.hora, tipo: linea.tipo, extracto: linea.extracto });
+  const cuerpo = JSON.stringify({ hora: linea.hora, tipo: linea.tipo, motivo: linea.motivo });
   const envio = fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -70,13 +73,12 @@ export async function esperarAvisos() {
   await Promise.allSettled([...enVuelo]);
 }
 
-export function avisarGuardia({ sesion, tipo, texto, motivo } = {}) {
+// Recibe { sesion, tipo, texto, motivo } por compatibilidad, pero «sesion» y «texto» NO se guardan.
+export function avisarGuardia({ tipo, motivo } = {}) {
   const linea = {
     hora: new Date().toISOString(),
-    sesion: String(sesion ?? "desconocida"),
     tipo: String(tipo ?? "alerta"),
-    motivo: motivo ? String(motivo) : null,
-    extracto: recortar(String(texto ?? "").replace(/\s+/g, " "), 80),
+    motivo: motivo ? String(motivo).slice(0, 120) : null,
   };
   if (escribeArchivo()) {
     try {

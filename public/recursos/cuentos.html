@@ -100,7 +100,10 @@ button, input, textarea { font: inherit; color: inherit; }
 .c-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; padding: 10px 14px 4px; }
 .c-marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; white-space: nowrap; }
 .c-marca-sub { font-weight: 400; color: var(--texto-suave); }
-@media (max-width: 379px) { .c-marca-sub { display: none; } }
+/* 2026-11-10 (auditoría H-03): entre 380 y 479 px «Contigo · Recursos» + «Modo suave» + tema no cabían y ensanchaban la página
+   (446 px a 412 px), dejando la barra fija fuera de la pantalla. Hasta 479 px se ve solo «Contigo». */
+@media (max-width: 479px) { .c-marca-sub { display: none; } }
+.c-marca { min-width: 0; }
 .c-orbe { width: 30px; height: 30px; border-radius: 50%; background: var(--orbe); position: relative; flex: none; }
 .c-orbe::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: var(--menta); mix-blend-mode: multiply; opacity: .9; }
 .c-ajustes { display: flex; gap: 6px; }
@@ -143,6 +146,9 @@ button, input, textarea { font: inherit; color: inherit; }
 .c-numeros { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; text-align: left; }
 .c-numeros li { background: var(--rosa-claro); color: var(--sobre-pastel); border-radius: 16px; padding: 10px 14px; font-size: 18px; }
 .c-numeros strong { font-size: 26px; margin-right: 8px; }
+/* Vista de adulto: cada línea es un enlace tel: con el número escrito (2026-11-10, auditoría H-08) */
+.c-numeros a.c-tel { display: flex; align-items: center; flex-wrap: wrap; min-height: 48px; color: inherit; text-decoration: none; border-radius: 12px; }
+.c-numeros a.c-tel strong { text-decoration: underline; text-underline-offset: 4px; }
 .c-nota-ayuda { font-size: 17px !important; margin-top: 14px !important; }
 /* === FIN CARAPAZON CONTIGO v1 === */
 
@@ -284,6 +290,10 @@ main:focus { outline: none; }
 var Contigo = (function () {
   'use strict';
   var PREFIJO = 'contigo.';
+  /* Todo lo que el sitio guarda en el celular empieza por uno de estos prefijos (inventario del 2026-11-10,
+     auditoría H-04): contigo.* (piezas, perfiles, ajustes) y acompanante-cuidadora* (la conversación del chat
+     «acompanante-cuidadora-web-v2», el modo demostración y los avisos). «Borrar todo» quita los dos grupos. */
+  var PREFIJOS_SITIO = [PREFIJO, 'acompanante-cuidadora'];
 
   function esc(t) {
     return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
@@ -305,7 +315,7 @@ var Contigo = (function () {
     claves: function () {
       try {
         var ls = window.localStorage, r = [];
-        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && k.indexOf(PREFIJO) === 0) r.push(k); }
+        for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (k && PREFIJOS_SITIO.some(function (p) { return k.indexOf(p) === 0; })) r.push(k); }
         return r;
       } catch (e) { return []; }
     },
@@ -672,10 +682,15 @@ var Contigo = (function () {
     var destino = capa.querySelector('[data-foco]') || capa.querySelector('button');
     if (destino) destino.focus();
   }
+  /* ¿Se llegó desde el chat? (el chat enlaza con ?desde=chat; 2026-11-10, auditoría H-07).
+     Entonces «Salir» se llama «Volver al chat» y lleva a /#chat. */
+  function desdeChat() {
+    try { return /(^|[?&])desde=chat(&|$)/.test(location.search || ''); } catch (e) { return false; }
+  }
   function salir() {
     voz.callar();
     var enSitio = location.protocol !== 'file:' && location.pathname.indexOf('/recursos/') !== -1;
-    if (enSitio) location.assign('/'); else abrirCapa('c-capa-salir');
+    if (enSitio) location.assign(desdeChat() ? '/#chat' : '/'); else abrirCapa('c-capa-salir');
   }
 
   /* 8 · Puerta de adulto: mantener presionado 3 segundos (sin sumas, para que la abuela pueda) */
@@ -753,6 +768,9 @@ var Contigo = (function () {
     if (bs) bs.addEventListener('click', function () { cambiarAjuste('suave', !leerAjustes().suave); anunciar(leerAjustes().suave ? 'Modo suave activado' : 'Modo suave apagado'); if (op.alCambiarAjustes) op.alCambiarAjustes(); });
     if (bt) bt.addEventListener('click', function () { cambiarAjuste('tema', document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro'); });
     document.querySelectorAll('[data-c-accion]').forEach(function (b) {
+      if (b.getAttribute('data-c-accion') === 'salir' && desdeChat()) {
+        try { b.lastChild.textContent = 'Volver al chat'; } catch (e) {}
+      }
       b.addEventListener('click', function () {
         var acc = b.getAttribute('data-c-accion');
         if (acc === 'salir') salir(); else abrirCapa(b.getAttribute('data-c-capa'));
@@ -773,7 +791,8 @@ var Contigo = (function () {
   return {
     version: 1, PREFIJO: PREFIJO, esc: esc, baul: baul, bytes: bytes, enlace: enlace, qr: qr, voz: voz,
     aplicarAjustes: aplicarAjustes, cambiarAjuste: cambiarAjuste, suave: suave, anunciar: anunciar,
-    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar
+    abrirCapa: abrirCapa, cerrarCapa: cerrarCapa, puertaAdulto: puertaAdulto, dobleToque: dobleToque, copiar: copiar, iniciar: iniciar,
+    PREFIJOS_SITIO: PREFIJOS_SITIO, desdeChat: desdeChat
   };
 })();
 if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado antes de pintar
@@ -1053,11 +1072,11 @@ if (typeof document !== 'undefined') Contigo.aplicarAjustes(); // tema guardado 
     <p class="c-pide">Por favor, quédate cerca y háblame despacio.</p>
     <div id="c-ayuda-adulto">
       <ul class="c-numeros">
-        <li><strong>123</strong> Emergencias, si hay peligro ahora</li>
-        <li><strong>106</strong> Línea 106, para hablar con alguien</li>
-        <li><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</li>
+        <li><a class="c-tel" href="tel:123" aria-label="Llamar al 123, emergencias, si hay peligro ahora"><strong>123</strong> Emergencias, si hay peligro ahora</a></li>
+        <li><a class="c-tel" href="tel:106" aria-label="Llamar a la Línea 106, para hablar con alguien"><strong>106</strong> Línea 106, para hablar con alguien</a></li>
+        <li><a class="c-tel" href="tel:141" aria-label="Llamar al 141, ICBF, ante un posible maltrato"><strong>141</strong> ICBF, ante un posible maltrato a una niña, niño o adolescente</a></li>
       </ul>
-      <p class="c-nota-ayuda">Los números están escritos aquí. Esta página no llama ni envía nada.</p>
+      <p class="c-nota-ayuda">Toca un número para llamar desde tu celular. Esta página no llama ni envía nada sola: tú decides.</p>
     </div>
   </div>
   <button type="button" class="c-boton" data-c-cerrar>Cerrar</button>
